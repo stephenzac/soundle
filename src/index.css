@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.note-box {
+    @apply bg-gray-900 text-white grid place-items-center h-10 w-10 border-2 border-slate-300 rounded-md
+}
+
+.round-button {
+    @apply bg-gray-900 text-white w-8 h-8 rounded-full cursor-pointer grid place-items-center button-animation
+}
+
+.button-animation {
+    @apply hover:bg-gray-600 hover:rounded-xl transition-all ease-in-out duration-75
+}
