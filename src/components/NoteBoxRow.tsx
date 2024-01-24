@@ -1,10 +1,13 @@
+import { useEffect } from "react";
+import { NoteTile } from "../contexts/BoardContext";
 import NoteBox from "./NoteBox";
 
 interface NoteBoxRowProps {
-    noteRow: string[];
+    noteRow: NoteTile[];
 };
 
 const NoteBoxRow = ({ noteRow }: NoteBoxRowProps) => {
+    useEffect(() => {}, []);
 
     return (
         <div className="flex justify-center h-8 my-5">

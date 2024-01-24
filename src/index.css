@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .note-box {
-    @apply bg-gray-900 text-white grid place-items-center h-10 w-10 border-2 border-slate-300 rounded-md
+    @apply bg-gray-900 text-white font-bold grid place-items-center h-10 w-10 border-2 border-slate-300 rounded-md
 }
 
 .round-button {

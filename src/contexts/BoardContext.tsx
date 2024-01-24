@@ -8,7 +8,7 @@ interface NoteTile {
 }
 
 interface Board {
-    gameBoard: string[][];
+    gameBoard: NoteTile[][];
     currentRow: number;
     currentIndex: number;
     melody: string[];
@@ -23,7 +23,14 @@ interface Board {
 const boardContext = createContext<Board | undefined>(undefined);
 
 const BoardContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [ gameBoard, setBoard ] = useState<string[][]>([[], [], [], [], []]);
+    const [ gameBoard, setBoard ] = useState<NoteTile[][]>(
+        [[{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}],
+         [{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}],
+         [{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}],
+         [{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}],
+         [{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}]
+        ]
+        );
     const [ currentRow, setCurrentRow ] = useState<number>(0);
     const [ currentIndex, setCurrentIndex ] = useState<number>(0);
     const [ melody, setMelody] = useState<string[]>(GenerateNotes());
@@ -35,27 +42,39 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
 
     const updateBoard = (note: string, rowNumber: number, index: number): void => {
-        let newBoard: string[][] = gameBoard;
-        newBoard[rowNumber][index] = note;
+        let newBoard: NoteTile[][] = gameBoard;
+        let newNote: NoteTile = {noteName: note, addedNote: true, deletedNote: false};
+        newBoard[rowNumber][index] = newNote;
         setBoard(newBoard);
+        console.log("Board is now: " + gameBoard[currentRow]);
     }
 
     const removeFromBoard = (): void => {
-        gameBoard[currentRow].pop();
+        gameBoard[currentRow][currentIndex - 1].deletedNote = true;
+        gameBoard[currentRow][currentIndex - 1].noteName = "";
+        updateCurrentIndex(currentIndex - 1);
+        // gameBoard[currentRow].pop();
     }
 
     const resetGame = () => {
-        setBoard([[], [], [], [], []]);
+        setBoard([[{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}],
+        [{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}],
+        [{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}],
+        [{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}],
+        [{noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}, {noteName: "", addedNote: false, deletedNote: false}]
+       ]);
         updateCurrentRow(0);
         updateCurrentIndex(0);
         getMelody();
     }
 
     const updateCurrentRow = (newRow: number): void => {
+        // row animation?
         setCurrentRow(newRow);
     }
 
     const updateCurrentIndex = (newIndex: number): void => {
+        // update note animation stuff here
         setCurrentIndex(newIndex);
     }
 
@@ -83,4 +102,5 @@ const useBoardContext = () => {
     return useContext(boardContext);
 }
 
-export {useBoardContext, BoardContextProvider}
+export { useBoardContext, BoardContextProvider }
+export type { NoteTile }

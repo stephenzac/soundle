@@ -1,11 +1,12 @@
 import * as Tone from "tone";
+import { NoteTile } from "./contexts/BoardContext";
 
 const MELODY_LENGTH: number = 5;
 const NOTES: string[] = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "B♭", "B"];
 
-export const CheckNotes = (submittedNotes: string[], actualNotes: string[]): boolean => {
+export const CheckNotes = (submittedNotes: NoteTile[], actualNotes: string[]): boolean => {
     for (let i = 0; i < MELODY_LENGTH; i++) {
-        if (submittedNotes[i] != actualNotes[i]) {
+        if (submittedNotes[i].noteName != actualNotes[i]) {
             console.log(`${submittedNotes} != ${actualNotes}`);
             return false;
         }

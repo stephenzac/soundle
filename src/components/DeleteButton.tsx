@@ -1,13 +1,12 @@
 import { useBoardContext } from "../contexts/BoardContext";
 
+const BEGINNING_OF_ROW = 0;
+
 const DeleteButton = () => {
-    const { currentIndex, updateCurrentIndex, removeFromBoard} = useBoardContext();
+    const { currentIndex, removeFromBoard } = useBoardContext();
 
-    const DeleteNote = () => {
-        console.log("Note deleted");
-
-        if (currentIndex > 0) {
-            updateCurrentIndex( currentIndex - 1);
+    const DeleteNote = () => {  
+        if (currentIndex > BEGINNING_OF_ROW) {
             removeFromBoard();
         }
 
