@@ -2,21 +2,29 @@ import { useBoardContext } from "../contexts/BoardContext";
 
 const ROW_LENGTH = 4;
 
-const NoteInputButton = ({ note }: {note: string}) => {
-    const { currentRow, currentIndex, updateCurrentIndex, updateBoard } = useBoardContext();
+interface NoteInputProps {
+  noteName: string;
+}
 
-    const InputNote = () => {
-        if (currentIndex <= ROW_LENGTH) {
-            updateCurrentIndex(currentIndex + 1);
-            updateBoard(note, currentRow, currentIndex);
-        }
-    };
+const NoteInputButton = ({ noteName }: NoteInputProps) => {
+  const { currentRow, currentIndex, updateCurrentIndex, updateBoard } =
+    useBoardContext();
 
-    return (
-        <div className="note-box button-animation mx-2 cursor-pointer" onClick={InputNote}>
-            {note}
-        </div>
-    );
+  const InputNote = () => {
+    if (currentIndex <= ROW_LENGTH) {
+      updateCurrentIndex(currentIndex + 1);
+      updateBoard(noteName, currentRow, currentIndex);
+    }
+  };
+
+  return (
+    <div
+      className="note-box button-animation mx-2 cursor-pointer"
+      onClick={InputNote}
+    >
+      {noteName}
+    </div>
+  );
 };
 
 export default NoteInputButton;
