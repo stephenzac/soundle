@@ -5,6 +5,8 @@ interface NoteTile {
   noteName: string;
   addedNote: boolean;
   deletedNote: boolean;
+  answered: boolean;
+  correct: boolean;
 }
 
 interface Board {
@@ -12,6 +14,10 @@ interface Board {
   currentRow: number;
   currentIndex: number;
   melody: string[];
+  gameWon: boolean;
+  gameLost: boolean;
+  updateGameWon: (newState: boolean) => void;
+  updateGameLost: (newState: boolean) => void;
   getMelody: () => void;
   updateBoard: (note: string, rowNumber: number, index: number) => void;
   removeFromBoard: () => void;
@@ -27,44 +33,204 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [gameBoard, setBoard] = useState<NoteTile[][]>([
     [
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
     ],
     [
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
     ],
     [
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
     ],
     [
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
     ],
     [
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
-      { noteName: "", addedNote: false, deletedNote: false },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        addedNote: false,
+        deletedNote: false,
+        answered: false,
+        correct: false,
+      },
     ],
   ]);
   const [currentRow, setCurrentRow] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [melody, setMelody] = useState<string[]>(GenerateNotes());
+  const [gameWon, setGameWon] = useState<boolean>(false);
+  const [gameLost, setGameLost] = useState<boolean>(false);
+
+  const updateGameWon = (newState: boolean) => {
+    setGameWon(newState);
+  };
+
+  const updateGameLost = (newState: boolean) => {
+    setGameLost(newState);
+  };
 
   const getMelody = (): void => {
     let newNotes: string[] = melody;
@@ -82,6 +248,8 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
       noteName: note,
       addedNote: true,
       deletedNote: false,
+      answered: false,
+      correct: false,
     };
     newBoard[rowNumber][index] = newNote;
     setBoard(newBoard);
@@ -96,53 +264,206 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
   const resetGame = () => {
     setBoard([
       [
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
       ],
       [
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
       ],
       [
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
       ],
       [
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
       ],
       [
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
-        { noteName: "", addedNote: false, deletedNote: false },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          addedNote: false,
+          deletedNote: false,
+          answered: false,
+          correct: false,
+        },
       ],
     ]);
+    if (gameWon) {
+      setGameWon(false);
+    } else if (gameLost) {
+      setGameLost(false);
+    }
     updateCurrentRow(0);
     updateCurrentIndex(0);
     getMelody();
   };
 
   const updateCurrentRow = (newRow: number): void => {
-    // row animation?
     setCurrentRow(newRow);
   };
 
   const updateCurrentIndex = (newIndex: number): void => {
-    // update note animation stuff here
     setCurrentIndex(newIndex);
   };
 
@@ -151,6 +472,10 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     currentRow,
     currentIndex,
     melody,
+    gameWon,
+    gameLost,
+    updateGameWon,
+    updateGameLost,
     getMelody,
     updateBoard,
     removeFromBoard,

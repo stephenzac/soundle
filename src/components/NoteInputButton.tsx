@@ -7,11 +7,17 @@ interface NoteInputProps {
 }
 
 const NoteInputButton = ({ noteName }: NoteInputProps) => {
-  const { currentRow, currentIndex, updateCurrentIndex, updateBoard } =
-    useBoardContext();
+  const {
+    currentRow,
+    currentIndex,
+    updateCurrentIndex,
+    updateBoard,
+    gameWon,
+    gameLost,
+  } = useBoardContext();
 
   const InputNote = () => {
-    if (currentIndex <= ROW_LENGTH) {
+    if (!(gameWon || gameLost) && currentIndex <= ROW_LENGTH) {
       updateCurrentIndex(currentIndex + 1);
       updateBoard(noteName, currentRow, currentIndex);
     }

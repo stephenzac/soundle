@@ -5,12 +5,10 @@ const GameBox = () => {
   const { gameBoard } = useBoardContext();
 
   return (
-    <div className="bg-gray-900 h-96 w-80 flex flex-col self-center justify-center border-2 border-slate-300 rounded-lg">
-      <NoteBoxRow noteRow={gameBoard[0]} />
-      <NoteBoxRow noteRow={gameBoard[1]} />
-      <NoteBoxRow noteRow={gameBoard[2]} />
-      <NoteBoxRow noteRow={gameBoard[3]} />
-      <NoteBoxRow noteRow={gameBoard[4]} />
+    <div className="bg-gray-900 h-4/6 w-10/12 max-w-80 flex flex-col self-center justify-center border-2 border-slate-300 rounded-lg">
+      {gameBoard.map((currentRow, index) => {
+        return <NoteBoxRow noteRow={currentRow} key={index} />;
+      })}
     </div>
   );
 };

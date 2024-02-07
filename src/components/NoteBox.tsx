@@ -5,6 +5,8 @@ interface NoteBoxProps {
 }
 
 const NoteBox = ({ note }: NoteBoxProps) => {
+  //TODO: Add colors for guesses
+
   if (note && note.addedNote) {
     console.log("Animating addition...");
     note.addedNote = false;
@@ -13,15 +15,26 @@ const NoteBox = ({ note }: NoteBoxProps) => {
     note.deletedNote = false;
   }
 
+  let noteBoxStyle = "note-box mx-2";
+
+  // different states of the NoteBox will render different styles
+  if (note.answered) {
+    if (note.correct) {
+      noteBoxStyle = "note-box-correct mx-2";
+    } else {
+      noteBoxStyle = "note-box-incorrect mx-2";
+    }
+  }
+
   return (
     <div
-      className={note.noteName !== "" ? "note-box mx-2" : "note-box mx-2"}
+      className={`${noteBoxStyle}`}
       onAnimationEnd={() => {
         note.addedNote = false;
         note.deletedNote = false;
       }}
     >
-      <div className="">{note === undefined ? "" : note.noteName}</div>
+      <div className="">{note.noteName}</div>
     </div>
   );
 };
