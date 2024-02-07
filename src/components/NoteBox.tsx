@@ -18,9 +18,9 @@ const NoteBox = ({ note }: NoteBoxProps) => {
   // different states of the NoteBox will render different styles
   if (note.answered) {
     if (note.correct) {
-      noteBoxStyle = "note-box-correct mx-2";
+      noteBoxStyle = "note-box-correct mx-2 transition-all ease-in";
     } else {
-      noteBoxStyle = "note-box-incorrect mx-2";
+      noteBoxStyle = "note-box-incorrect mx-2 transition-all ease-in";
     }
   }
 

@@ -1,8 +1,10 @@
+// import icon from "./github-mark-white.png";
+
 const GitHubLink = () => {
   return (
     <div className="flex flex-row place-items-center absolute bottom-2 left-5">
       <img
-        src="/images/github-mark-white.png"
+        src={"./github-mark-white.png"}
         className="w-7 h-7 flex place-items-center"
       ></img>
 

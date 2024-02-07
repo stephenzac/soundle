@@ -15,11 +15,11 @@ const MainGame = () => {
       <GameBox></GameBox>
 
       <div className="absolute top-0 left 0 w-max">
-        {gameWon && <img src={"../../public/images/happy-cat.gif "}></img>}
+        {gameWon && <img src={"./happy-cat.gif "}></img>}
       </div>
 
       <div className="absolute top-0 left-0 w-48">
-        {gameLost && <img src={"../../public/images/sad-cat.gif "}></img>}
+        {gameLost && <img src={"./sad-cat.gif "}></img>}
       </div>
 
       <div className="flex flex-row mt-4 justify-center">

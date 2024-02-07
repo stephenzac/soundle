@@ -3,7 +3,6 @@ import { NoteTile } from "./contexts/BoardContext";
 
 const MELODY_LENGTH = 5;
 const NOTES = ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
-const NOTES_TRANSLATED = {};
 
 export const CheckNotes = (
   submittedNotes: NoteTile[],
