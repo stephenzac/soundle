@@ -2,7 +2,7 @@ const GitHubLink = () => {
   return (
     <div className="flex flex-row place-items-center absolute bottom-2 left-5">
       <img
-        src={"../../public/images/github-mark-white.png"}
+        src="/images/github-mark-white.png"
         className="w-7 h-7 flex place-items-center"
       ></img>
 

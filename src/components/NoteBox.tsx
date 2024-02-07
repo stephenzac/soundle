@@ -5,8 +5,6 @@ interface NoteBoxProps {
 }
 
 const NoteBox = ({ note }: NoteBoxProps) => {
-  //TODO: Add colors for guesses
-
   if (note && note.addedNote) {
     console.log("Animating addition...");
     note.addedNote = false;

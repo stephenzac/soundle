@@ -62,5 +62,3 @@ export const PlayMelody = (notes: string[]): void => {
 
   Tone.Transport.start();
 };
-
-// export const RenderNote = (note: string): void => {};
