@@ -39,7 +39,7 @@ const MainGame = () => {
         <NoteInputButton noteName={"B"} />
       </div>
 
-      <div className="flex justify-center mt-4 mb-10 space-x-8">
+      <div className="flex justify-center mt-4 space-x-8">
         <DeleteButton />
         <SubmitButton />
         <PlayMelodyButton />

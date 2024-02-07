@@ -13,9 +13,7 @@ export const CheckNotes = (
   for (let i = 0; i < MELODY_LENGTH; i++) {
     submittedNotes[i].answered = true;
 
-    if (submittedNotes[i].noteName != actualNotes[i]) {
-      console.log(`${submittedNotes} != ${actualNotes}`);
-    } else {
+    if (submittedNotes[i].noteName == actualNotes[i]) {
       submittedNotes[i].correct = true;
       correctCount++;
     }
@@ -55,8 +53,6 @@ export const PlayMelody = (notes: string[]): void => {
 
     const noteDuration = Tone.Time("8n").toSeconds();
     synth.triggerRelease(startTime + noteDuration);
-
-    console.log(note);
   });
 
   Tone.Transport.start();

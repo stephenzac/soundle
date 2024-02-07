@@ -5,14 +5,6 @@ interface NoteBoxProps {
 }
 
 const NoteBox = ({ note }: NoteBoxProps) => {
-  if (note && note.addedNote) {
-    console.log("Animating addition...");
-    note.addedNote = false;
-  } else if (note && note.deletedNote) {
-    console.log("Animating deletion...");
-    note.deletedNote = false;
-  }
-
   let noteBoxStyle = "note-box mx-2";
 
   // different states of the NoteBox will render different styles
@@ -25,13 +17,7 @@ const NoteBox = ({ note }: NoteBoxProps) => {
   }
 
   return (
-    <div
-      className={`${noteBoxStyle}`}
-      onAnimationEnd={() => {
-        note.addedNote = false;
-        note.deletedNote = false;
-      }}
-    >
+    <div className={`${noteBoxStyle}`}>
       <div className="">{note.noteName}</div>
     </div>
   );

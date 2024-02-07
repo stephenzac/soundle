@@ -3,8 +3,6 @@ import { GenerateNotes } from "../GameNotes";
 
 interface NoteTile {
   noteName: string;
-  addedNote: boolean;
-  deletedNote: boolean;
   answered: boolean;
   correct: boolean;
 }
@@ -35,36 +33,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     [
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
@@ -72,36 +60,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     [
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
@@ -109,36 +87,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     [
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
@@ -146,36 +114,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     [
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
@@ -183,36 +141,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     [
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
       {
         noteName: "",
-        addedNote: false,
-        deletedNote: false,
         answered: false,
         correct: false,
       },
@@ -246,8 +194,6 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     let newBoard: NoteTile[][] = gameBoard;
     let newNote: NoteTile = {
       noteName: note,
-      addedNote: true,
-      deletedNote: false,
       answered: false,
       correct: false,
     };
@@ -256,7 +202,6 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const removeFromBoard = (): void => {
-    gameBoard[currentRow][currentIndex - 1].deletedNote = true;
     gameBoard[currentRow][currentIndex - 1].noteName = "";
     updateCurrentIndex(currentIndex - 1);
   };
@@ -266,36 +211,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
       [
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
@@ -303,36 +238,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
       [
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
@@ -340,36 +265,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
       [
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
@@ -377,36 +292,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
       [
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
@@ -414,36 +319,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
       [
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },
         {
           noteName: "",
-          addedNote: false,
-          deletedNote: false,
           answered: false,
           correct: false,
         },

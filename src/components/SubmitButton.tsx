@@ -20,10 +20,7 @@ const SubmitButton = () => {
     // Check correctness of submitted notes
     if (currentIndex === END_OF_ROW) {
       if (CheckNotes(gameBoard[currentRow], melody)) {
-        console.log("Correct!");
         updateGameWon(true);
-      } else {
-        console.log("Incorrect.");
       }
 
       // Incorrect guess, move to next row
