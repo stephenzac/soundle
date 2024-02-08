@@ -21,6 +21,7 @@ const SubmitButton = () => {
     if (currentIndex === END_OF_ROW) {
       if (CheckNotes(gameBoard[currentRow], melody)) {
         updateGameWon(true);
+        return;
       }
 
       // Incorrect guess, move to next row
