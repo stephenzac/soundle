@@ -9,6 +9,7 @@ import { useBoardContext } from "../contexts/BoardContext";
 
 const MainGame = () => {
   const { gameWon, gameLost } = useBoardContext();
+  //TODO: Add informational section/button?
 
   return (
     <>
@@ -46,7 +47,7 @@ const MainGame = () => {
         {(gameWon || gameLost) && <ResetButton />}
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-1">
         <GitHubLink />
       </div>
     </>
