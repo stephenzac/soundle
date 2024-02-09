@@ -165,6 +165,33 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
         correct: false,
       },
     ],
+    [
+      {
+        noteName: "",
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        answered: false,
+        correct: false,
+      },
+      {
+        noteName: "",
+        answered: false,
+        correct: false,
+      },
+    ],
   ]);
   const [currentRow, setCurrentRow] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -208,6 +235,33 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
 
   const resetGame = () => {
     setBoard([
+      [
+        {
+          noteName: "",
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          answered: false,
+          correct: false,
+        },
+        {
+          noteName: "",
+          answered: false,
+          correct: false,
+        },
+      ],
       [
         {
           noteName: "",

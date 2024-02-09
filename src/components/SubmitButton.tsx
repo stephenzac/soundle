@@ -2,7 +2,7 @@ import { useBoardContext } from "../contexts/BoardContext";
 import { CheckNotes } from "../GameNotes";
 
 const END_OF_ROW = 5;
-const END_OF_BOARD = 4;
+const END_OF_BOARD = 5;
 
 const SubmitButton = () => {
   const {
@@ -12,11 +12,16 @@ const SubmitButton = () => {
     updateCurrentRow,
     updateCurrentIndex,
     melody,
+    gameWon,
+    gameLost,
     updateGameWon,
     updateGameLost,
   } = useBoardContext();
 
   const submit = () => {
+    if (gameWon || gameLost) {
+      return;
+    }
     // Check correctness of submitted notes
     if (currentIndex === END_OF_ROW) {
       if (CheckNotes(gameBoard[currentRow], melody)) {
