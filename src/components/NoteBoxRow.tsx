@@ -7,7 +7,7 @@ interface NoteBoxRowProps {
 
 const NoteBoxRow = ({ noteRow }: NoteBoxRowProps) => {
   return (
-    <div className="flex justify-center h-6 my-5">
+    <div className="flex place-items-center justify-center h-6 my-3.5">
       {noteRow.map((note, index) => {
         return <NoteBox note={note} key={index} />;
       })}
