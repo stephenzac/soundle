@@ -8,6 +8,6 @@ Because I have passions in both music and software development, I created Soundl
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
 
-I developed Soundle using Typescript, React, and Tailwind CSS. I found much use in React Contexts to handle the logic and state of the game behind the scenes. This project was also a good chance for me to learn the basics of Tailwind CSS. 
+I developed Soundle using Typescript, React, and Tailwind CSS. I found much use in React Contexts and Typescript to represent the state of the game and handle the game logic behind the scenes. This project was also a good chance for me to learn the basics of Tailwind CSS.
 
-I used Tone.js to generate and play the pitches of the randomly generated melody. 
+I used Tone.js to generate and play the pitches of the randomly generated melodies.
