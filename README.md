@@ -1,8 +1,13 @@
-# React + Vite
+# Soundle
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Because I have passions in both music and software development, I created Soundle as a fun little ear training game for you musicians out there. The game will generate 5 random pitches, and you get 6 chances to guess the exact pitches in the order it was played (in concert pitch). Unlike other Wordle-like games, you aren't limited to one game per day: you can replay and guess melodies as many times as you'd like. 
 
-Currently, two official plugins are available:
+## Tech Stack
+![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+I developed Soundle using Typescript, React, and Tailwind CSS. I found much use in React Contexts to handle the logic and state of the game behind the scenes. This project was also a good chance for me to learn the basics of Tailwind CSS. 
+
+I used Tone.js to generate and play the pitches of the randomly generated melody. 
