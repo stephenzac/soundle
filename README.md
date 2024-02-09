@@ -11,3 +11,5 @@ Because I have passions in both music and software development, I created Soundl
 I developed Soundle using Typescript, React, and Tailwind CSS. I found much use in React Contexts and Typescript to represent the state of the game and handle the game logic behind the scenes. This project was also a good chance for me to learn the basics of Tailwind CSS.
 
 I used Tone.js to generate and play the pitches of the randomly generated melodies.
+
+This game is a variation of the web application Melodle, built by Matias Meno.
