@@ -5,6 +5,8 @@ import SubmitButton from "./SubmitButton";
 import PlayMelodyButton from "./PlayMelodyButton";
 import ResetButton from "./ResetButton";
 import GitHubLink from "./GitHubLink";
+import InformationButton from "./InformationButton";
+import Information from "./Information";
 import { useBoardContext } from "../contexts/BoardContext";
 
 const MainGame = () => {
@@ -51,8 +53,13 @@ const MainGame = () => {
         {(gameWon || gameLost) && <ResetButton />}
       </div>
 
-      <div className="flex justify-center mt-1">
+      <div className="w-10/12 max-w-80 flex flex-row justify-center items-center space-x-4 mt-1">
         <GitHubLink />
+        <InformationButton />
+      </div>
+
+      <div className="min-h-screen flex justify-center">
+        <Information />
       </div>
     </>
   );

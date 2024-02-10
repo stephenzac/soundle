@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Information from "./Information";
 
 const InformationButton = () => {
   const [clicked, setClicked] = useState(false);
