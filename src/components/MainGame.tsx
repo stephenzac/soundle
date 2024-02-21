@@ -6,12 +6,12 @@ import PlayMelodyButton from "./PlayMelodyButton";
 import ResetButton from "./ResetButton";
 import GitHubLink from "./GitHubLink";
 import InformationButton from "./InformationButton";
-import Information from "./Information";
+import InformationModal from "./InformationModal";
+import { InformationContextProvider } from "../contexts/InformationContext";
 import { useBoardContext } from "../contexts/BoardContext";
 
 const MainGame = () => {
   const { gameWon, gameLost } = useBoardContext();
-  //TODO: Add informational section/button?
 
   return (
     <>
@@ -55,12 +55,18 @@ const MainGame = () => {
 
       <div className="w-10/12 max-w-80 flex flex-row justify-center items-center space-x-4 mt-1">
         <GitHubLink />
-        <InformationButton />
+
+        <InformationContextProvider>
+          <InformationButton />
+          <InformationModal />
+        </InformationContextProvider>
       </div>
 
-      <div className="min-h-screen flex justify-center">
-        <Information />
-      </div>
+      {/* <div className="min-h-screen flex justify-center"> */}
+      {/* <InformationContextProvider>
+          <InformationModal />
+        </InformationContextProvider> */}
+      {/* </div> */}
     </>
   );
 };

@@ -1,14 +1,10 @@
-import { useState } from "react";
-import Information from "./Information";
+import { useInformationContext } from "../contexts/InformationContext";
 
 const InformationButton = () => {
-  const [clicked, setClicked] = useState(false);
+  const { clicked, setClicked } = useInformationContext();
 
   const buttonClicked = () => {
-    if (!clicked) {
-      console.log("Showing information");
-      setClicked(true);
-    }
+    setClicked(true);
   };
 
   return (
