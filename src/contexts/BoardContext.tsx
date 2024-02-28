@@ -14,6 +14,8 @@ interface Board {
   melody: string[];
   gameWon: boolean;
   gameLost: boolean;
+  melodyPlayed: boolean;
+  updateMelodyPlayed: (newState: boolean) => void;
   updateGameWon: (newState: boolean) => void;
   updateGameLost: (newState: boolean) => void;
   getMelody: () => void;
@@ -29,182 +31,35 @@ const boardContext = createContext<Board>({} as Board);
 const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [gameBoard, setBoard] = useState<NoteTile[][]>([
-    [
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-    ],
-    [
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-    ],
-    [
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-    ],
-    [
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-    ],
-    [
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-    ],
-    [
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-      {
-        noteName: "",
-        answered: false,
-        correct: false,
-      },
-    ],
-  ]);
+  let newGameBoard: NoteTile[][] = [[], [], [], [], [], []];
+  for (let i = 0; i < 6; i++) {
+    for (let j = 0; j < 5; j++) {
+      let newTile: NoteTile = { noteName: "", answered: false, correct: false };
+      newGameBoard[i][j] = newTile;
+    }
+  }
+
+  const [gameBoard, setBoard] = useState<NoteTile[][]>(newGameBoard);
+
   const [currentRow, setCurrentRow] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [melody, setMelody] = useState<string[]>(GenerateNotes());
   const [gameWon, setGameWon] = useState<boolean>(false);
   const [gameLost, setGameLost] = useState<boolean>(false);
+  const [melodyPlayed, setMelodyPlayed] = useState<boolean>(false);
+
+  const updateMelodyPlayed = (newState: boolean) => {
+    setMelodyPlayed(newState);
+  };
 
   const updateGameWon = (newState: boolean) => {
     setGameWon(newState);
+    updateMelodyPlayed(false);
   };
 
   const updateGameLost = (newState: boolean) => {
     setGameLost(newState);
+    updateMelodyPlayed(false);
   };
 
   const getMelody = (): void => {
@@ -234,170 +89,19 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const resetGame = () => {
-    setBoard([
-      [
-        {
+    let newGameBoard: NoteTile[][] = [[], [], [], [], [], []];
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 5; j++) {
+        let newTile: NoteTile = {
           noteName: "",
           answered: false,
           correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-      ],
-      [
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-      ],
-      [
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-      ],
-      [
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-      ],
-      [
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-      ],
-      [
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-        {
-          noteName: "",
-          answered: false,
-          correct: false,
-        },
-      ],
-    ]);
+        };
+        newGameBoard[i][j] = newTile;
+      }
+    }
+    setBoard(newGameBoard);
+
     if (gameWon) {
       setGameWon(false);
     } else if (gameLost) {
@@ -410,6 +114,7 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
 
   const updateCurrentRow = (newRow: number): void => {
     setCurrentRow(newRow);
+    updateMelodyPlayed(false);
   };
 
   const updateCurrentIndex = (newIndex: number): void => {
@@ -423,6 +128,8 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     melody,
     gameWon,
     gameLost,
+    melodyPlayed,
+    updateMelodyPlayed,
     updateGameWon,
     updateGameLost,
     getMelody,

@@ -5,13 +5,17 @@ import { useBoardContext } from "../contexts/BoardContext";
 const MELODY_WAIT_TIME = 2600;
 
 const PlayMelodyButton = () => {
-  const { melody } = useBoardContext();
+  const { melody, melodyPlayed, updateMelodyPlayed, gameWon, gameLost } =
+    useBoardContext();
   const [clicked, setClicked] = useState(false);
 
   const melodyButtonClicked = () => {
-    if (!clicked) {
+    if (!clicked && !melodyPlayed) {
       setClicked(true);
       PlayMelody(melody);
+      if (!(gameWon || gameLost)) {
+        updateMelodyPlayed(true);
+      }
 
       // prevent melody button spamming
       setTimeout(() => {
@@ -21,7 +25,10 @@ const PlayMelodyButton = () => {
   };
 
   return (
-    <div className="round-button" onClick={melodyButtonClicked}>
+    <div
+      className={!melodyPlayed ? "round-button" : "round-button-unclickable"}
+      onClick={melodyButtonClicked}
+    >
       ♫
     </div>
   );

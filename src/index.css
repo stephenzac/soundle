@@ -18,6 +18,10 @@
   @apply bg-gray-900 text-white w-8 h-8 rounded-full cursor-pointer grid place-items-center button-animation;
 }
 
+.round-button-unclickable {
+  @apply bg-gray-900 text-white w-8 h-8 rounded-full cursor-not-allowed grid place-items-center button-animation opacity-50;
+}
+
 .button-animation {
   @apply hover:bg-gray-600 hover:rounded-xl transition-all ease-in-out duration-75;
 }
