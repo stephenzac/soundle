@@ -2,7 +2,7 @@ import * as Tone from "tone";
 import { NoteTile } from "./contexts/BoardContext";
 
 const MELODY_LENGTH = 5;
-const NOTES = ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
+const NOTES = ["C", "D♭", "D", "E♭", "E", "F", "Gb", "G", "A♭", "A", "B♭", "B"];
 
 export const CheckNotes = (
   submittedNotes: NoteTile[],
