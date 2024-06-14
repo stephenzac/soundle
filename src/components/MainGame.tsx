@@ -5,6 +5,8 @@ import SubmitButton from "./SubmitButton";
 import PlayMelodyButton from "./PlayMelodyButton";
 import ResetButton from "./ResetButton";
 import GitHubLink from "./GitHubLink";
+import HappyCat from "./HappyCat";
+import SadCat from "./SadCat";
 import { useBoardContext } from "../contexts/BoardContext";
 
 const MainGame = () => {
@@ -15,17 +17,9 @@ const MainGame = () => {
     <>
       <GameBox></GameBox>
 
-      <div className="absolute top-0 left 0 w-max">
-        {gameWon && (
-          <img src={"./happy-cat.gif "} alt="GIF of happy cat dancing"></img>
-        )}
-      </div>
+      {gameWon && <HappyCat gifPath={"./happy-cat.gif"} />}
 
-      <div className="absolute top-0 left-0 w-48">
-        {gameLost && (
-          <img src={"./sad-cat.gif "} alt="GIF of a banana cat crying"></img>
-        )}
-      </div>
+      {gameLost && <SadCat gifPath="./sad-cat.gif" />}
 
       <div className="flex flex-row mt-4 justify-center">
         <NoteInputButton noteName={"C"} />
