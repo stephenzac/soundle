@@ -1,14 +1,15 @@
-import { useInformationContext } from "../contexts/InformationContext";
+interface InformationButtonProps {
+  setClickedState: (newState: boolean) => void;
+}
 
-const InformationButton = () => {
-  const { clicked, setClicked } = useInformationContext();
-
-  const buttonClicked = () => {
-    setClicked(true);
-  };
-
+const InformationButton = ({ setClickedState }: InformationButtonProps) => {
   return (
-    <div className="round-button font-bold" onClick={buttonClicked}>
+    <div
+      className="round-button font-bold"
+      onClick={() => {
+        setClickedState(true);
+      }}
+    >
       ?
     </div>
   );
