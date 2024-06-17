@@ -1,8 +1,9 @@
 # Soundle
 
-Because I have passions in both music and software development, I created Soundle as a fun little ear training game for you musicians out there. The game will generate 5 random pitches, and you get 6 chances to guess the exact pitches in the order it was played (in concert pitch). Unlike other Wordle-like games, you aren't limited to one game per day: you can replay and guess melodies as many times as you'd like. 
+Because I have passions in both music and software development, I created Soundle as a fun little ear training game for you musicians out there. The game will generate 5 random pitches, and you get 6 chances to guess the exact pitches in the order it was played (in concert pitch). Unlike other Wordle-like games, you aren't limited to one game per day: you can replay and guess melodies as many times as you'd like.
 
 ## Tech Stack
+
 ![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)

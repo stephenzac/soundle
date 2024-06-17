@@ -4,14 +4,12 @@ import NoteInputButton from "./NoteInputButton";
 import SubmitButton from "./SubmitButton";
 import PlayMelodyButton from "./PlayMelodyButton";
 import ResetButton from "./ResetButton";
-import GitHubLink from "./GitHubLink";
 import HappyCat from "./HappyCat";
 import SadCat from "./SadCat";
 import { useBoardContext } from "../contexts/BoardContext";
 
 const MainGame = () => {
   const { gameWon, gameLost } = useBoardContext();
-  //TODO: Add informational section/button?
 
   return (
     <>
@@ -43,10 +41,6 @@ const MainGame = () => {
         <SubmitButton />
         <PlayMelodyButton />
         {(gameWon || gameLost) && <ResetButton />}
-      </div>
-
-      <div className="flex justify-center mt-1">
-        <GitHubLink />
       </div>
     </>
   );

@@ -2,20 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  color: white;
+}
+
+@layer components {
+  .modal-animate-in {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+
+  .modal-active {
+    opacity: 1;
+    transition: opacity 200ms, transform 200ms;
+  }
+
+  .modal-animate-out {
+    opacity: 0;
+    transform: translateX(100px);
+    transition: opacity 200ms, transform 200ms;
+  }
+}
+
 .note-box {
-  @apply bg-gray-900 text-white font-bold grid place-items-center h-9 w-9 border-2 border-slate-300 rounded-md;
+  @apply bg-gray-900 font-bold grid place-items-center h-9 w-9 border-2 border-slate-300 rounded-md;
 }
 
 .note-box-correct {
-  @apply bg-green-700 text-white font-bold grid place-items-center h-10 w-10 border-2 border-slate-300 rounded-md;
+  @apply bg-green-700 font-bold grid place-items-center h-10 w-10 border-2 border-slate-300 rounded-md;
 }
 
 .note-box-incorrect {
-  @apply bg-red-700 text-white font-bold grid place-items-center h-10 w-10 border-2 border-slate-300 rounded-md;
+  @apply bg-red-700 font-bold grid place-items-center h-10 w-10 border-2 border-slate-300 rounded-md;
+}
+
+.note-box-example {
+  @apply bg-gray-900 font-bold grid place-items-center h-8 w-8 ml-2 border-2 border-slate-300 rounded-md;
 }
 
 .round-button {
-  @apply bg-gray-900 text-white w-8 h-8 rounded-full cursor-pointer grid place-items-center button-animation;
+  @apply bg-gray-900 w-8 h-8 rounded-full cursor-pointer grid place-items-center button-animation;
+}
+
+.round-button-example {
+  @apply bg-gray-900 w-8 h-8 ml-2 rounded-full grid place-items-center;
 }
 
 .round-button-unclickable {
