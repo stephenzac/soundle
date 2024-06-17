@@ -23,9 +23,7 @@ const App = () => {
         <InformationButton setClickedState={setShowInfo} />
       </div>
 
-      <div className="flex flex-row justify-center items-center">
-        {showInfo && <InformationModal setClickedState={setShowInfo} />}
-      </div>
+      {showInfo && <InformationModal setClickedState={setShowInfo} />}
     </div>
   );
 };

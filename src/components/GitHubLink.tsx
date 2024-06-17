@@ -3,16 +3,15 @@
 const GitHubLink = () => {
   return (
     <div className="flex flex-row place-items-center">
-      <img
-        src={"./github-mark-white.png"}
-        className="w-7 h-7 flex place-items-center"
-      ></img>
-
       <a
-        className="font-bold text-sm text-white h-12 ml-2 flex place-items-center underline"
+        className="flex place-items-center gap-3 font-bold text-sm text-white h-12 ml-2 underline"
         href="https://github.com/stephenzac"
         target="_blank"
       >
+        <img
+          src={"./github-mark-white.png"}
+          className="w-7 h-7 flex place-items-center"
+        ></img>
         stephenzac
       </a>
     </div>
