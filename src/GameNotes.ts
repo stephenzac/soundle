@@ -2,7 +2,7 @@ import * as Tone from "tone";
 import { NoteTile } from "./contexts/BoardContext";
 
 const MELODY_LENGTH = 5;
-const NOTES = ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
+const NOTES = ["C", "D♭", "D", "E♭", "E", "F", "Gb", "G", "A♭", "A", "B♭", "B"];
 
 export const CheckNotes = (
   submittedNotes: NoteTile[],
@@ -48,7 +48,7 @@ export const PlayMelody = (notes: string[]): void => {
       note = note.replace("♭", "b");
     }
 
-    const startTime = now + index / 2;
+    const startTime = now + index / 2.3;
     synth.triggerAttack(`${note}4`, startTime);
 
     const noteDuration = Tone.Time("8n").toSeconds();
