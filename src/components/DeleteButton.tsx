@@ -13,9 +13,13 @@ const DeleteButton = () => {
   };
 
   return (
-    <div className="round-button" onClick={DeleteNote}>
+    <button
+      className="round-button"
+      onClick={DeleteNote}
+      aria-label="Delete note"
+    >
       ⌫
-    </div>
+    </button>
   );
 };
 

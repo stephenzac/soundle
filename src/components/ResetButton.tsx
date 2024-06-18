@@ -4,9 +4,13 @@ const ResetButton = () => {
   const { resetGame } = useBoardContext();
 
   return (
-    <div className="round-button font-bold" onClick={resetGame}>
+    <button
+      className="round-button font-bold"
+      onClick={resetGame}
+      aria-label="Reset game"
+    >
       ↺
-    </div>
+    </button>
   );
 };
 

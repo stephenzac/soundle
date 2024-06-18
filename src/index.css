@@ -4,12 +4,13 @@
 
 body {
   color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 @layer components {
   .modal-animate-in {
     opacity: 0;
-    transform: translateX(-100px);
+    transform: scale(0.5);
   }
 
   .modal-active {
@@ -19,8 +20,22 @@ body {
 
   .modal-animate-out {
     opacity: 0;
-    transform: translateX(100px);
+    transform: scale(0.5);
     transition: opacity 200ms, transform 200ms;
+  }
+
+  .background-animate-in {
+    opacity: 0;
+  }
+
+  .background-active {
+    opacity: 0.6;
+    transition: opacity 200ms;
+  }
+
+  .background-animate-out {
+    opacity: 0;
+    transition: opacity 200ms;
   }
 }
 

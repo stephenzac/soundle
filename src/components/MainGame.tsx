@@ -28,7 +28,7 @@ const MainGame = () => {
         <NoteInputButton noteName={"F"} />
       </div>
       <div className="flex flex-row mt-4 justify-center">
-        <NoteInputButton noteName={"Gb"} />
+        <NoteInputButton noteName={"G♭"} />
         <NoteInputButton noteName={"G"} />
         <NoteInputButton noteName={"A♭"} />
         <NoteInputButton noteName={"A"} />

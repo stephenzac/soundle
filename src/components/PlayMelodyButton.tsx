@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PlayMelody } from "../GameNotes";
 import { useBoardContext } from "../contexts/BoardContext";
 
-const MELODY_WAIT_TIME = 2600;
+const MELODY_WAIT_TIME = 2700;
 
 const PlayMelodyButton = () => {
   const { melody, melodyPlayed, updateMelodyPlayed, gameWon, gameLost } =
@@ -25,12 +25,13 @@ const PlayMelodyButton = () => {
   };
 
   return (
-    <div
+    <button
       className={!melodyPlayed ? "round-button" : "round-button-unclickable"}
       onClick={melodyButtonClicked}
+      aria-label="Play melody"
     >
       ♫
-    </div>
+    </button>
   );
 };
 
