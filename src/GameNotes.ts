@@ -48,7 +48,7 @@ export const PlayMelody = (notes: string[]): void => {
       note = note.replace("♭", "b");
     }
 
-    const startTime = now + index / 2.3;
+    const startTime = now + index / 2;
     synth.triggerAttack(`${note}4`, startTime);
 
     const noteDuration = Tone.Time("8n").toSeconds();

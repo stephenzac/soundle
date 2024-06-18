@@ -10,18 +10,20 @@ const App = () => {
 
   return (
     <div className="bg-gray-800 h-screen flex flex-col items-center">
-      <h1 className="text-center text-4xl font-bold w-full pt-2 pb-4">
-        Soundle
-      </h1>
+      <header>
+        <h1 className="text-center text-4xl font-bold w-full pt-5 pb-4">
+          Soundle
+        </h1>
+      </header>
 
       <BoardContextProvider>
         <MainGame />
       </BoardContextProvider>
 
-      <div className="w-10/12 max-w-80 flex flex-row justify-center items-center space-x-4 mt-1">
+      <footer className="flex flex-row justify-center items-center w-10/12 pr-1 max-w-80 gap-2 mt-1">
         <GitHubLink />
         <InformationButton setClickedState={setShowInfo} />
-      </div>
+      </footer>
 
       {showInfo && <InformationModal setClickedState={setShowInfo} />}
     </div>

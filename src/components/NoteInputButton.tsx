@@ -24,12 +24,13 @@ const NoteInputButton = ({ noteName }: NoteInputProps) => {
   };
 
   return (
-    <div
+    <button
       className="note-box button-animation mx-2 cursor-pointer"
       onClick={InputNote}
+      aria-label={`Input note ${noteName}`}
     >
       {noteName}
-    </div>
+    </button>
   );
 };
 

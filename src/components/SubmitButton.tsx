@@ -44,9 +44,13 @@ const SubmitButton = () => {
   };
 
   return (
-    <div className="round-button font-bold" onClick={submit}>
+    <button
+      className="round-button font-bold"
+      onClick={submit}
+      aria-label="Submit melody guess"
+    >
       ✓
-    </div>
+    </button>
   );
 };
 

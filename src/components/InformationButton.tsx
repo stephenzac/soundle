@@ -4,14 +4,15 @@ interface InformationButtonProps {
 
 const InformationButton = ({ setClickedState }: InformationButtonProps) => {
   return (
-    <div
+    <button
       className="round-button font-bold"
       onClick={() => {
         setClickedState(true);
       }}
+      aria-label="Show game information"
     >
       ?
-    </div>
+    </button>
   );
 };
 

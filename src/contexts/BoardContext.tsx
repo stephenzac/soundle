@@ -41,8 +41,8 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
 
   const [gameBoard, setBoard] = useState<NoteTile[][]>(newGameBoard);
 
-  const [currentRow, setCurrentRow] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentRow, setCurrentRow] = useState<number>(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [melody, setMelody] = useState<string[]>(GenerateNotes());
   const [gameWon, setGameWon] = useState<boolean>(false);
   const [gameLost, setGameLost] = useState<boolean>(false);
@@ -74,12 +74,11 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     index: number
   ): void => {
     let newBoard: NoteTile[][] = gameBoard;
-    let newNote: NoteTile = {
+    newBoard[rowNumber][index] = {
       noteName: note,
       answered: false,
       correct: false,
     };
-    newBoard[rowNumber][index] = newNote;
     setBoard(newBoard);
   };
 
@@ -92,12 +91,11 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     let newGameBoard: NoteTile[][] = [[], [], [], [], [], []];
     for (let i = 0; i < 6; i++) {
       for (let j = 0; j < 5; j++) {
-        let newTile: NoteTile = {
+        newGameBoard[i][j] = {
           noteName: "",
           answered: false,
           correct: false,
         };
-        newGameBoard[i][j] = newTile;
       }
     }
     setBoard(newGameBoard);
