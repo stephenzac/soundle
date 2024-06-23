@@ -1,11 +1,11 @@
 import { NoteTile } from "../contexts/BoardContext";
 
-interface NoteBoxProps {
+type NoteBoxProps = {
   note: NoteTile;
-}
+};
 
 const NoteBox = ({ note }: NoteBoxProps) => {
-  let noteBoxStyle = "note-box mx-2";
+  let noteBoxStyle = "note-box";
 
   // TODO: Add different colors for right note, wrong spot
 
@@ -13,12 +13,12 @@ const NoteBox = ({ note }: NoteBoxProps) => {
   if (note.answered) {
     noteBoxStyle = `note-box-${
       note.correct ? "correct" : "incorrect"
-    } mx-2 transition-all ease-in duration-350`;
+    } transition-all ease-in duration-350`;
   }
 
   return (
     <div className={`${noteBoxStyle}`}>
-      <div className="">{note.noteName}</div>
+      <p>{note.noteName}</p>
     </div>
   );
 };

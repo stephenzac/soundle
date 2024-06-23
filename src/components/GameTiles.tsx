@@ -1,14 +1,11 @@
 import NoteBoxRow from "./NoteBoxRow";
 import { useBoardContext } from "../contexts/BoardContext";
 
-const GameBox = () => {
+const GameTiles = () => {
   const { gameBoard } = useBoardContext();
 
   return (
-    <div
-      className="bg-gray-900 h-3/6 w-10/12 max-w-80 flex flex-col self-center justify-center border-2 border-slate-300 rounded-lg"
-      role="presentation"
-    >
+    <div className="flex flex-col gap-4 my-4">
       {gameBoard.map((currentRow, index) => {
         return <NoteBoxRow noteRow={currentRow} key={index} />;
       })}
@@ -16,4 +13,4 @@ const GameBox = () => {
   );
 };
 
-export default GameBox;
+export default GameTiles;

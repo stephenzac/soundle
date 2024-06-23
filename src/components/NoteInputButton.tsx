@@ -2,9 +2,9 @@ import { useBoardContext } from "../contexts/BoardContext";
 
 const ROW_LENGTH = 4;
 
-interface NoteInputProps {
+type NoteInputProps = {
   noteName: string;
-}
+};
 
 const NoteInputButton = ({ noteName }: NoteInputProps) => {
   const {
@@ -25,7 +25,7 @@ const NoteInputButton = ({ noteName }: NoteInputProps) => {
 
   return (
     <button
-      className="note-box button-animation mx-2 cursor-pointer"
+      className="note-input-button button-animation mx-2 cursor-pointer"
       onClick={InputNote}
       aria-label={`Input note ${noteName}`}
     >
