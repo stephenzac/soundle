@@ -32,7 +32,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
         role="presentation"
       ></div>
       <section
-        className={`flex flex-col place-items-start px-2 absolute top-16 bg-gray-700 h-4/6 max-w-80 pt-2 ml-auto mr-auto rounded-lg border-2 border-slate-300 ${modalClass} `}
+        className={`flex flex-col place-items-start px-2 absolute top-16 bg-gray-700 h-96 max-w-80 pt-2 ml-auto mr-auto rounded-lg border-2 border-slate-300 ${modalClass} `}
         role="dialogue"
         aria-describedby="modalDescription"
         aria-modal="true"
@@ -47,7 +47,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
 
         <div id="modalDescription">
           <header>
-            <p className="text-slate-100 text-center mb-5">
+            <p className="text-slate-100 text-center mb-6">
               Soundle is a Wordle-like ear training game to improve your sense
               of pitch. Listen to the five tones in concert pitch and guess them
               all correctly within 6 tries.
@@ -86,7 +86,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
               ♫
             </div>
             <figcaption className="text-slate-100 w-full pl-4">
-              Playback the random melody.
+              Playback the random melody. (Once per guess)
             </figcaption>
           </figure>
 
