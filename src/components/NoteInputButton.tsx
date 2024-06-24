@@ -17,7 +17,6 @@ const NoteInputButton = ({ noteName }: NoteInputProps) => {
   } = useGameContext();
 
   const InputNote = () => {
-    console.log(`Current index: ${currentIndex}`);
     if (!(gameWon || gameLost) && currentIndex <= ROW_LENGTH) {
       setCurrentIndex(currentIndex + 1);
       const newNote: NoteTile = {

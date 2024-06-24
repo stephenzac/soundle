@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useGameContext } from "../contexts/GameContext";
 import { CheckNotes } from "../GameNotes";
 
@@ -17,6 +18,24 @@ const SubmitButton = () => {
     updateGameWon,
     updateGameLost,
   } = useGameContext();
+
+  const [buttonClass, setButtonClass] = useState<string>(
+    "round-button-unclickable"
+  );
+
+  useEffect(() => {
+    if (currentIndex === END_OF_ROW) {
+      setButtonClass("round-button");
+    } else {
+      if (buttonClass != "round-button-unclickable") {
+        setButtonClass("round-button-unclickable");
+      }
+    }
+
+    if (gameWon || gameLost) {
+      setButtonClass("round-button-unclickable");
+    }
+  }, [currentIndex, gameWon, gameLost]);
 
   const submit = () => {
     if (gameWon || gameLost) {
@@ -38,6 +57,7 @@ const SubmitButton = () => {
           return;
         }
 
+        // Back to beginning of row after moving to next row
         setCurrentIndex(0);
       }
     }
@@ -45,7 +65,7 @@ const SubmitButton = () => {
 
   return (
     <button
-      className="round-button font-bold"
+      className={buttonClass}
       onClick={submit}
       aria-label="Submit melody guess"
     >

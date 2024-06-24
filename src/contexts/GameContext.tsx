@@ -20,7 +20,6 @@ type Board = {
   updateGameLost: (newState: boolean) => void;
   getMelody: () => void;
   updateBoard: (note: NoteTile, rowNumber: number, index: number) => void;
-  removeFromBoard: () => void;
   resetGame: () => void;
   updateCurrentRow: (newRow: number) => void;
   setCurrentIndex: (newIndex: number) => void;
@@ -70,11 +69,6 @@ const GameContextProvider: React.FC<{ children: ReactNode }> = ({
     setBoard(newBoard);
   };
 
-  const removeFromBoard = (): void => {
-    gameBoard[currentRow][currentIndex - 1].noteName = "";
-    setCurrentIndex(currentIndex - 1);
-  };
-
   const resetGame = () => {
     let newGameBoard: NoteTile[][] = [[], [], [], [], [], []];
     for (let i = 0; i < 6; i++) {
@@ -116,7 +110,6 @@ const GameContextProvider: React.FC<{ children: ReactNode }> = ({
     updateGameLost,
     getMelody: generateNewMelody,
     updateBoard,
-    removeFromBoard,
     resetGame,
     updateCurrentRow,
     setCurrentIndex,

@@ -6,13 +6,14 @@ type NoteBoxProps = {
 };
 
 const NoteBox = ({ note }: NoteBoxProps) => {
-  const [noteClass, setNoteClass] = useState<string>("note-animate-in");
+  const [noteDisplayed, setNoteDisplayed] = useState<string>("");
+  const [noteClass, setNoteClass] = useState<string>("");
 
   useEffect(() => {
     if (note.noteName === "") {
-      setNoteClass("note-animate-in");
-      console.log("Note is now empty");
+      setNoteClass("note-animate");
     } else {
+      setNoteDisplayed(note.noteName);
       setNoteClass("note-active");
     }
   }, [note]);
@@ -30,7 +31,7 @@ const NoteBox = ({ note }: NoteBoxProps) => {
 
   return (
     <div className={`${noteBoxStyle}`}>
-      <p className={noteClass}>{note.noteName}</p>
+      <p className={noteClass}>{noteDisplayed}</p>
     </div>
   );
 };

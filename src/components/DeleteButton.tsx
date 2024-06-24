@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import { useGameContext, NoteTile } from "../contexts/GameContext";
 
 const BEGINNING_OF_ROW = 0;
 
 const DeleteButton = () => {
+  const [buttonClass, setButtonClass] = useState<string>("round-button");
+
   const {
     currentIndex,
     setCurrentIndex,
@@ -24,9 +27,17 @@ const DeleteButton = () => {
     }
   };
 
+  useEffect(() => {
+    if (currentIndex > BEGINNING_OF_ROW && !(gameWon || gameLost)) {
+      setButtonClass("round-button");
+    } else {
+      setButtonClass("round-button-unclickable");
+    }
+  }, [currentIndex, gameWon, gameLost]);
+
   return (
     <button
-      className="round-button"
+      className={buttonClass}
       onClick={DeleteNote}
       aria-label="Delete note"
     >
