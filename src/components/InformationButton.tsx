@@ -1,6 +1,6 @@
-interface InformationButtonProps {
+type InformationButtonProps = {
   setClickedState: (newState: boolean) => void;
-}
+};
 
 const InformationButton = ({ setClickedState }: InformationButtonProps) => {
   return (

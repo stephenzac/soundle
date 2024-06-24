@@ -1,4 +1,4 @@
-import { useBoardContext } from "../contexts/BoardContext";
+import { useGameContext } from "../contexts/GameContext";
 import { CheckNotes } from "../GameNotes";
 
 const END_OF_ROW = 5;
@@ -10,13 +10,13 @@ const SubmitButton = () => {
     currentRow,
     currentIndex,
     updateCurrentRow,
-    updateCurrentIndex,
+    setCurrentIndex,
     melody,
     gameWon,
     gameLost,
     updateGameWon,
     updateGameLost,
-  } = useBoardContext();
+  } = useGameContext();
 
   const submit = () => {
     if (gameWon || gameLost) {
@@ -38,7 +38,7 @@ const SubmitButton = () => {
           return;
         }
 
-        updateCurrentIndex(0);
+        setCurrentIndex(0);
       }
     }
   };

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
-interface InformationModalProps {
+type InformationModalProps = {
   setClickedState: (newState: boolean) => void;
-}
+};
 
 const InformationModal = ({ setClickedState }: InformationModalProps) => {
   const [modalClass, setModalClass] = useState<string>("modal-animate-in");

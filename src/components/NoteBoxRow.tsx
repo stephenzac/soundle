@@ -1,4 +1,4 @@
-import { NoteTile } from "../contexts/BoardContext";
+import { NoteTile } from "../contexts/GameContext";
 import NoteBox from "./NoteBox";
 
 type NoteBoxRowProps = {

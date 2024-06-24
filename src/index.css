@@ -36,6 +36,22 @@ body {
     opacity: 0;
     transition: opacity 200ms;
   }
+
+  .note-animate-in {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  .note-active {
+    opacity: 1;
+    transition: opacity 100ms, transform 100ms;
+  }
+
+  .note-animate-out {
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 200ms, transform 200ms;
+  }
 }
 
 .note-box {
@@ -43,11 +59,11 @@ body {
 }
 
 .note-box-correct {
-  @apply bg-green-700 font-bold grid place-items-center h-12 w-12 border-2 text-xl border-slate-300 rounded-md;
+  @apply bg-green-700 font-bold grid place-items-center h-12 w-12 border-2 text-lg border-slate-300 rounded-md;
 }
 
 .note-box-incorrect {
-  @apply bg-red-700 font-bold grid place-items-center h-12 w-12 border-2 text-xl border-slate-300 rounded-md;
+  @apply bg-red-700 font-bold grid place-items-center h-12 w-12 border-2 text-lg border-slate-300 rounded-md;
 }
 
 .note-input-button {

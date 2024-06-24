@@ -1,14 +1,26 @@
-import { useBoardContext } from "../contexts/BoardContext";
+import { useGameContext, NoteTile } from "../contexts/GameContext";
 
 const BEGINNING_OF_ROW = 0;
 
 const DeleteButton = () => {
-  const { currentIndex, removeFromBoard, gameWon, gameLost } =
-    useBoardContext();
+  const {
+    currentIndex,
+    setCurrentIndex,
+    currentRow,
+    updateBoard,
+    gameWon,
+    gameLost,
+  } = useGameContext();
 
   const DeleteNote = () => {
     if (currentIndex > BEGINNING_OF_ROW && !(gameWon || gameLost)) {
-      removeFromBoard();
+      setCurrentIndex(currentIndex - 1);
+      const newNote: NoteTile = {
+        noteName: "",
+        answered: false,
+        correct: false,
+      };
+      updateBoard(newNote, currentRow, currentIndex - 1);
     }
   };
 

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { PlayMelody } from "../GameNotes";
-import { useBoardContext } from "../contexts/BoardContext";
+import { useGameContext } from "../contexts/GameContext";
 
 const MELODY_WAIT_TIME = 2700;
 
 const PlayMelodyButton = () => {
-  const { melody, melodyPlayed, updateMelodyPlayed, gameWon, gameLost } =
-    useBoardContext();
+  const { melody, melodyPlayed, setMelodyPlayed, gameWon, gameLost } =
+    useGameContext();
   const [clicked, setClicked] = useState(false);
 
   const melodyButtonClicked = () => {
@@ -14,7 +14,7 @@ const PlayMelodyButton = () => {
       setClicked(true);
       PlayMelody(melody);
       if (!(gameWon || gameLost)) {
-        updateMelodyPlayed(true);
+        setMelodyPlayed(true);
       }
 
       // prevent melody button spamming

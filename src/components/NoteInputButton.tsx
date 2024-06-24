@@ -1,4 +1,4 @@
-import { useBoardContext } from "../contexts/BoardContext";
+import { NoteTile, useGameContext } from "../contexts/GameContext";
 
 const ROW_LENGTH = 4;
 
@@ -10,16 +10,22 @@ const NoteInputButton = ({ noteName }: NoteInputProps) => {
   const {
     currentRow,
     currentIndex,
-    updateCurrentIndex,
+    setCurrentIndex,
     updateBoard,
     gameWon,
     gameLost,
-  } = useBoardContext();
+  } = useGameContext();
 
   const InputNote = () => {
+    console.log(`Current index: ${currentIndex}`);
     if (!(gameWon || gameLost) && currentIndex <= ROW_LENGTH) {
-      updateCurrentIndex(currentIndex + 1);
-      updateBoard(noteName, currentRow, currentIndex);
+      setCurrentIndex(currentIndex + 1);
+      const newNote: NoteTile = {
+        noteName: noteName,
+        answered: false,
+        correct: false,
+      };
+      updateBoard(newNote, currentRow, currentIndex);
     }
   };
 

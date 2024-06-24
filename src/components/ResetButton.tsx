@@ -1,16 +1,20 @@
-import { useBoardContext } from "../contexts/BoardContext";
+import { useGameContext } from "../contexts/GameContext";
 
 const ResetButton = () => {
-  const { resetGame } = useBoardContext();
+  const { resetGame, gameWon, gameLost } = useGameContext();
 
   return (
-    <button
-      className="round-button font-bold"
-      onClick={resetGame}
-      aria-label="Reset game"
-    >
-      ↺
-    </button>
+    <>
+      {(gameWon || gameLost) && (
+        <button
+          className="round-button font-bold"
+          onClick={resetGame}
+          aria-label="Reset game"
+        >
+          ↺
+        </button>
+      )}
+    </>
   );
 };
 
