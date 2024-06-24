@@ -1,11 +1,24 @@
-import { NoteTile } from "../contexts/BoardContext";
+import { useEffect, useState } from "react";
+import { NoteTile } from "../contexts/GameContext";
 
-interface NoteBoxProps {
+type NoteBoxProps = {
   note: NoteTile;
-}
+};
 
 const NoteBox = ({ note }: NoteBoxProps) => {
-  let noteBoxStyle = "note-box mx-2";
+  const [noteDisplayed, setNoteDisplayed] = useState<string>("");
+  const [noteClass, setNoteClass] = useState<string>("");
+
+  useEffect(() => {
+    if (note.noteName === "") {
+      setNoteClass("note-animate");
+    } else {
+      setNoteDisplayed(note.noteName);
+      setNoteClass("note-active");
+    }
+  }, [note]);
+
+  let noteBoxStyle = "note-box";
 
   // TODO: Add different colors for right note, wrong spot
 
@@ -13,12 +26,12 @@ const NoteBox = ({ note }: NoteBoxProps) => {
   if (note.answered) {
     noteBoxStyle = `note-box-${
       note.correct ? "correct" : "incorrect"
-    } mx-2 transition-all ease-in duration-350`;
+    } transition-all ease-in duration-350`;
   }
 
   return (
     <div className={`${noteBoxStyle}`}>
-      <div className="">{note.noteName}</div>
+      <p className={noteClass}>{noteDisplayed}</p>
     </div>
   );
 };

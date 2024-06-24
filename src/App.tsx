@@ -1,7 +1,6 @@
 import MainGame from "./components/MainGame";
 import GitHubLink from "./components/GitHubLink";
 import InformationButton from "./components/InformationButton";
-import { BoardContextProvider } from "./contexts/BoardContext";
 import { useState } from "react";
 import InformationModal from "./components/InformationModal";
 
@@ -16,11 +15,9 @@ const App = () => {
         </h1>
       </header>
 
-      <BoardContextProvider>
-        <MainGame />
-      </BoardContextProvider>
+      <MainGame />
 
-      <footer className="flex flex-row justify-center items-center w-10/12 pr-1 max-w-80 gap-2 mt-1">
+      <footer className="flex flex-row justify-center items-center w-10/12 pr-1 max-w-80 gap-2 mt-2">
         <GitHubLink />
         <InformationButton setClickedState={setShowInfo} />
       </footer>

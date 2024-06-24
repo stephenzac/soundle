@@ -1,13 +1,13 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 import { GenerateNotes } from "../GameNotes";
 
-interface NoteTile {
+type NoteTile = {
   noteName: string;
   answered: boolean;
   correct: boolean;
-}
+};
 
-interface Board {
+type Board = {
   gameBoard: NoteTile[][];
   currentRow: number;
   currentIndex: number;
@@ -15,20 +15,19 @@ interface Board {
   gameWon: boolean;
   gameLost: boolean;
   melodyPlayed: boolean;
-  updateMelodyPlayed: (newState: boolean) => void;
+  setMelodyPlayed: (newState: boolean) => void;
   updateGameWon: (newState: boolean) => void;
   updateGameLost: (newState: boolean) => void;
   getMelody: () => void;
-  updateBoard: (note: string, rowNumber: number, index: number) => void;
-  removeFromBoard: () => void;
+  updateBoard: (note: NoteTile, rowNumber: number, index: number) => void;
   resetGame: () => void;
   updateCurrentRow: (newRow: number) => void;
-  updateCurrentIndex: (newIndex: number) => void;
-}
+  setCurrentIndex: (newIndex: number) => void;
+};
 
-const boardContext = createContext<Board>({} as Board);
+const gameContext = createContext<Board>({} as Board);
 
-const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
+const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   let newGameBoard: NoteTile[][] = [[], [], [], [], [], []];
@@ -48,43 +47,26 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
   const [gameLost, setGameLost] = useState<boolean>(false);
   const [melodyPlayed, setMelodyPlayed] = useState<boolean>(false);
 
-  const updateMelodyPlayed = (newState: boolean) => {
-    setMelodyPlayed(newState);
-  };
-
   const updateGameWon = (newState: boolean) => {
     setGameWon(newState);
-    updateMelodyPlayed(false);
+    setMelodyPlayed(false);
   };
 
   const updateGameLost = (newState: boolean) => {
     setGameLost(newState);
-    updateMelodyPlayed(false);
+    setMelodyPlayed(false);
   };
 
-  const getMelody = (): void => {
+  const generateNewMelody = (): void => {
     let newNotes: string[] = melody;
     newNotes = GenerateNotes();
     setMelody(newNotes);
   };
 
-  const updateBoard = (
-    note: string,
-    rowNumber: number,
-    index: number
-  ): void => {
+  const updateBoard = (note: NoteTile, rowNumber: number, index: number) => {
     let newBoard: NoteTile[][] = gameBoard;
-    newBoard[rowNumber][index] = {
-      noteName: note,
-      answered: false,
-      correct: false,
-    };
+    newBoard[rowNumber][index] = note;
     setBoard(newBoard);
-  };
-
-  const removeFromBoard = (): void => {
-    gameBoard[currentRow][currentIndex - 1].noteName = "";
-    updateCurrentIndex(currentIndex - 1);
   };
 
   const resetGame = () => {
@@ -106,17 +88,13 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
       setGameLost(false);
     }
     updateCurrentRow(0);
-    updateCurrentIndex(0);
-    getMelody();
+    setCurrentIndex(0);
+    generateNewMelody();
   };
 
   const updateCurrentRow = (newRow: number): void => {
     setCurrentRow(newRow);
-    updateMelodyPlayed(false);
-  };
-
-  const updateCurrentIndex = (newIndex: number): void => {
-    setCurrentIndex(newIndex);
+    setMelodyPlayed(false);
   };
 
   const contextValue: Board = {
@@ -127,27 +105,27 @@ const BoardContextProvider: React.FC<{ children: ReactNode }> = ({
     gameWon,
     gameLost,
     melodyPlayed,
-    updateMelodyPlayed,
+    setMelodyPlayed,
     updateGameWon,
     updateGameLost,
-    getMelody,
+    getMelody: generateNewMelody,
     updateBoard,
-    removeFromBoard,
     resetGame,
     updateCurrentRow,
-    updateCurrentIndex,
+    setCurrentIndex,
   };
 
   return (
-    <boardContext.Provider value={contextValue}>
-      {children}
-    </boardContext.Provider>
+    <gameContext.Provider value={contextValue}>{children}</gameContext.Provider>
   );
 };
 
-const useBoardContext = () => {
-  return useContext(boardContext);
+const useGameContext = () => {
+  return useContext(gameContext);
 };
 
-export { useBoardContext, BoardContextProvider };
+export {
+  useGameContext as useGameContext,
+  GameContextProvider as GameContextProvider,
+};
 export type { NoteTile };

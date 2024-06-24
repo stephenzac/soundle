@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import { NoteTile } from "./contexts/BoardContext";
+import { NoteTile } from "./contexts/GameContext";
 
 const MELODY_LENGTH = 5;
 const NOTES = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"];
