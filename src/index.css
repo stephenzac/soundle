@@ -49,15 +49,23 @@ body {
 }
 
 .note-box {
-  @apply bg-gray-900 font-bold grid place-items-center h-11 w-11 border-2 border-slate-300 rounded-md;
+  @apply bg-gray-900 font-bold flex justify-center items-center place-items-center h-11 w-11 border-2 border-slate-300 rounded-md transition-all;
 }
 
 .note-box-correct {
-  @apply bg-green-700 font-bold grid place-items-center h-12 w-12 border-2 text-lg border-slate-300 rounded-md;
+  @apply bg-green-700 font-bold flex justify-center items-center h-12 w-12 text-lg border-2 border-slate-300 rounded-md transition-all;
+}
+
+.note-box-close-answer {
+  @apply bg-amber-500 font-bold flex justify-center items-center h-12 w-12 text-lg border-2 border-slate-300 rounded-md transition-all;
 }
 
 .note-box-incorrect {
-  @apply bg-red-700 font-bold grid place-items-center h-12 w-12 border-2 text-lg border-slate-300 rounded-md;
+  @apply bg-red-700 font-bold flex justify-center items-center h-12 w-12 border-2 text-lg border-slate-300 rounded-md transition-all;
+}
+
+.note-box-example {
+  @apply bg-gray-900 font-bold grid place-items-center h-8 w-[30px] ml-2 border-2 border-slate-300 rounded-md;
 }
 
 .note-input-button {
@@ -66,10 +74,6 @@ body {
 
 .round-button {
   @apply bg-gray-900 w-8 h-8 rounded-full cursor-pointer grid place-items-center button-animation;
-}
-
-.note-box-example {
-  @apply bg-gray-900 font-bold grid place-items-center h-8 w-9 ml-2 border-2 border-slate-300 rounded-md;
 }
 
 .round-button-example {
