@@ -20,13 +20,15 @@ const NoteBox = ({ note }: NoteBoxProps) => {
 
   let noteBoxStyle = "note-box";
 
-  // TODO: Add different colors for right note, wrong spot
-
   // different states of the NoteBox will render different styles
   if (note.answered) {
-    noteBoxStyle = `note-box-${
-      note.correct ? "correct" : "incorrect"
-    } transition-all ease-in duration-350`;
+    if (note.correct) {
+      noteBoxStyle = "note-box-correct";
+    } else if (note.answerIsClose) {
+      noteBoxStyle = "note-box-close-answer";
+    } else {
+      noteBoxStyle = "note-box-incorrect";
+    }
   }
 
   return (

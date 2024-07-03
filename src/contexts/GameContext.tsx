@@ -5,6 +5,7 @@ type NoteTile = {
   noteName: string;
   answered: boolean;
   correct: boolean;
+  answerIsClose: boolean;
 };
 
 type Board = {
@@ -33,7 +34,12 @@ const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   let newGameBoard: NoteTile[][] = [[], [], [], [], [], []];
   for (let i = 0; i < 6; i++) {
     for (let j = 0; j < 5; j++) {
-      let newTile: NoteTile = { noteName: "", answered: false, correct: false };
+      let newTile: NoteTile = {
+        noteName: "",
+        answered: false,
+        correct: false,
+        answerIsClose: false,
+      };
       newGameBoard[i][j] = newTile;
     }
   }
@@ -77,6 +83,7 @@ const GameContextProvider: React.FC<{ children: ReactNode }> = ({
           noteName: "",
           answered: false,
           correct: false,
+          answerIsClose: false,
         };
       }
     }
