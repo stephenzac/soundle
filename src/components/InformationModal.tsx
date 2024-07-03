@@ -75,7 +75,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
               ✓
             </div>
             <figcaption className="text-slate-100 w-full pl-4">
-              Submit your guess for the melody played.
+              Submit your guess for the tones played.
             </figcaption>
           </figure>
 
@@ -87,7 +87,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
               ♫
             </div>
             <figcaption className="text-slate-100 w-full pl-4">
-              Playback the random melody. (Once per guess)
+              Listen to the random tones.
             </figcaption>
           </figure>
 

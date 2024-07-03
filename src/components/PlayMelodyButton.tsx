@@ -2,31 +2,27 @@ import { useState } from "react";
 import { PlayMelody } from "../GameNotes";
 import { useGameContext } from "../contexts/GameContext";
 
-const MELODY_WAIT_TIME = 2700;
+const MELODY_WAIT_TIME = 2900;
 
 const PlayMelodyButton = () => {
-  const { melody, melodyPlayed, setMelodyPlayed, gameWon, gameLost } =
-    useGameContext();
-  const [clicked, setClicked] = useState(false);
+  const { melody } = useGameContext();
+  const [playable, setPlayable] = useState(true);
 
   const melodyButtonClicked = () => {
-    if (!clicked && !melodyPlayed) {
-      setClicked(true);
+    if (playable) {
+      setPlayable(false);
       PlayMelody(melody);
-      if (!(gameWon || gameLost)) {
-        setMelodyPlayed(true);
-      }
 
       // prevent melody button spamming
       setTimeout(() => {
-        setClicked(false);
+        setPlayable(true);
       }, MELODY_WAIT_TIME);
     }
   };
 
   return (
     <button
-      className={!melodyPlayed ? "round-button" : "round-button-unclickable"}
+      className="round-button"
       onClick={melodyButtonClicked}
       aria-label="Play melody"
     >
