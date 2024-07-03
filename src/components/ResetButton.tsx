@@ -1,20 +1,16 @@
 import { useGameContext } from "../contexts/GameContext";
 
 const ResetButton = () => {
-  const { resetGame, gameWon, gameLost } = useGameContext();
+  const { resetGame } = useGameContext();
 
   return (
-    <>
-      {(gameWon || gameLost) && (
-        <button
-          className="round-button font-bold"
-          onClick={resetGame}
-          aria-label="Reset game"
-        >
-          ↺
-        </button>
-      )}
-    </>
+    <button
+      className="round-button font-bold mr-16"
+      onClick={resetGame}
+      aria-label="Reset game"
+    >
+      ↺
+    </button>
   );
 };
 
