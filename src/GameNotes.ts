@@ -11,18 +11,30 @@ export const CheckNotes = (
   let correctCount = 0;
 
   for (let i = 0; i < MELODY_LENGTH; i++) {
-    submittedNotes[i].answered = true;
+    const currentSubmitted = submittedNotes[i];
+    const currentActual = actualNotes[i];
 
-    if (submittedNotes[i].noteName == actualNotes[i]) {
-      submittedNotes[i].correct = true;
+    currentSubmitted.answered = true;
+
+    if (currentSubmitted.noteName == currentActual) {
+      currentSubmitted.correct = true;
       correctCount++;
+    }
+
+    // Check if guess is a half step off from actual note
+    const noteDistance = Math.abs(
+      NOTES.indexOf(currentSubmitted.noteName) - NOTES.indexOf(currentActual)
+    );
+    if (
+      noteDistance === 1 ||
+      (currentSubmitted.noteName === "B" && currentActual == "C") ||
+      (currentSubmitted.noteName === "C" && currentActual === "B")
+    ) {
+      currentSubmitted.answerIsClose = true;
     }
   }
 
-  if (correctCount == MELODY_LENGTH) {
-    return true;
-  }
-  return false;
+  return correctCount === MELODY_LENGTH;
 };
 
 export const GenerateNotes = (): string[] => {

@@ -33,7 +33,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
       ></div>
 
       <section
-        className={`flex flex-col px-2 absolute top-16 bg-gray-700 h-4/6 max-w-80 pt-2 ml-auto mr-auto rounded-lg border-2 border-slate-300 ${modalClass} `}
+        className={`flex flex-col px-2 absolute top-16 bg-gray-700 max-w-80 pt-2 pb-2 ml-auto mr-auto rounded-lg border-2 border-slate-300 ${modalClass} `}
         role="dialogue"
         aria-describedby="modalDescription"
         aria-modal="true"
@@ -62,9 +62,41 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
             >
               C
             </div>
-            <figcaption className="text-slate-100 w-full pl-4">
+            <figcaption className="text-slate-100 pl-4">
               Input a note as part of your guess.
             </figcaption>
+          </figure>
+
+          <figure className="flex flex-row place-items-center mb-4">
+            <div
+              className="bg-green-700 font-bold grid place-items-center h-8 w-[30px] ml-2 border-2 border-slate-300 rounded-md"
+              aria-label="Correct note guess example"
+            >
+              C
+            </div>
+            <figcaption className="ml-4">Correct note guess.</figcaption>
+          </figure>
+
+          <figure className="flex flex-row place-items-center mb-4">
+            <div
+              className="bg-amber-400 font-bold grid place-items-center h-8 w-[30px] ml-2 border-2 border-slate-300 rounded-md"
+              aria-label="Close note guess example"
+            >
+              B
+            </div>
+            <figcaption className="ml-4">
+              Note guess was off by a half step.
+            </figcaption>
+          </figure>
+
+          <figure className="flex flex-row place-items-center mb-4">
+            <div
+              className="bg-red-700 font-bold grid place-items-center h-8 w-[30px] ml-2 border-2 border-slate-300 rounded-md"
+              aria-label="Correct note guess example"
+            >
+              B♭
+            </div>
+            <figcaption className="ml-4">Incorrect note guess.</figcaption>
           </figure>
 
           <figure className="flex flex-row place-items-center mb-4">
