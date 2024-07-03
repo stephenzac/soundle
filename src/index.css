@@ -39,12 +39,12 @@ body {
 
   .note-active {
     transform: scaleY(1);
-    transition: transform 100ms;
+    transition: transform 200ms;
   }
 
   .note-animate {
     transform: scaleY(-0);
-    transition: opacity 120ms, transform 120ms;
+    transition: opacity 150ms, transform 150ms;
   }
 }
 
