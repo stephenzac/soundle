@@ -7,10 +7,12 @@ import ResetButton from "./ResetButton";
 const GameControlsRow = () => {
   const { gameWon, gameLost } = useGameContext();
 
-  let divClassName = "flex justify-center mt-4 ml-16 space-x-8 transition-all";
+  let divClassName =
+    "flex justify-center mt-4 ml-16 space-x-8 transition-all duration-300";
 
   if (gameWon || gameLost) {
-    divClassName = "flex justify-center mt-4 space-x-8 transition-all";
+    divClassName =
+      "flex justify-center mt-4 space-x-8 transition-all duration-300";
   }
 
   return (
@@ -21,7 +23,7 @@ const GameControlsRow = () => {
       {gameWon || gameLost ? (
         <ResetButton />
       ) : (
-        <div className="w-8 h-8 opacity-0"></div>
+        <div className="w-8 h-8 opacity-0 dura"></div>
       )}
     </div>
   );

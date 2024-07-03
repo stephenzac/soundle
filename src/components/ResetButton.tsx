@@ -5,7 +5,7 @@ const ResetButton = () => {
 
   return (
     <button
-      className="round-button font-bold mr-16"
+      className="round-button font-bold mr-16 animate-pulse-fast duration-0"
       onClick={resetGame}
       aria-label="Reset game"
     >
