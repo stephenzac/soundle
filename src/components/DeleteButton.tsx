@@ -22,6 +22,7 @@ const DeleteButton = () => {
         noteName: "",
         answered: false,
         correct: false,
+        answerIsClose: false,
       };
       updateBoard(newNote, currentRow, currentIndex - 1);
     }
