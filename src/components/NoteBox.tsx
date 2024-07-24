@@ -20,7 +20,7 @@ const NoteBox = ({ note }: NoteBoxProps) => {
 
   let noteBoxStyle = "note-box";
 
-  // different states of the NoteBox will render different styles
+  // Different states of the NoteBox will render different styles
   if (note.answered) {
     if (note.correct) {
       noteBoxStyle = "note-box-correct";

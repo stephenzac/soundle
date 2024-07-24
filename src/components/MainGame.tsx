@@ -2,12 +2,12 @@ import GameTiles from "./GameTiles";
 import NoteInputButton from "./NoteInputButton";
 import HappyCat from "./HappyCat";
 import SadCat from "./SadCat";
-import { GameContextProvider } from "../contexts/GameContext";
 import GameControlsRow from "./GameControlsRow";
+import { GameContextProvider } from "../contexts/GameContext";
 
 const MainGame = () => {
   return (
-    <>
+    <main>
       <GameContextProvider>
         <GameTiles />
 
@@ -33,7 +33,7 @@ const MainGame = () => {
 
         <GameControlsRow />
       </GameContextProvider>
-    </>
+    </main>
   );
 };
 

@@ -10,7 +10,7 @@ const App = () => {
   return (
     <div className="bg-gray-800 h-screen flex flex-col items-center">
       <header>
-        <h1 className="text-center text-4xl font-bold w-full pt-5 pb-4">
+        <h1 className="main-header text-center text-4xl font-bold w-full pt-5 pb-4">
           Soundle
         </h1>
       </header>

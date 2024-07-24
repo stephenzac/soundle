@@ -48,7 +48,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
 
         <div id="modalDescription">
           <header>
-            <p className="text-slate-100 text-center mb-6">
+            <p className="modal-text text-slate-100 text-center mb-6 mx-4">
               Soundle is a Wordle-like ear training game to improve your sense
               of pitch. Listen to the five tones in concert pitch and guess them
               all correctly within 6 tries.
@@ -62,7 +62,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
             >
               C
             </div>
-            <figcaption className="text-slate-100 pl-4">
+            <figcaption className="modal-text text-slate-100 pl-4">
               Input a note as part of your guess.
             </figcaption>
           </figure>
@@ -74,7 +74,9 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
             >
               C
             </div>
-            <figcaption className="ml-4">Correct note guess.</figcaption>
+            <figcaption className="modal-text ml-4">
+              Correct note guess.
+            </figcaption>
           </figure>
 
           <figure className="flex flex-row place-items-center mb-4">
@@ -84,7 +86,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
             >
               B
             </div>
-            <figcaption className="ml-4">
+            <figcaption className="modal-text ml-4">
               Note guess was off by a half step.
             </figcaption>
           </figure>
@@ -96,7 +98,9 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
             >
               B♭
             </div>
-            <figcaption className="ml-4">Incorrect note guess.</figcaption>
+            <figcaption className="modal-text ml-4">
+              Incorrect note guess.
+            </figcaption>
           </figure>
 
           <figure className="flex flex-row place-items-center mb-4">
@@ -106,7 +110,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
             >
               ✓
             </div>
-            <figcaption className="text-slate-100 w-full pl-4">
+            <figcaption className="modal-text text-slate-100 w-full pl-4">
               Submit your guess for the tones played.
             </figcaption>
           </figure>
@@ -118,7 +122,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
             >
               ♫
             </div>
-            <figcaption className="text-slate-100 w-full pl-4">
+            <figcaption className="modal-text text-slate-100 w-full pl-4">
               Listen to the random tones.
             </figcaption>
           </figure>
@@ -130,7 +134,7 @@ const InformationModal = ({ setClickedState }: InformationModalProps) => {
             >
               ⌫
             </div>
-            <figcaption className="text-slate-100 w-full pl-4">
+            <figcaption className="modal-text text-slate-100 w-full pl-4">
               Delete a note from your guess.
             </figcaption>
           </figure>

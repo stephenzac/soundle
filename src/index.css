@@ -48,6 +48,15 @@ body {
   }
 }
 
+.main-header {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.modal-text {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 14px;
+}
+
 .note-box {
   @apply bg-gray-900 font-bold flex justify-center items-center place-items-center h-11 w-11 border-2 border-slate-300 rounded-md transition-all;
 }
