@@ -7,7 +7,7 @@ import { GameContextProvider } from "../contexts/GameContext";
 
 const MainGame = () => {
   return (
-    <main>
+    <main className="flex flex-col items-center">
       <GameContextProvider>
         <GameTiles />
 
