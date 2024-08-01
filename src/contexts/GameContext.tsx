@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 import { GenerateNotes } from "../GameNotes";
 
-type NoteTile = {
+export type NoteTile = {
   noteName: string;
   answered: boolean;
   correct: boolean;
@@ -28,7 +28,7 @@ type Board = {
 
 const gameContext = createContext<Board>({} as Board);
 
-const GameContextProvider: React.FC<{ children: ReactNode }> = ({
+export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   let newGameBoard: NoteTile[][] = [[], [], [], [], [], []];
@@ -127,12 +127,6 @@ const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-const useGameContext = () => {
+export const useGameContext = () => {
   return useContext(gameContext);
 };
-
-export {
-  useGameContext as useGameContext,
-  GameContextProvider as GameContextProvider,
-};
-export type { NoteTile };
