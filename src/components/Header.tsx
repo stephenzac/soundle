@@ -22,7 +22,7 @@ const Header = () => {
       </div>
       {showInfo && <InformationModal setClickedState={setShowInfo} />}
 
-      <div className="w-full h-[1.5px] bg-slate-300 mb-5 lg:mb-8" />
+      <div className="w-full h-[1.5px] bg-slate-300 mb-6 lg:mb-10" />
     </>
   );
 };
