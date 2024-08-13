@@ -5,7 +5,7 @@ type NoteBoxProps = {
   note: NoteTile;
 };
 
-const NoteBox = ({ note }: NoteBoxProps) => {
+const NoteBox: React.FC<NoteBoxProps> = ({ note }) => {
   const [noteDisplayed, setNoteDisplayed] = useState<string>("");
   const [noteClass, setNoteClass] = useState<string>("");
 

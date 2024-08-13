@@ -2,7 +2,9 @@ type InformationButtonProps = {
   setClickedState: (newState: boolean) => void;
 };
 
-const InformationButton = ({ setClickedState }: InformationButtonProps) => {
+const InformationButton: React.FC<InformationButtonProps> = ({
+  setClickedState,
+}) => {
   return (
     <button
       className="round-button font-bold"

@@ -3,7 +3,7 @@ import { useGameContext, NoteTile } from "../contexts/GameContext";
 
 const BEGINNING_OF_ROW = 0;
 
-const DeleteButton = () => {
+const DeleteButton: React.FC = () => {
   const [buttonClass, setButtonClass] = useState<string>("round-button");
 
   const {

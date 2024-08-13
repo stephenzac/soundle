@@ -5,7 +5,7 @@ import { CheckNotes } from "../GameNotes";
 const END_OF_ROW = 5;
 const END_OF_BOARD = 5;
 
-const SubmitButton = () => {
+const SubmitButton: React.FC = () => {
   const {
     gameBoard,
     currentRow,

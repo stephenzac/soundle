@@ -4,7 +4,9 @@ type InformationModalProps = {
   setClickedState: (newState: boolean) => void;
 };
 
-const InformationModal = ({ setClickedState }: InformationModalProps) => {
+const InformationModal: React.FC<InformationModalProps> = ({
+  setClickedState,
+}) => {
   const [modalClass, setModalClass] = useState<string>("modal-animate-in");
   const [backgroundClass, setBackgroundClass] = useState<string>(
     "background-animate-in"

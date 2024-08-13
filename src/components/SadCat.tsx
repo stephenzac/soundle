@@ -4,7 +4,7 @@ type SadCatProps = {
   gifPath: string;
 };
 
-const SadCat = ({ gifPath }: SadCatProps) => {
+const SadCat: React.FC<SadCatProps> = ({ gifPath }) => {
   const { gameLost } = useGameContext();
 
   return (

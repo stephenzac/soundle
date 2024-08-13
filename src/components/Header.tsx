@@ -3,7 +3,7 @@ import InformationModal from "./InformationModal";
 import InformationButton from "./InformationButton";
 import GitHubLink from "./GitHubLink";
 
-const Header = () => {
+const Header: React.FC = () => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
 
   return (

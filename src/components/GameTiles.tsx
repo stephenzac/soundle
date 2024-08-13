@@ -1,7 +1,7 @@
 import NoteBoxRow from "./NoteBoxRow";
 import { useGameContext } from "../contexts/GameContext";
 
-const GameTiles = () => {
+const GameTiles: React.FC = () => {
   const { gameBoard } = useGameContext();
 
   return (
