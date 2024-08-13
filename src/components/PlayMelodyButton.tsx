@@ -4,7 +4,7 @@ import { useGameContext } from "../contexts/GameContext";
 
 const MELODY_WAIT_TIME = 2900;
 
-const PlayMelodyButton = () => {
+export const PlayMelodyButton = () => {
   const { melody } = useGameContext();
   const [playable, setPlayable] = useState(true);
 

@@ -45,7 +45,6 @@ export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   const [gameBoard, setBoard] = useState<NoteTile[][]>(newGameBoard);
-
   const [currentRow, setCurrentRow] = useState<number>(0);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [melody, setMelody] = useState<string[]>(GenerateNotes());
