@@ -5,7 +5,7 @@ const GameTiles = () => {
   const { gameBoard } = useGameContext();
 
   return (
-    <div className="flex flex-col gap-4 my-4 mb-8">
+    <div className="flex flex-col gap-4">
       {gameBoard.map((currentRow, index) => {
         return <NoteBoxRow noteRow={currentRow} key={index} />;
       })}

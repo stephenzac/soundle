@@ -82,7 +82,7 @@ body {
 }
 
 .round-button {
-  @apply bg-gray-900 w-8 h-8 rounded-full cursor-pointer grid place-items-center button-animation hover:animate-pulse-fast;
+  @apply bg-gray-900 w-9 h-9 rounded-full cursor-pointer grid place-items-center button-animation hover:animate-pulse-fast;
 }
 
 .round-button-example {
@@ -90,9 +90,9 @@ body {
 }
 
 .round-button-unclickable {
-  @apply bg-gray-900 text-white w-8 h-8 rounded-full cursor-not-allowed grid place-items-center button-animation opacity-50;
+  @apply bg-gray-900 text-white w-9 h-9 rounded-full cursor-not-allowed grid place-items-center button-animation opacity-50;
 }
 
 .button-animation {
-  @apply hover:bg-gray-600 hover:rounded-xl transition-all ease-in-out duration-75;
+  @apply hover:bg-gray-600 hover:scale-110 transition-all ease-linear duration-75;
 }
