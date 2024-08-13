@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGameContext } from "../contexts/GameContext";
 
-const CorrectAnswer = () => {
+const CorrectAnswer: React.FC = () => {
   const { melody, gameLost } = useGameContext();
   const [animateClass, setAnimateClass] = useState("modal-animate-in");
 

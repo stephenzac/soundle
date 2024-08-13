@@ -1,4 +1,4 @@
-const GitHubLink = () => {
+const GitHubLink: React.FC = () => {
   return (
     <div className="flex flex-row place-items-center">
       <a

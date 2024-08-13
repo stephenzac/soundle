@@ -4,7 +4,7 @@ import SubmitButton from "./SubmitButton";
 import PlayMelodyButton from "./PlayMelodyButton";
 import ResetButton from "./ResetButton";
 
-const GameControlsRow = () => {
+const GameControlsRow: React.FC = () => {
   const { gameWon, gameLost } = useGameContext();
 
   let divClassName =

@@ -1,6 +1,6 @@
 import { useGameContext } from "../contexts/GameContext";
 
-const ResetButton = () => {
+const ResetButton: React.FC = () => {
   const { resetGame } = useGameContext();
 
   return (

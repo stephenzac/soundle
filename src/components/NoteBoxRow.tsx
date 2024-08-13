@@ -5,7 +5,7 @@ type NoteBoxRowProps = {
   noteRow: NoteTile[];
 };
 
-const NoteBoxRow = ({ noteRow }: NoteBoxRowProps) => {
+const NoteBoxRow: React.FC<NoteBoxRowProps> = ({ noteRow }) => {
   return (
     <div className="flex flex-row gap-2 place-items-center justify-center h-9">
       {noteRow.map((note, index) => {

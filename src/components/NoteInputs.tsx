@@ -1,6 +1,6 @@
 import NoteInputButton from "./NoteInputButton";
 
-const NoteInputs = () => {
+const NoteInputs: React.FC = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row justify-center">

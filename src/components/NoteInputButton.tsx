@@ -6,7 +6,7 @@ type NoteInputProps = {
   noteName: string;
 };
 
-const NoteInputButton = ({ noteName }: NoteInputProps) => {
+const NoteInputButton: React.FC<NoteInputProps> = ({ noteName }) => {
   const {
     currentRow,
     currentIndex,
