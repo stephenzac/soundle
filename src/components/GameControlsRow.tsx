@@ -5,7 +5,7 @@ import PlayMelodyButton from "./PlayMelodyButton";
 import ResetButton from "./ResetButton";
 
 const GameControlsRow = () => {
-  const { gameWon, gameLost, updateGameLost } = useGameContext();
+  const { gameWon, gameLost } = useGameContext();
 
   let divClassName =
     "flex justify-center ml-16 space-x-8 transition-all duration-300";
