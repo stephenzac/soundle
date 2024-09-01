@@ -33,13 +33,13 @@ const InformationModal: React.FC<InformationModalProps> = ({
       />
 
       <section
-        className={`flex flex-col px-2 absolute top-16 bg-gray-700 max-w-80 pt-2 pb-2 ml-auto mr-auto rounded-lg border-2 border-slate-300 z-10 ${modalClass} `}
+        className={`flex flex-col px-1 absolute top-16 bg-gray-700 max-w-80 pt-2 pb-2 ml-auto mr-auto rounded-lg border-2 border-slate-300 z-10 ${modalClass} `}
         role="dialogue"
         aria-describedby="modalDescription"
         aria-modal="true"
       >
         <button
-          className="hover:cursor-pointer font-bold self-end my-0"
+          className="flex items-center justify-center hover:cursor-pointer font-bold self-end my-0 w-6 h-6"
           onClick={handleClose}
           aria-label="Close"
         >
