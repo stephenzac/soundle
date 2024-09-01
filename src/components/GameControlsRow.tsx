@@ -9,7 +9,7 @@ const GameControlsRow: React.FC = () => {
 
   return (
     <div
-      className={`flex justify-center space-x-8 transition-all duration-300 ${
+      className={`flex justify-center space-x-8 transition-all duration-300 mt-2 ${
         !(gameWon || gameLost) ? 'ml-16' : ''
       }`}
     >

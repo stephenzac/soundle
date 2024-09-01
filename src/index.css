@@ -62,15 +62,15 @@ body {
 }
 
 .note-box-correct {
-  @apply bg-green-700 font-bold flex justify-center items-center h-12 w-12 text-lg border-2 border-slate-300 rounded-md transition-all;
+  @apply bg-green-700 font-bold flex justify-center items-center h-11 w-11 text-lg border-2 border-slate-300 rounded-md transition-all;
 }
 
 .note-box-close-answer {
-  @apply bg-amber-500 font-bold flex justify-center items-center h-12 w-12 text-lg border-2 border-slate-300 rounded-md transition-all;
+  @apply bg-amber-500 font-bold flex justify-center items-center h-11 w-11 text-lg border-2 border-slate-300 rounded-md transition-all;
 }
 
 .note-box-incorrect {
-  @apply bg-red-700 font-bold flex justify-center items-center h-12 w-12 border-2 text-lg border-slate-300 rounded-md transition-all;
+  @apply bg-red-700 font-bold flex justify-center items-center h-11 w-11 border-2 text-lg border-slate-300 rounded-md transition-all;
 }
 
 .note-box-example {
@@ -78,7 +78,7 @@ body {
 }
 
 .note-input-button {
-  @apply bg-gray-900 font-bold grid place-items-center h-10 w-10 border-2 border-slate-300 rounded-md;
+  @apply bg-gray-900 font-bold grid place-items-center h-11 w-11 border-2 border-slate-300 rounded-md;
 }
 
 .round-button {

@@ -9,7 +9,7 @@ import Header from './components/Header';
 const App: React.FC = () => (
   <div className="bg-gray-800 h-screen flex flex-col items-center">
     <Header />
-    <main className="flex flex-col items-center gap-5">
+    <main className="flex flex-col items-center gap-2">
       <GameContextProvider>
         <GameTiles />
         <HappyCat />

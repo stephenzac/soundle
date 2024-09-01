@@ -31,7 +31,7 @@ const NoteInputButton: React.FC<NoteInputProps> = ({ noteName }) => {
 
   return (
     <button
-      className="note-input-button button-animation mx-2 cursor-pointer"
+      className="note-input-button button-animation cursor-pointer"
       onClick={inputNote}
       aria-label={`Button to input note ${noteName}`}
     >

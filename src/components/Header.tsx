@@ -22,7 +22,7 @@ const Header: React.FC = () => {
       </div>
       {showInfo && <InformationModal setClickedState={setShowInfo} />}
 
-      <div className="w-full h-[1.5px] bg-slate-300 mb-6 lg:mb-10" />
+      <div className="w-full h-[1.5px] bg-slate-300 mb-3 lg:mb-10" />
     </>
   );
 };
