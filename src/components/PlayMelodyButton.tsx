@@ -1,22 +1,18 @@
-import { useState } from "react";
-import { PlayMelody } from "../GameNotes";
-import { useGameContext } from "../contexts/GameContext";
-
-const MELODY_WAIT_TIME = 2900;
+import { useState } from 'react';
+import { playMelody } from '../lib/GameNotes';
+import { useGameContext } from '../contexts/GameContext';
 
 export const PlayMelodyButton: React.FC = () => {
   const { melody } = useGameContext();
-  const [playable, setPlayable] = useState(true);
+  const [playable, setPlayable] = useState<boolean>(true);
 
   const melodyButtonClicked = () => {
     if (playable) {
       setPlayable(false);
-      PlayMelody(melody);
+      playMelody(melody);
 
       // prevent melody button spamming
-      setTimeout(() => {
-        setPlayable(true);
-      }, MELODY_WAIT_TIME);
+      setTimeout(() => setPlayable(true), 2900);
     }
   };
 

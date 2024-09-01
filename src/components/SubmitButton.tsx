@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
-import { useGameContext } from "../contexts/GameContext";
-import { CheckNotes } from "../GameNotes";
-
-const END_OF_ROW = 5;
-const END_OF_BOARD = 5;
+import { useEffect, useState } from 'react';
+import { useGameContext } from '../contexts/GameContext';
+import { checkNotes } from '../lib/GameNotes';
+import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
 
 const SubmitButton: React.FC = () => {
   const {
@@ -20,39 +18,35 @@ const SubmitButton: React.FC = () => {
   } = useGameContext();
 
   const [buttonClass, setButtonClass] = useState<string>(
-    "round-button-unclickable"
+    'round-button-unclickable'
   );
 
   useEffect(() => {
-    if (currentIndex === END_OF_ROW) {
-      setButtonClass("round-button");
+    if (currentIndex === ROW_LENGTH) {
+      setButtonClass('round-button');
     } else {
-      if (buttonClass != "round-button-unclickable") {
-        setButtonClass("round-button-unclickable");
-      }
+      if (buttonClass != 'round-button-unclickable')
+        setButtonClass('round-button-unclickable');
     }
 
-    if (gameWon || gameLost) {
-      setButtonClass("round-button-unclickable");
-    }
+    if (gameWon || gameLost) setButtonClass('round-button-unclickable');
   }, [currentIndex, gameWon, gameLost]);
 
   const submit = () => {
-    if (gameWon || gameLost) {
-      return;
-    }
+    if (gameWon || gameLost) return;
+
     // Check correctness of submitted notes
-    if (currentIndex === END_OF_ROW) {
-      if (CheckNotes(gameBoard[currentRow], melody)) {
+    if (currentIndex === ROW_LENGTH) {
+      if (checkNotes(gameBoard[currentRow], melody)) {
         updateGameWon(true);
         return;
       }
 
       // Incorrect guess, move to next row
-      if (currentRow <= END_OF_BOARD) {
+      if (currentRow <= NUM_ROWS - 1) {
         updateCurrentRow(currentRow + 1);
 
-        if (currentRow === END_OF_BOARD) {
+        if (currentRow === NUM_ROWS - 1) {
           updateGameLost(true);
           return;
         }

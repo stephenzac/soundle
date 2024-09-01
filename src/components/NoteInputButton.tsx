@@ -1,10 +1,10 @@
-import { NoteTile, useGameContext } from "../contexts/GameContext";
+import { ROW_LENGTH } from '../constants/game-board';
+import { NoteNotation } from '../constants/notes';
+import { NoteTile, useGameContext } from '../contexts/GameContext';
 
-const ROW_LENGTH = 4;
-
-type NoteInputProps = {
-  noteName: string;
-};
+interface NoteInputProps {
+  noteName: NoteNotation;
+}
 
 const NoteInputButton: React.FC<NoteInputProps> = ({ noteName }) => {
   const {
@@ -16,8 +16,8 @@ const NoteInputButton: React.FC<NoteInputProps> = ({ noteName }) => {
     gameLost,
   } = useGameContext();
 
-  const InputNote = () => {
-    if (!(gameWon || gameLost) && currentIndex <= ROW_LENGTH) {
+  const inputNote = () => {
+    if (!(gameWon || gameLost) && currentIndex < ROW_LENGTH) {
       setCurrentIndex(currentIndex + 1);
       const newNote: NoteTile = {
         noteName: noteName,
@@ -31,9 +31,9 @@ const NoteInputButton: React.FC<NoteInputProps> = ({ noteName }) => {
 
   return (
     <button
-      className="note-input-button button-animation mx-2 cursor-pointer"
-      onClick={InputNote}
-      aria-label={`Input note ${noteName}`}
+      className="note-input-button button-animation cursor-pointer"
+      onClick={inputNote}
+      aria-label={`Button to input note ${noteName}`}
     >
       {noteName}
     </button>

@@ -1,18 +1,20 @@
-import { ReactNode, createContext, useContext, useState } from "react";
-import { GenerateNotes } from "../GameNotes";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { generateNotes } from '../lib/GameNotes';
+import { NoteNotation } from '../constants/notes';
+import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
 
 export type NoteTile = {
-  noteName: string;
+  noteName: NoteNotation;
   answered: boolean;
   correct: boolean;
   answerIsClose: boolean;
 };
 
-type Board = {
+interface Board {
   gameBoard: NoteTile[][];
   currentRow: number;
   currentIndex: number;
-  melody: string[];
+  melody: NoteNotation[];
   gameWon: boolean;
   gameLost: boolean;
   melodyPlayed: boolean;
@@ -24,33 +26,39 @@ type Board = {
   resetGame: () => void;
   updateCurrentRow: (newRow: number) => void;
   setCurrentIndex: (newIndex: number) => void;
-};
+}
 
 const gameContext = createContext<Board>({} as Board);
 
-export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
+export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  let newGameBoard: NoteTile[][] = [[], [], [], [], [], []];
-  for (let i = 0; i < 6; i++) {
-    for (let j = 0; j < 5; j++) {
-      let newTile: NoteTile = {
-        noteName: "",
-        answered: false,
-        correct: false,
-        answerIsClose: false,
-      };
-      newGameBoard[i][j] = newTile;
-    }
-  }
-
-  const [gameBoard, setBoard] = useState<NoteTile[][]>(newGameBoard);
+  const [gameBoard, setBoard] = useState<NoteTile[][]>([]);
+  const [melody, setMelody] = useState<NoteNotation[]>([]);
   const [currentRow, setCurrentRow] = useState<number>(0);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [melody, setMelody] = useState<string[]>(GenerateNotes());
   const [gameWon, setGameWon] = useState<boolean>(false);
   const [gameLost, setGameLost] = useState<boolean>(false);
   const [melodyPlayed, setMelodyPlayed] = useState<boolean>(false);
+
+  // Initialize first board
+  useEffect(() => {
+    let newGameBoard: NoteTile[][] = [];
+    for (let i = 0; i < NUM_ROWS; i++) {
+      newGameBoard.push([]);
+      for (let j = 0; j < ROW_LENGTH; j++) {
+        let newTile: NoteTile = {
+          noteName: '',
+          answered: false,
+          correct: false,
+          answerIsClose: false,
+        };
+        newGameBoard[i].push(newTile);
+      }
+    }
+    setBoard(newGameBoard);
+    generateNewMelody();
+  }, []);
 
   const updateGameWon = (newState: boolean) => {
     setGameWon(newState);
@@ -63,8 +71,7 @@ export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const generateNewMelody = (): void => {
-    let newNotes: string[] = melody;
-    newNotes = GenerateNotes();
+    let newNotes = generateNotes();
     setMelody(newNotes);
   };
 
@@ -75,24 +82,21 @@ export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const resetGame = () => {
-    let newGameBoard: NoteTile[][] = [[], [], [], [], [], []];
-    for (let i = 0; i < 6; i++) {
-      for (let j = 0; j < 5; j++) {
-        newGameBoard[i][j] = {
-          noteName: "",
-          answered: false,
-          correct: false,
-          answerIsClose: false,
-        };
+    let newGameBoard = gameBoard;
+    for (let i = 0; i < NUM_ROWS; i++) {
+      for (let j = 0; j < ROW_LENGTH; j++) {
+        let currentTile = newGameBoard[i][j];
+        currentTile.noteName = '';
+        currentTile.answered = false;
+        currentTile.correct = false;
+        currentTile.answerIsClose = false;
       }
     }
     setBoard(newGameBoard);
 
-    if (gameWon) {
-      setGameWon(false);
-    } else if (gameLost) {
-      setGameLost(false);
-    }
+    if (gameWon) setGameWon(false);
+    else if (gameLost) setGameLost(false);
+
     updateCurrentRow(0);
     setCurrentIndex(0);
     generateNewMelody();
@@ -126,6 +130,4 @@ export const GameContextProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-export const useGameContext = () => {
-  return useContext(gameContext);
-};
+export const useGameContext = () => useContext(gameContext);
