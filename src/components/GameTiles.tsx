@@ -1,15 +1,20 @@
-import NoteBoxRow from "./NoteBoxRow";
-import { useGameContext } from "../contexts/GameContext";
+import NoteBoxRow from './NoteBoxRow';
+import { useGameContext } from '../contexts/GameContext';
+import NoteBox from './NoteBox';
 
 const GameTiles: React.FC = () => {
   const { gameBoard } = useGameContext();
 
   return (
-    <div className="flex flex-col gap-4">
-      {gameBoard.map((currentRow, index) => {
-        return <NoteBoxRow noteRow={currentRow} key={index} />;
-      })}
-    </div>
+    <>
+      {gameBoard.map((row, index) => (
+        <div className="grid grid-rows-6 grid-cols-5 gap-x-2 h-8" key={index}>
+          {row.map((note, index) => (
+            <NoteBox note={note} key={index} />
+          ))}
+        </div>
+      ))}
+    </>
   );
 };
 

@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import { useGameContext, NoteTile } from "../contexts/GameContext";
-
-const BEGINNING_OF_ROW = 0;
+import { useEffect, useState } from 'react';
+import { useGameContext, NoteTile } from '../contexts/GameContext';
 
 const DeleteButton: React.FC = () => {
-  const [buttonClass, setButtonClass] = useState<string>("round-button");
+  const [buttonClass, setButtonClass] = useState<string>('round-button');
 
   const {
     currentIndex,
@@ -16,10 +14,10 @@ const DeleteButton: React.FC = () => {
   } = useGameContext();
 
   const DeleteNote = () => {
-    if (currentIndex > BEGINNING_OF_ROW && !(gameWon || gameLost)) {
+    if (currentIndex > 0 && !(gameWon || gameLost)) {
       setCurrentIndex(currentIndex - 1);
       const newNote: NoteTile = {
-        noteName: "",
+        noteName: '',
         answered: false,
         correct: false,
         answerIsClose: false,
@@ -29,11 +27,9 @@ const DeleteButton: React.FC = () => {
   };
 
   useEffect(() => {
-    if (currentIndex > BEGINNING_OF_ROW && !(gameWon || gameLost)) {
-      setButtonClass("round-button");
-    } else {
-      setButtonClass("round-button-unclickable");
-    }
+    if (currentIndex > 0 && !(gameWon || gameLost))
+      setButtonClass('round-button');
+    else setButtonClass('round-button-unclickable');
   }, [currentIndex, gameWon, gameLost]);
 
   return (

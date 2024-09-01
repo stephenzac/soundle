@@ -1,38 +1,40 @@
-import { useEffect, useState } from "react";
-import { NoteTile } from "../contexts/GameContext";
+import { useEffect, useState } from 'react';
+import { NoteTile } from '../contexts/GameContext';
 
-type NoteBoxProps = {
+interface NoteBoxProps {
   note: NoteTile;
-};
+}
 
 const NoteBox: React.FC<NoteBoxProps> = ({ note }) => {
-  const [noteDisplayed, setNoteDisplayed] = useState<string>("");
-  const [noteClass, setNoteClass] = useState<string>("");
+  const [noteDisplayed, setNoteDisplayed] = useState<string>('');
+  const [noteClass, setNoteClass] = useState<string>('');
+  const [noteBoxStyle, setNoteBoxStyle] = useState<string>('note-box');
 
   useEffect(() => {
-    if (note.noteName === "") {
-      setNoteClass("note-animate");
+    // Render the note name
+    if (note.noteName === '') {
+      setNoteClass('note-animate');
     } else {
       setNoteDisplayed(note.noteName);
-      setNoteClass("note-active");
+      setNoteClass('note-active');
     }
-  }, [note]);
 
-  let noteBoxStyle = "note-box";
-
-  // Different states of the NoteBox will render different styles
-  if (note.answered) {
-    if (note.correct) {
-      noteBoxStyle = "note-box-correct";
-    } else if (note.answerIsClose) {
-      noteBoxStyle = "note-box-close-answer";
+    // Different states of the NoteBox will render different styles
+    if (note.answered) {
+      if (note.correct) {
+        setNoteBoxStyle('note-box-correct');
+      } else if (note.answerIsClose) {
+        setNoteBoxStyle('note-box-close-answer');
+      } else {
+        setNoteBoxStyle('note-box-incorrect');
+      }
     } else {
-      noteBoxStyle = "note-box-incorrect";
+      setNoteBoxStyle('note-box');
     }
-  }
+  }, [note, note.answered]);
 
   return (
-    <div className={`${noteBoxStyle}`}>
+    <div className={`${noteBoxStyle}`} aria-label={`Box with ${note}`}>
       <p className={noteClass}>{noteDisplayed}</p>
     </div>
   );

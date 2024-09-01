@@ -1,26 +1,12 @@
-import NoteInputButton from "./NoteInputButton";
+import { musicNotes } from '../constants/notes';
+import NoteInputButton from './NoteInputButton';
 
-const NoteInputs: React.FC = () => {
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-row justify-center">
-        <NoteInputButton noteName={"C"} />
-        <NoteInputButton noteName={"D♭"} />
-        <NoteInputButton noteName={"D"} />
-        <NoteInputButton noteName={"E♭"} />
-        <NoteInputButton noteName={"E"} />
-        <NoteInputButton noteName={"F"} />
-      </div>
-      <div className="flex flex-row justify-center">
-        <NoteInputButton noteName={"G♭"} />
-        <NoteInputButton noteName={"G"} />
-        <NoteInputButton noteName={"A♭"} />
-        <NoteInputButton noteName={"A"} />
-        <NoteInputButton noteName={"B♭"} />
-        <NoteInputButton noteName={"B"} />
-      </div>
-    </div>
-  );
-};
+const NoteInputs: React.FC = () => (
+  <div className="w-11/12 grid grid-cols-6 gap-y-2">
+    {musicNotes.map((note) => (
+      <NoteInputButton noteName={note} key={note} />
+    ))}
+  </div>
+);
 
 export default NoteInputs;

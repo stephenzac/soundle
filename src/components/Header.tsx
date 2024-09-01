@@ -1,7 +1,7 @@
-import { useState } from "react";
-import InformationModal from "./InformationModal";
-import InformationButton from "./InformationButton";
-import GitHubLink from "./GitHubLink";
+import { useState } from 'react';
+import InformationModal from './InformationModal';
+import InformationButton from './InformationButton';
+import GitHubLink from './GitHubLink';
 
 const Header: React.FC = () => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
