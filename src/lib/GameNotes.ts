@@ -1,8 +1,9 @@
 import * as Tone from 'tone';
 import { NoteTile } from '../contexts/GameContext';
 import { NoteNotation, musicNotes } from '../constants/notes';
-import { ROW_LENGTH } from '../constants/game-board';
+import { GAME_ROW_LENGTH } from '../constants/game-board';
 
+// helper function for checkNotes
 const getNoteIndex = (note: NoteNotation): number => {
   return note === '' ? -1 : musicNotes.indexOf(note);
 };
@@ -13,10 +14,8 @@ export const checkNotes = (
 ): boolean => {
   let correctCount = 0;
 
-  for (let i = 0; i < ROW_LENGTH; i++) {
-    const submittedNote = submittedNotes[i];
-    const actualNote: NoteNotation = actualNotes[i];
-
+  actualNotes.forEach((actualNote: NoteNotation, index) => {
+    const submittedNote = submittedNotes[index];
     submittedNote.answered = true;
 
     if (submittedNote.noteName === actualNote) {
@@ -31,20 +30,20 @@ export const checkNotes = (
 
     if (
       noteDistance === 1 ||
-      (submittedNote.noteName === 'B' && actualNote == 'C') ||
+      (submittedNote.noteName === 'B' && actualNote === 'C') ||
       (submittedNote.noteName === 'C' && actualNote === 'B')
     )
       submittedNote.answerIsClose = true;
-  }
+  });
 
-  return correctCount === ROW_LENGTH;
+  return correctCount === GAME_ROW_LENGTH;
 };
 
 export const generateNotes = (): NoteNotation[] => {
   let generatedNotes: NoteNotation[] = [];
 
-  for (let i = 0; i < ROW_LENGTH; i++) {
-    let randomIndex = Math.floor(Math.random() * 12);
+  for (let i = 0; i < GAME_ROW_LENGTH; i++) {
+    let randomIndex = Math.floor(Math.random() * musicNotes.length);
     generatedNotes.push(musicNotes[randomIndex]);
   }
 

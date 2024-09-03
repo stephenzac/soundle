@@ -1,4 +1,4 @@
-import { ROW_LENGTH } from '../constants/game-board';
+import { GAME_ROW_LENGTH } from '../constants/game-board';
 import { NoteNotation } from '../constants/notes';
 import { NoteTile, useGameContext } from '../contexts/GameContext';
 
@@ -17,7 +17,7 @@ const NoteInputButton: React.FC<NoteInputProps> = ({ noteName }) => {
   } = useGameContext();
 
   const inputNote = () => {
-    if (!(gameWon || gameLost) && currentIndex < ROW_LENGTH) {
+    if (!(gameWon || gameLost) && currentIndex < GAME_ROW_LENGTH) {
       setCurrentIndex(currentIndex + 1);
       const newNote: NoteTile = {
         noteName: noteName,

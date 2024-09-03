@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useGameContext } from '../contexts/GameContext';
 import { checkNotes } from '../lib/GameNotes';
-import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
+import { GAME_NUM_ROWS, GAME_ROW_LENGTH } from '../constants/game-board';
 
 const SubmitButton: React.FC = () => {
   const {
@@ -22,7 +22,7 @@ const SubmitButton: React.FC = () => {
   );
 
   useEffect(() => {
-    if (currentIndex === ROW_LENGTH) {
+    if (currentIndex === GAME_ROW_LENGTH) {
       setButtonClass('round-button');
     } else {
       if (buttonClass != 'round-button-unclickable')
@@ -36,17 +36,17 @@ const SubmitButton: React.FC = () => {
     if (gameWon || gameLost) return;
 
     // Check correctness of submitted notes
-    if (currentIndex === ROW_LENGTH) {
+    if (currentIndex === GAME_ROW_LENGTH) {
       if (checkNotes(gameBoard[currentRow], melody)) {
         updateGameWon(true);
         return;
       }
 
       // Incorrect guess, move to next row
-      if (currentRow <= NUM_ROWS - 1) {
+      if (currentRow <= GAME_NUM_ROWS - 1) {
         updateCurrentRow(currentRow + 1);
 
-        if (currentRow === NUM_ROWS - 1) {
+        if (currentRow === GAME_NUM_ROWS - 1) {
           updateGameLost(true);
           return;
         }

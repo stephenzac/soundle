@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { generateNotes } from '../lib/GameNotes';
 import { NoteNotation } from '../constants/notes';
-import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
+import { GAME_NUM_ROWS, GAME_ROW_LENGTH } from '../constants/game-board';
 
 export type NoteTile = {
   noteName: NoteNotation;
@@ -44,9 +44,9 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
   // Initialize first board
   useEffect(() => {
     let newGameBoard: NoteTile[][] = [];
-    for (let i = 0; i < NUM_ROWS; i++) {
+    for (let i = 0; i < GAME_NUM_ROWS; i++) {
       newGameBoard.push([]);
-      for (let j = 0; j < ROW_LENGTH; j++) {
+      for (let j = 0; j < GAME_ROW_LENGTH; j++) {
         let newTile: NoteTile = {
           noteName: '',
           answered: false,
@@ -83,8 +83,8 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const resetGame = () => {
     let newGameBoard = gameBoard;
-    for (let i = 0; i < NUM_ROWS; i++) {
-      for (let j = 0; j < ROW_LENGTH; j++) {
+    for (let i = 0; i < GAME_NUM_ROWS; i++) {
+      for (let j = 0; j < GAME_ROW_LENGTH; j++) {
         let currentTile = newGameBoard[i][j];
         currentTile.noteName = '';
         currentTile.answered = false;
