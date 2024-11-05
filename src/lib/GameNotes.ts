@@ -3,7 +3,7 @@ import { NoteTile } from '../contexts/GameContext';
 import { NoteNotation, musicNotes } from '../constants/notes';
 import { ROW_LENGTH } from '../constants/game-board';
 
-const getNoteIndex = (note: NoteNotation): number => {
+const getNoteIndex = (note: NoteNotation | ''): number => {
   return note === '' ? -1 : musicNotes.indexOf(note);
 };
 
@@ -51,8 +51,8 @@ export const generateNotes = (): NoteNotation[] => {
   return generatedNotes;
 };
 
-export const playMelody = (notes: NoteNotation[]): void => {
-  Tone.start();
+export const playMelody = async (notes: NoteNotation[]): Promise<void> => {
+  await Tone.start();
   const synth = new Tone.Synth().toDestination();
   const now = Tone.now();
 
