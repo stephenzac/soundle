@@ -12,4 +12,4 @@ export const musicNotes = [
   'B♭',
   'B',
 ] as const;
-export type NoteNotation = (typeof musicNotes)[number] | '';
+export type NoteNotation = (typeof musicNotes)[number];

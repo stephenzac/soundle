@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { NoteTile } from '../contexts/GameContext';
+import { NoteTile } from '../../contexts/GameContext';
 
 interface NoteBoxProps {
   note: NoteTile;
 }
 
-const NoteBox: React.FC<NoteBoxProps> = ({ note }) => {
+export const NoteBox: React.FC<NoteBoxProps> = ({ note }) => {
   const [noteDisplayed, setNoteDisplayed] = useState<string>('');
   const [noteClass, setNoteClass] = useState<string>('');
   const [noteBoxStyle, setNoteBoxStyle] = useState<string>('note-box');
@@ -39,5 +39,3 @@ const NoteBox: React.FC<NoteBoxProps> = ({ note }) => {
     </div>
   );
 };
-
-export default NoteBox;
