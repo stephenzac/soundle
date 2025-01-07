@@ -6,10 +6,10 @@ export const GameTiles: React.FC = () => {
 
   return (
     <>
-      {gameBoard.map((row, index) => (
-        <div className='grid grid-rows-6 grid-cols-5 gap-x-2 h-11' key={index}>
-          {row.map((note, index) => (
-            <NoteBox note={note} key={index} />
+      {gameBoard.map((row, rowNum) => (
+        <div className='grid grid-rows-6 grid-cols-5 gap-x-2 h-11' key={rowNum}>
+          {row.map((note, noteIndex) => (
+            <NoteBox note={note} key={noteIndex} />
           ))}
         </div>
       ))}
