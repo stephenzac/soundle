@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { InformationModal } from './info-modal/InformationModal';
-import { InformationButton } from './info-modal/InformationButton';
+import { InformationModal } from '../info-modal/InformationModal';
+import { InformationButton } from '../info-modal/InformationButton';
 import GitHubLink from './GitHubLink';
 
 const Header: React.FC = () => {

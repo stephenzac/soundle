@@ -1,9 +1,9 @@
 import { GameContextProvider } from './contexts/GameContext';
 import { GameTiles } from './components/game/GameTiles';
-import HappyCat from './components/HappyCat';
+import HappyCat from './components/info/HappyCat';
 import { GameControlsRow } from './components/controls/GameControlsRow';
-import CorrectAnswer from './components/CorrectAnswer';
-import Header from './components/Header';
+import CorrectAnswer from './components/info/CorrectAnswer';
+import Header from './components/info/Header';
 import { musicNotes } from './constants/notes';
 import { NoteInputButton } from './components/controls/NoteInputButton';
 
