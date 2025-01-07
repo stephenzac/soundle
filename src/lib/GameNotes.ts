@@ -3,8 +3,20 @@ import { NoteTile } from '../contexts/GameContext';
 import { NoteNotation, musicNotes } from '../constants/notes';
 import { ROW_LENGTH } from '../constants/game-board';
 
-const getNoteIndex = (note: NoteNotation): number => {
-  return note === '' ? -1 : musicNotes.indexOf(note);
+const checkNoteDistance = (
+  submittedNote: NoteNotation | '',
+  actualNote: NoteNotation | ''
+): number => {
+  if (submittedNote === '' || actualNote === '') return -1;
+  if (
+    (submittedNote === 'B' && actualNote === 'C') ||
+    (submittedNote === 'C' && actualNote === 'B')
+  )
+    return 1;
+
+  return Math.abs(
+    musicNotes.indexOf(submittedNote) - musicNotes.indexOf(actualNote)
+  );
 };
 
 export const checkNotes = (
@@ -24,17 +36,9 @@ export const checkNotes = (
       correctCount++;
     }
 
-    // Check if guess is a half step off from actual note
-    const noteDistance = Math.abs(
-      getNoteIndex(submittedNote.noteName) - getNoteIndex(actualNote)
-    );
-
-    if (
-      noteDistance === 1 ||
-      (submittedNote.noteName === 'B' && actualNote == 'C') ||
-      (submittedNote.noteName === 'C' && actualNote === 'B')
-    )
-      submittedNote.answerIsClose = true;
+    // // Check if guess is a half step off
+    const noteDistance = checkNoteDistance(submittedNote.noteName, actualNote);
+    if (noteDistance === 1) submittedNote.answerIsClose = true;
   }
 
   return correctCount === ROW_LENGTH;
@@ -51,8 +55,8 @@ export const generateNotes = (): NoteNotation[] => {
   return generatedNotes;
 };
 
-export const playMelody = (notes: NoteNotation[]): void => {
-  Tone.start();
+export const playMelody = async (notes: NoteNotation[]): Promise<void> => {
+  await Tone.start();
   const synth = new Tone.Synth().toDestination();
   const now = Tone.now();
 

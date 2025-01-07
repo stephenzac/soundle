@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useGameContext } from '../contexts/GameContext';
-import { checkNotes } from '../lib/GameNotes';
-import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
+import { useGameContext } from '../../contexts/GameContext';
+import { checkNotes } from '../../lib/GameNotes';
+import { NUM_ROWS, ROW_LENGTH } from '../../constants/game-board';
 
-const SubmitButton: React.FC = () => {
+export const SubmitButton: React.FC = () => {
   const {
     gameBoard,
     currentRow,
@@ -61,11 +61,9 @@ const SubmitButton: React.FC = () => {
     <button
       className={buttonClass}
       onClick={submit}
-      aria-label="Submit melody guess"
+      aria-label='Submit melody guess'
     >
       ✓
     </button>
   );
 };
-
-export default SubmitButton;

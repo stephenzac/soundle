@@ -4,7 +4,7 @@ import { NoteNotation } from '../constants/notes';
 import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
 
 export type NoteTile = {
-  noteName: NoteNotation;
+  noteName: NoteNotation | '';
   answered: boolean;
   correct: boolean;
   answerIsClose: boolean;
@@ -21,7 +21,6 @@ interface Board {
   setMelodyPlayed: (newState: boolean) => void;
   updateGameWon: (newState: boolean) => void;
   updateGameLost: (newState: boolean) => void;
-  getMelody: () => void;
   updateBoard: (note: NoteTile, rowNumber: number, index: number) => void;
   resetGame: () => void;
   updateCurrentRow: (newRow: number) => void;
@@ -41,21 +40,16 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [gameLost, setGameLost] = useState<boolean>(false);
   const [melodyPlayed, setMelodyPlayed] = useState<boolean>(false);
 
-  // Initialize first board
   useEffect(() => {
-    let newGameBoard: NoteTile[][] = [];
-    for (let i = 0; i < NUM_ROWS; i++) {
-      newGameBoard.push([]);
-      for (let j = 0; j < ROW_LENGTH; j++) {
-        let newTile: NoteTile = {
-          noteName: '',
-          answered: false,
-          correct: false,
-          answerIsClose: false,
-        };
-        newGameBoard[i].push(newTile);
-      }
-    }
+    const newGameBoard: NoteTile[][] = Array.from({ length: NUM_ROWS }, () =>
+      Array.from({ length: ROW_LENGTH }, () => ({
+        noteName: '',
+        answered: false,
+        correct: false,
+        answerIsClose: false,
+      }))
+    );
+
     setBoard(newGameBoard);
     generateNewMelody();
   }, []);
@@ -70,33 +64,31 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
     setMelodyPlayed(false);
   };
 
-  const generateNewMelody = (): void => {
-    let newNotes = generateNotes();
+  const generateNewMelody = () => {
+    const newNotes: NoteNotation[] = generateNotes();
     setMelody(newNotes);
   };
 
   const updateBoard = (note: NoteTile, rowNumber: number, index: number) => {
-    let newBoard: NoteTile[][] = gameBoard;
+    const newBoard = [...gameBoard];
+    newBoard[rowNumber] = [...gameBoard[rowNumber]];
     newBoard[rowNumber][index] = note;
     setBoard(newBoard);
   };
 
   const resetGame = () => {
-    let newGameBoard = gameBoard;
-    for (let i = 0; i < NUM_ROWS; i++) {
-      for (let j = 0; j < ROW_LENGTH; j++) {
-        let currentTile = newGameBoard[i][j];
-        currentTile.noteName = '';
-        currentTile.answered = false;
-        currentTile.correct = false;
-        currentTile.answerIsClose = false;
-      }
-    }
+    const newGameBoard: NoteTile[][] = Array.from({ length: NUM_ROWS }, () =>
+      Array.from({ length: ROW_LENGTH }, () => ({
+        noteName: '',
+        answered: false,
+        correct: false,
+        answerIsClose: false,
+      }))
+    );
+
     setBoard(newGameBoard);
-
-    if (gameWon) setGameWon(false);
-    else if (gameLost) setGameLost(false);
-
+    setGameWon(false);
+    setGameLost(false);
     updateCurrentRow(0);
     setCurrentIndex(0);
     generateNewMelody();
@@ -118,7 +110,6 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
     setMelodyPlayed,
     updateGameWon,
     updateGameLost,
-    getMelody: generateNewMelody,
     updateBoard,
     resetGame,
     updateCurrentRow,

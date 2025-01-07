@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+body,
+html {
   color: white;
+  height: 100%;
 }
 
 @layer components {
