@@ -40,7 +40,6 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [gameLost, setGameLost] = useState<boolean>(false);
   const [melodyPlayed, setMelodyPlayed] = useState<boolean>(false);
 
-  // Initialize first board
   useEffect(() => {
     const newGameBoard: NoteTile[][] = Array.from({ length: NUM_ROWS }, () =>
       Array.from({ length: ROW_LENGTH }, () => ({
@@ -48,7 +47,6 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
         answered: false,
         correct: false,
         answerIsClose: false,
-        tetiwaod: 12321,
       }))
     );
 
@@ -66,33 +64,31 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
     setMelodyPlayed(false);
   };
 
-  const generateNewMelody = (): void => {
-    let newNotes = generateNotes();
+  const generateNewMelody = () => {
+    const newNotes: NoteNotation[] = generateNotes();
     setMelody(newNotes);
   };
 
   const updateBoard = (note: NoteTile, rowNumber: number, index: number) => {
-    let newBoard: NoteTile[][] = gameBoard;
+    const newBoard = [...gameBoard];
+    newBoard[rowNumber] = [...gameBoard[rowNumber]];
     newBoard[rowNumber][index] = note;
     setBoard(newBoard);
   };
 
   const resetGame = () => {
-    let newGameBoard = gameBoard;
-    newGameBoard.forEach((row) =>
-      row.forEach((currentNoteTile) => {
-        currentNoteTile.noteName = '';
-        currentNoteTile.answered = false;
-        currentNoteTile.correct = false;
-        currentNoteTile.answerIsClose = false;
-      })
+    const newGameBoard: NoteTile[][] = Array.from({ length: NUM_ROWS }, () =>
+      Array.from({ length: ROW_LENGTH }, () => ({
+        noteName: '',
+        answered: false,
+        correct: false,
+        answerIsClose: false,
+      }))
     );
 
     setBoard(newGameBoard);
-
     setGameWon(false);
     setGameLost(false);
-
     updateCurrentRow(0);
     setCurrentIndex(0);
     generateNewMelody();
