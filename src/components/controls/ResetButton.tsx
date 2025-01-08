@@ -1,7 +1,8 @@
-import { useGameContext } from '../../contexts/GameContext';
+import { use } from 'react';
+import { GameContext } from '../../contexts/GameContext';
 
 export const ResetButton: React.FC = () => {
-  const { resetGame } = useGameContext();
+  const { resetGame } = use(GameContext);
 
   return (
     <button

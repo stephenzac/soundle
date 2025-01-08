@@ -3,7 +3,7 @@ import { InformationModal } from '../info-modal/InformationModal';
 import { InformationButton } from '../info-modal/InformationButton';
 import GitHubLink from './GitHubLink';
 
-const Header: React.FC = () => {
+export const Header: React.FC = () => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
 
   return (
@@ -26,5 +26,3 @@ const Header: React.FC = () => {
     </>
   );
 };
-
-export default Header;

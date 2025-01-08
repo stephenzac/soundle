@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useGameContext } from '../../contexts/GameContext';
+import { use, useEffect, useState } from 'react';
+
 import { checkNotes } from '../../lib/GameNotes';
 import { NUM_ROWS, ROW_LENGTH } from '../../constants/game-board';
+import { GameContext } from '../../contexts/GameContext';
 
 export const SubmitButton: React.FC = () => {
   const {
@@ -15,7 +16,7 @@ export const SubmitButton: React.FC = () => {
     gameLost,
     updateGameWon,
     updateGameLost,
-  } = useGameContext();
+  } = use(GameContext);
 
   const [buttonClass, setButtonClass] = useState<string>(
     'round-button-unclickable'

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useGameContext, NoteTile } from '../../contexts/GameContext';
+import { use, useEffect, useState } from 'react';
+import { GameContext, NoteTile } from '../../contexts/GameContext';
 
 export const DeleteButton: React.FC = () => {
   const [buttonClass, setButtonClass] = useState<string>('round-button');
@@ -11,7 +11,7 @@ export const DeleteButton: React.FC = () => {
     updateBoard,
     gameWon,
     gameLost,
-  } = useGameContext();
+  } = use(GameContext);
 
   const DeleteNote = () => {
     if (currentIndex == 0 || gameWon || gameLost) return;
