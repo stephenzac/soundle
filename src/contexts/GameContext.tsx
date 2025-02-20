@@ -27,7 +27,7 @@ interface Board {
   setCurrentIndex: (newIndex: number) => void;
 }
 
-const gameContext = createContext<Board>({} as Board);
+export const GameContext = createContext<Board>({} as Board);
 
 export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -116,9 +116,5 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
     setCurrentIndex,
   };
 
-  return (
-    <gameContext.Provider value={contextValue}>{children}</gameContext.Provider>
-  );
+  return <GameContext value={contextValue}>{children}</GameContext>;
 };
-
-export const useGameContext = () => useContext(gameContext);

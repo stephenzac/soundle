@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { playMelody } from '../../lib/GameNotes';
-import { useGameContext } from '../../contexts/GameContext';
+import { GameContext } from '../../contexts/GameContext';
 
 export const PlayMelodyButton: React.FC = () => {
-  const { melody } = useGameContext();
+  const { melody } = use(GameContext);
   const [playable, setPlayable] = useState<boolean>(true);
 
   const melodyButtonClicked = () => {

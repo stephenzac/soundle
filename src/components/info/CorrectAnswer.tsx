@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useGameContext } from '../../contexts/GameContext';
+import { use, useEffect, useState } from 'react';
+import { GameContext } from '../../contexts/GameContext';
 
-const CorrectAnswer: React.FC = () => {
-  const { melody, gameLost } = useGameContext();
+export const CorrectAnswer: React.FC = () => {
+  const { melody, gameLost } = use(GameContext);
   const [animateClass, setAnimateClass] = useState('modal-animate-in');
 
   useEffect(() => {
@@ -32,5 +32,3 @@ const CorrectAnswer: React.FC = () => {
     </>
   );
 };
-
-export default CorrectAnswer;

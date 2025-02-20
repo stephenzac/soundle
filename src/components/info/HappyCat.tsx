@@ -1,7 +1,8 @@
-import { useGameContext } from '../../contexts/GameContext';
+import { use, useContext } from 'react';
+import { GameContext } from '../../contexts/GameContext';
 
-const HappyCat: React.FC = () => {
-  const { gameWon } = useGameContext();
+export const HappyCat: React.FC = () => {
+  const { gameWon } = use(GameContext);
 
   return (
     <>
@@ -17,5 +18,3 @@ const HappyCat: React.FC = () => {
     </>
   );
 };
-
-export default HappyCat;

@@ -1,11 +1,12 @@
-import { useGameContext } from '../../contexts/GameContext';
 import { DeleteButton } from './DeleteButton';
 import { SubmitButton } from './SubmitButton';
 import { PlayMelodyButton } from './PlayMelodyButton';
 import { ResetButton } from './ResetButton';
+import { use } from 'react';
+import { GameContext } from '../../contexts/GameContext';
 
 export const GameControlsRow: React.FC = () => {
-  const { gameWon, gameLost } = useGameContext();
+  const { gameWon, gameLost } = use(GameContext);
 
   return (
     <div

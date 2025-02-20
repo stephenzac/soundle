@@ -1,6 +1,7 @@
+import { use } from 'react';
 import { ROW_LENGTH } from '../../constants/game-board';
 import { NoteNotation } from '../../constants/notes';
-import { NoteTile, useGameContext } from '../../contexts/GameContext';
+import { GameContext, NoteTile } from '../../contexts/GameContext';
 
 interface NoteInputProps {
   noteName: NoteNotation;
@@ -14,7 +15,7 @@ export const NoteInputButton: React.FC<NoteInputProps> = ({ noteName }) => {
     updateBoard,
     gameWon,
     gameLost,
-  } = useGameContext();
+  } = use(GameContext);
 
   const inputNote = () => {
     if (currentIndex >= ROW_LENGTH || gameWon || gameLost) return;

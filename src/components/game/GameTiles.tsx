@@ -1,8 +1,9 @@
-import { useGameContext } from '../../contexts/GameContext';
+import { use } from 'react';
 import { NoteBox } from './NoteBox';
+import { GameContext } from '../../contexts/GameContext';
 
 export const GameTiles: React.FC = () => {
-  const { gameBoard } = useGameContext();
+  const { gameBoard } = use(GameContext);
 
   return (
     <>
