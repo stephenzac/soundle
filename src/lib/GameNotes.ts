@@ -67,7 +67,7 @@ export const playMelody = async (notes: NoteNotation[]): Promise<void> => {
       note = note.replace('♭', 'b') as NoteNotation;
     }
 
-    const startTime = now + index / 1.75;
+    const startTime = now + index / 1.6;
     synth.triggerAttack(`${note}4`, startTime);
 
     const noteDuration = Tone.Time('8n').toSeconds();
