@@ -8,19 +8,13 @@ interface NoteInputProps {
 }
 
 export const NoteInputButton: React.FC<NoteInputProps> = ({ note }) => {
-  const {
-    currentRow,
-    currentIndex,
-    setCurrentIndex,
-    updateBoard,
-    gameWon,
-    gameLost,
-  } = use(GameContext);
+  const { currentRow, currentIndex, setCurrentIndex, updateBoard, gameWon, gameLost } =
+    use(GameContext);
 
   const inputNote = () => {
     if (currentIndex >= ROW_LENGTH || gameWon || gameLost) return;
-
     setCurrentIndex(currentIndex + 1);
+
     const newNote: NoteTile = {
       note,
       answered: false,
@@ -32,7 +26,7 @@ export const NoteInputButton: React.FC<NoteInputProps> = ({ note }) => {
 
   return (
     <button
-      className='note-input-button button-animation cursor-pointer'
+      className="note-input-button button-animation cursor-pointer"
       onClick={inputNote}
       aria-label={`Button to input note ${note.noteNotation}`}
     >

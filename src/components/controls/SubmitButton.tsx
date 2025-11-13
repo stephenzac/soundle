@@ -18,7 +18,7 @@ export const SubmitButton: React.FC = () => {
     updateGameLost,
   } = use(GameContext);
 
-  const [buttonClass, setButtonClass] = useState<string>('round-button-unclickable');
+  const [buttonClass, setButtonClass] = useState('round-button-unclickable');
 
   useEffect(() => {
     if (currentIndex === ROW_LENGTH) {

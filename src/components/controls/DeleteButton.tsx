@@ -2,18 +2,12 @@ import { use, useEffect, useState } from 'react';
 import { GameContext, NoteTile } from '../../contexts/GameContext';
 
 export const DeleteButton: React.FC = () => {
-  const [buttonClass, setButtonClass] = useState<string>('round-button');
+  const [buttonClass, setButtonClass] = useState('round-button');
 
-  const {
-    currentIndex,
-    setCurrentIndex,
-    currentRow,
-    updateBoard,
-    gameWon,
-    gameLost,
-  } = use(GameContext);
+  const { currentIndex, setCurrentIndex, currentRow, updateBoard, gameWon, gameLost } =
+    use(GameContext);
 
-  const DeleteNote = () => {
+  const deleteNote = () => {
     if (currentIndex === 0 || gameWon || gameLost) return;
 
     setCurrentIndex(currentIndex - 1);
@@ -27,19 +21,14 @@ export const DeleteButton: React.FC = () => {
   };
 
   useEffect(() => {
-    if (currentIndex > 0 && !(gameWon || gameLost))
-      setButtonClass('round-button');
+    if (currentIndex > 0 && !(gameWon || gameLost)) setButtonClass('round-button');
     else {
       setButtonClass('round-button-unclickable');
     }
   }, [currentIndex, gameWon, gameLost]);
 
   return (
-    <button
-      className={buttonClass}
-      onClick={DeleteNote}
-      aria-label='Delete note'
-    >
+    <button className={buttonClass} onClick={deleteNote} aria-label="Delete note">
       ⌫
     </button>
   );

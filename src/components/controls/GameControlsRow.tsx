@@ -17,11 +17,7 @@ export const GameControlsRow: React.FC = () => {
       <DeleteButton />
       <SubmitButton />
       <PlayMelodyButton />
-      {gameWon || gameLost ? (
-        <ResetButton />
-      ) : (
-        <div className='w-8 h-8 opacity-0' />
-      )}
+      {gameWon || gameLost ? <ResetButton /> : <div className="w-8 h-8 opacity-0" />}
     </div>
   );
 };

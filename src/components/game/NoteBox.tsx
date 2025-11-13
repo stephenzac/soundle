@@ -6,12 +6,11 @@ interface NoteBoxProps {
 }
 
 export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
-  const [noteDisplayed, setNoteDisplayed] = useState<string>('');
-  const [noteClass, setNoteClass] = useState<string>('');
-  const [noteBoxStyle, setNoteBoxStyle] = useState<string>('note-box');
+  const [noteDisplayed, setNoteDisplayed] = useState('');
+  const [noteClass, setNoteClass] = useState('');
+  const [noteBoxStyle, setNoteBoxStyle] = useState('note-box');
 
   useEffect(() => {
-    // Render the note name
     if (currentNote.note === '') {
       setNoteClass('note-animate');
     } else {
@@ -36,9 +35,7 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
   return (
     <div
       className={`${noteBoxStyle}`}
-      aria-label={`Box with ${
-        currentNote.note === '' ? 'nothing' : currentNote.note.noteNotation
-      }`}
+      aria-label={`Box with ${currentNote.note === '' ? 'nothing' : currentNote.note.noteNotation}`}
     >
       <p className={noteClass}>{noteDisplayed}</p>
     </div>

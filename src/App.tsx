@@ -8,14 +8,14 @@ import { NoteInputButton } from './components/controls/NoteInputButton';
 import { GameContextProvider } from './contexts/GameContext';
 
 export const App: React.FC = () => (
-  <div className='bg-gray-800 min-h-screen flex flex-col items-center'>
+  <div className="bg-gray-800 min-h-screen flex flex-col items-center">
     <Header />
-    <main className='flex flex-col items-center gap-2'>
+    <main className="flex flex-col items-center gap-2">
       <GameContextProvider>
         <HappyCat />
         <GameTiles />
         <HappyCat />
-        <div className='w-80 grid grid-cols-6 gap-x-3 gap-y-2 mt-1'>
+        <div className="w-80 grid grid-cols-6 gap-x-3 gap-y-2 mt-1">
           {validGameNotes.map((note) => (
             <NoteInputButton note={note} key={note.noteNotation} />
           ))}

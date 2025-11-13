@@ -17,11 +17,7 @@ export const CorrectAnswer: React.FC = () => {
         <div
           className={`flex flex-row items-center gap-4 bg-gray-900 p-3 rounded-md border-2 border-slate-300 text-center font-bold text-xl ${animateClass}`}
         >
-          <img
-            src='./sad-cat.gif'
-            alt='GIF of a sad banana cat crying'
-            width={80}
-          />
+          <img src="./sad-cat.gif" alt="GIF of a sad banana cat crying" width={80} />
 
           <div>
             <p>The correct notes were:</p>
