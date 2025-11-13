@@ -18,7 +18,7 @@ export const DeleteButton: React.FC = () => {
 
     setCurrentIndex(currentIndex - 1);
     const newNote: NoteTile = {
-      noteName: '',
+      note: '',
       answered: false,
       correct: false,
       answerIsClose: false,

@@ -2,28 +2,28 @@ import { useEffect, useState } from 'react';
 import { NoteTile } from '../../contexts/GameContext';
 
 interface NoteBoxProps {
-  note: NoteTile;
+  currentNote: NoteTile;
 }
 
-export const NoteBox: React.FC<NoteBoxProps> = ({ note }) => {
+export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
   const [noteDisplayed, setNoteDisplayed] = useState<string>('');
   const [noteClass, setNoteClass] = useState<string>('');
   const [noteBoxStyle, setNoteBoxStyle] = useState<string>('note-box');
 
   useEffect(() => {
     // Render the note name
-    if (note.noteName === '') {
+    if (currentNote.note === '') {
       setNoteClass('note-animate');
     } else {
-      setNoteDisplayed(note.noteName);
+      setNoteDisplayed(currentNote.note.noteNotation);
       setNoteClass('note-active');
     }
 
     // Different states of the NoteBox will render different styles
-    if (note.answered) {
-      if (note.correct) {
+    if (currentNote.answered) {
+      if (currentNote.correct) {
         setNoteBoxStyle('note-box-correct');
-      } else if (note.answerIsClose) {
+      } else if (currentNote.answerIsClose) {
         setNoteBoxStyle('note-box-close-answer');
       } else {
         setNoteBoxStyle('note-box-incorrect');
@@ -31,10 +31,15 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ note }) => {
     } else {
       setNoteBoxStyle('note-box');
     }
-  }, [note, note.answered]);
+  }, [currentNote.note, currentNote.answered]);
 
   return (
-    <div className={`${noteBoxStyle}`} aria-label={`Box with ${note}`}>
+    <div
+      className={`${noteBoxStyle}`}
+      aria-label={`Box with ${
+        currentNote.note === '' ? 'nothing' : currentNote.note.noteNotation
+      }`}
+    >
       <p className={noteClass}>{noteDisplayed}</p>
     </div>
   );
