@@ -1,33 +1,22 @@
 import * as Tone from 'tone';
 import { NoteTile } from '../contexts/GameContext';
-import {
-  GameNote,
-  NoteLabel,
-  NOTE_LABELS,
-  TONE_STRINGS,
-} from '../constants/notes';
+import { GameNote, NoteNotationLabel, NOTE_LABELS, TONE_STRINGS } from '../constants/notes';
 import { ROW_LENGTH } from '../constants/game-board';
 
 const checkNoteDistance = (
-  submittedNote: NoteLabel | '',
-  actualNote: NoteLabel | ''
+  submittedNote: NoteNotationLabel,
+  actualNote: NoteNotationLabel
 ): number => {
-  if (submittedNote === '' || actualNote === '') return -1;
   if (
     (submittedNote === 'B' && actualNote === 'C') ||
     (submittedNote === 'C' && actualNote === 'B')
   )
     return 1;
 
-  return Math.abs(
-    NOTE_LABELS.indexOf(submittedNote) - NOTE_LABELS.indexOf(actualNote)
-  );
+  return Math.abs(NOTE_LABELS.indexOf(submittedNote) - NOTE_LABELS.indexOf(actualNote));
 };
 
-export const checkNotes = (
-  submittedNotes: NoteTile[],
-  actualNotes: GameNote[]
-): boolean => {
+export const checkNotes = (submittedNotes: NoteTile[], actualNotes: GameNote[]): boolean => {
   let correctCount = 0;
 
   submittedNotes.forEach((submittedNote, index) => {
@@ -52,10 +41,10 @@ export const checkNotes = (
 };
 
 export const generateNotes = (): GameNote[] => {
-  let generatedNotes: GameNote[] = [];
+  const generatedNotes: GameNote[] = [];
 
   for (let i = 0; i < ROW_LENGTH; i++) {
-    let randomIndex = Math.floor(Math.random() * 12);
+    const randomIndex = Math.floor(Math.random() * 12);
     generatedNotes.push({
       noteNotation: NOTE_LABELS[randomIndex],
       tone: TONE_STRINGS[randomIndex],

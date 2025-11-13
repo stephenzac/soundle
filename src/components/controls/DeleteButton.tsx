@@ -14,7 +14,7 @@ export const DeleteButton: React.FC = () => {
   } = use(GameContext);
 
   const DeleteNote = () => {
-    if (currentIndex == 0 || gameWon || gameLost) return;
+    if (currentIndex === 0 || gameWon || gameLost) return;
 
     setCurrentIndex(currentIndex - 1);
     const newNote: NoteTile = {
@@ -29,7 +29,9 @@ export const DeleteButton: React.FC = () => {
   useEffect(() => {
     if (currentIndex > 0 && !(gameWon || gameLost))
       setButtonClass('round-button');
-    else setButtonClass('round-button-unclickable');
+    else {
+      setButtonClass('round-button-unclickable');
+    }
   }, [currentIndex, gameWon, gameLost]);
 
   return (

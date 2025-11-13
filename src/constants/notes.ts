@@ -12,7 +12,7 @@ export const NOTE_LABELS = [
   'B♭',
   'B',
 ] as const;
-export type NoteLabel = (typeof NOTE_LABELS)[number];
+export type NoteNotationLabel = (typeof NOTE_LABELS)[number];
 
 export const TONE_STRINGS = [
   'C',
@@ -31,7 +31,7 @@ export const TONE_STRINGS = [
 export type ToneString = (typeof TONE_STRINGS)[number];
 
 export interface GameNote {
-  noteNotation: NoteLabel;
+  noteNotation: NoteNotationLabel;
   tone: ToneString;
 }
 
