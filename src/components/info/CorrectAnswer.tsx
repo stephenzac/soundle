@@ -21,7 +21,7 @@ export const CorrectAnswer: React.FC = () => {
 
           <div>
             <p>The correct notes were:</p>
-            <p>{melody.join(', ')}</p>
+            <p>{Array.from(melody.map((note) => note.noteNotation)).join(', ')}</p>
           </div>
         </div>
       )}
