@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NoteTile } from '../../contexts/GameContext';
+import { NoteTile } from '../../../contexts/GameContext';
 
 interface NoteBoxProps {
   currentNote: NoteTile;

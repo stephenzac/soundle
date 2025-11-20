@@ -1,10 +1,10 @@
-import { GameTiles } from './components/game/GameTiles';
+import { GameTiles } from './components/game/display/GameTiles';
 import { HappyCat } from './components/info/HappyCat';
-import { GameControlsRow } from './components/controls/GameControlsRow';
+import { GameControlsRow } from './components/game/controls/GameControlsRow';
 import { CorrectAnswer } from './components/info/CorrectAnswer';
 import { Header } from './components/info/Header';
 import { validGameNotes } from './constants/notes';
-import { NoteInputButton } from './components/controls/NoteInputButton';
+import { NoteInputButton } from './components/game/controls/NoteInputButton';
 import { GameContextProvider } from './contexts/GameContext';
 
 export const App: React.FC = () => (

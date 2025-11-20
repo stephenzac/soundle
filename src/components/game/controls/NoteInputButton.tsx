@@ -1,7 +1,7 @@
 import { use } from 'react';
-import { ROW_LENGTH } from '../../constants/game-board';
-import { GameNote } from '../../constants/notes';
-import { GameContext, NoteTile } from '../../contexts/GameContext';
+import { ROW_LENGTH } from '../../../constants/game-board';
+import { GameNote } from '../../../constants/notes';
+import { GameContext, NoteTile } from '../../../contexts/GameContext';
 
 interface NoteInputProps {
   note: GameNote;

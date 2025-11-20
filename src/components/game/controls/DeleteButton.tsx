@@ -1,5 +1,5 @@
 import { use, useEffect, useState } from 'react';
-import { GameContext, NoteTile } from '../../contexts/GameContext';
+import { GameContext, NoteTile } from '../../../contexts/GameContext';
 
 export const DeleteButton: React.FC = () => {
   const [buttonClass, setButtonClass] = useState('round-button');

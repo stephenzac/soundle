@@ -3,7 +3,7 @@ import { SubmitButton } from './SubmitButton';
 import { PlayMelodyButton } from './PlayMelodyButton';
 import { ResetButton } from './ResetButton';
 import { use } from 'react';
-import { GameContext } from '../../contexts/GameContext';
+import { GameContext } from '../../../contexts/GameContext';
 
 export const GameControlsRow: React.FC = () => {
   const { gameWon, gameLost } = use(GameContext);
