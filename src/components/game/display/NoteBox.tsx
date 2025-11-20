@@ -10,15 +10,7 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
   const [noteClass, setNoteClass] = useState('');
   const [noteBoxStyle, setNoteBoxStyle] = useState('note-box');
 
-  useEffect(() => {
-    if (currentNote.note === '') {
-      setNoteClass('note-animate');
-    } else {
-      setNoteDisplayed(currentNote.note.noteNotation);
-      setNoteClass('note-active');
-    }
-
-    // Different states of the NoteBox will render different styles
+  const updateNoteboxStyle = () => {
     if (currentNote.answered) {
       if (currentNote.correct) {
         setNoteBoxStyle('note-box-correct');
@@ -30,6 +22,17 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
     } else {
       setNoteBoxStyle('note-box');
     }
+  };
+
+  useEffect(() => {
+    if (currentNote.note === '') {
+      setNoteClass('note-animate');
+    } else {
+      setNoteDisplayed(currentNote.note.noteNotation);
+      setNoteClass('note-active');
+    }
+
+    updateNoteboxStyle();
   }, [currentNote.note, currentNote.answered]);
 
   return (
