@@ -16,13 +16,17 @@ html {
 
   .modal-active {
     opacity: 1;
-    transition: opacity 200ms, transform 200ms;
+    transition:
+      opacity 200ms,
+      transform 200ms;
   }
 
   .modal-animate-out {
     opacity: 0;
     transform: scale(0.5);
-    transition: opacity 200ms, transform 200ms;
+    transition:
+      opacity 200ms,
+      transform 200ms;
   }
 
   .background-animate-in {
@@ -46,7 +50,9 @@ html {
 
   .note-animate {
     transform: scaleY(-0);
-    transition: opacity 150ms, transform 150ms;
+    transition:
+      opacity 150ms,
+      transform 150ms;
   }
 }
 
@@ -59,20 +65,24 @@ html {
   font-size: 14px;
 }
 
+.note-box-base {
+  @apply font-bold flex justify-center items-center place-items-center h-11 w-11 border-2 border-slate-300 rounded-md transition-all;
+}
+
 .note-box {
-  @apply bg-gray-900 font-bold flex justify-center items-center place-items-center h-11 w-11 border-2 border-slate-300 rounded-md transition-all;
+  @apply bg-gray-900 note-box-base;
 }
 
 .note-box-correct {
-  @apply bg-green-700 font-bold flex justify-center items-center h-11 w-11 text-lg border-2 border-slate-300 rounded-md transition-all;
+  @apply bg-green-700 note-box-base;
 }
 
 .note-box-close-answer {
-  @apply bg-amber-500 font-bold flex justify-center items-center h-11 w-11 text-lg border-2 border-slate-300 rounded-md transition-all;
+  @apply bg-amber-500 note-box-base;
 }
 
 .note-box-incorrect {
-  @apply bg-red-700 font-bold flex justify-center items-center h-11 w-11 border-2 text-lg border-slate-300 rounded-md transition-all;
+  @apply bg-red-700 note-box-base;
 }
 
 .note-box-example {
@@ -83,8 +93,12 @@ html {
   @apply bg-gray-900 font-bold grid place-items-center h-11 w-11 border-2 border-slate-300 rounded-md;
 }
 
+.round-button-base {
+  @apply bg-gray-900 w-9 h-9 rounded-full grid place-items-center button-animation;
+}
+
 .round-button {
-  @apply bg-gray-900 w-9 h-9 rounded-full cursor-pointer grid place-items-center button-animation hover:animate-pulse-fast;
+  @apply round-button-base cursor-pointer hover:animate-pulse-fast;
 }
 
 .round-button-example {
@@ -92,7 +106,7 @@ html {
 }
 
 .round-button-unclickable {
-  @apply bg-gray-900 text-white w-9 h-9 rounded-full cursor-not-allowed grid place-items-center button-animation opacity-50;
+  @apply round-button-base text-white cursor-not-allowed opacity-50;
 }
 
 .button-animation {
