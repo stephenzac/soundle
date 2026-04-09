@@ -5,6 +5,8 @@ interface NoteBoxProps {
   currentNote: NoteTile;
 }
 
+const NOTE_EXIT_MS = 50;
+
 export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
   const [noteDisplayed, setNoteDisplayed] = useState('');
   const [noteClass, setNoteClass] = useState('');
@@ -27,11 +29,15 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
   useEffect(() => {
     if (currentNote.note === '') {
       setNoteClass('note-animate');
-    } else {
-      setNoteDisplayed(currentNote.note.noteNotation);
-      setNoteClass('note-active');
+      const clearAfterExit = window.setTimeout(() => {
+        setNoteDisplayed('');
+      }, NOTE_EXIT_MS);
+      updateNoteboxStyle();
+      return () => clearTimeout(clearAfterExit);
     }
 
+    setNoteDisplayed(currentNote.note.noteNotation);
+    setNoteClass('note-active');
     updateNoteboxStyle();
   }, [currentNote.note, currentNote.answered, updateNoteboxStyle]);
 
@@ -41,7 +47,9 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
       aria-label={`Box with ${currentNote.note === '' ? 'nothing' : currentNote.note.noteNotation}`}
     >
       <p className={noteClass}>{noteDisplayed[0]}</p>
-      <span className="absolute top-1 right-0.5 text-s">{noteDisplayed[1]}</span>
+      {noteDisplayed.length > 1 && (
+        <span className="absolute top-1 right-0.5 text-s">{noteDisplayed[1]}</span>
+      )}
     </div>
   );
 };
