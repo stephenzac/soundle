@@ -8,6 +8,6 @@ export const InformationButton: React.FC<InformationButtonProps> = ({ setClicked
     onClick={() => setClickedState(true)}
     aria-label="Show game information"
   >
-    ?
+    i
   </button>
 );

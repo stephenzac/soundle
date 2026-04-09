@@ -8,9 +8,9 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between w-full px-5 lg:px-7">
+      <div className="flex flex-row items-center justify-between w-full px-5 lg:px-7 header-container">
         <header>
-          <h1 className="main-header text-left text-2xl italic lg:text-4xl font-bold pt-3 pb-3">
+          <h1 className="main-header text-left text-xl italic lg:text-4xl font-bold pt-3 pb-3">
             Soundle
           </h1>
         </header>
@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
       </div>
       {showInfo && <InformationModal setClickedState={setShowInfo} />}
 
-      <div className="w-full h-[1.5px] bg-slate-300 mb-3 lg:mb-10" />
+      <div className="w-full pixel-divider mb-3 lg:mb-10" />
     </>
   );
 };

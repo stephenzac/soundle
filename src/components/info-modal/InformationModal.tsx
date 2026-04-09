@@ -22,21 +22,22 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
   return (
     <>
       <div
-        className={`flex justify-center h-screen w-screen fixed top-0 bottom-0 left-0 right-0 bg-gray-800 ${backgroundClass}`}
+        className={`flex justify-center h-screen w-screen fixed top-0 bottom-0 left-0 right-0 pixel-modal-background ${backgroundClass}`}
         onClick={handleClose}
         role="presentation"
       />
 
       <section
-        className={`flex flex-col px-1 absolute top-16 bg-gray-700 max-w-80 pt-2 pb-2 ml-auto mr-auto rounded-lg border-2 border-slate-300 z-10 ${modalClass} `}
+        className={`flex flex-col px-4 absolute top-4 lg:top-12 pixel-modal w-80 lg:w-1/4 pt-4 pb-4 ml-auto mr-auto z-10 ${modalClass} `}
         role="dialogue"
         aria-describedby="modalDescription"
         aria-modal="true"
       >
         <button
-          className="flex items-center justify-center hover:cursor-pointer font-bold self-end my-0 w-6 h-6"
+          className="flex items-center justify-center hover:cursor-pointer font-bold self-end my-0 w-8 h-8 pixel-border hover:bg-red-600 transition-all"
           onClick={handleClose}
           aria-label="Close"
+          style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '10px' }}
         >
           X
         </button>
@@ -60,7 +61,8 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="bg-green-700 font-bold grid place-items-center h-8 w-[30px] ml-2 border-2 border-slate-300 rounded-md"
+              className="note-box-correct font-bold grid place-items-center ml-2"
+              style={{ height: '32px', width: '32px' }}
               aria-label="Correct note guess example"
             >
               C
@@ -70,7 +72,8 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="bg-amber-400 font-bold grid place-items-center h-8 w-[30px] ml-2 border-2 border-slate-300 rounded-md"
+              className="note-box-close-answer font-bold grid place-items-center ml-2"
+              style={{ height: '32px', width: '32px' }}
               aria-label="Close note guess example"
             >
               B
@@ -80,7 +83,8 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="bg-red-700 font-bold grid place-items-center h-8 w-[30px] ml-2 border-2 border-slate-300 rounded-md"
+              className="note-box-incorrect font-bold grid place-items-center ml-2"
+              style={{ height: '32px', width: '32px' }}
               aria-label="Correct note guess example"
             >
               B♭
