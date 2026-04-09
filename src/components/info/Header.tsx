@@ -1,28 +1,28 @@
-import { useState } from 'react';
-import { InformationModal } from '../info-modal/InformationModal';
-import { InformationButton } from '../info-modal/InformationButton';
-import GitHubLink from './GitHubLink';
+import { OpenInformationButton } from '../info-modal/InformationModal';
 
-export const Header: React.FC = () => {
-  const [showInfo, setShowInfo] = useState<boolean>(false);
+import { GitHubLink } from './GitHubLink';
 
+interface HeaderProps {
+  setShowInfoModal: (newState: boolean) => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({ setShowInfoModal }) => {
   return (
     <>
-      <div className='flex flex-row items-center justify-between w-full px-5 lg:px-7'>
+      <div className="flex flex-row items-center justify-between w-full px-5 lg:px-7 header-container">
         <header>
-          <h1 className='main-header text-left text-2xl italic lg:text-4xl font-bold pt-3 pb-3'>
+          <h1 className="main-header text-left text-xl italic lg:text-4xl font-bold pt-3 pb-3">
             Soundle
           </h1>
         </header>
 
-        <div className='flex flex-row items-center gap-2'>
-          <InformationButton setClickedState={setShowInfo} />
+        <div className="flex flex-row items-center gap-2">
+          <OpenInformationButton setClickedState={setShowInfoModal} />
           <GitHubLink />
         </div>
       </div>
-      {showInfo && <InformationModal setClickedState={setShowInfo} />}
 
-      <div className='w-full h-[1.5px] bg-slate-300 mb-3 lg:mb-10' />
+      <div className="w-full pixel-divider mb-3 lg:mb-10" />
     </>
   );
 };

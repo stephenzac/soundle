@@ -1,74 +1,67 @@
 import * as Tone from 'tone';
 import { NoteTile } from '../contexts/GameContext';
-import { NoteNotation, musicNotes } from '../constants/notes';
+import { GameNote, NoteNotationLabel, NOTE_LABELS, TONE_STRINGS } from '../constants/notes';
 import { ROW_LENGTH } from '../constants/game-board';
 
 const checkNoteDistance = (
-  submittedNote: NoteNotation | '',
-  actualNote: NoteNotation | ''
+  submittedNote: NoteNotationLabel,
+  actualNote: NoteNotationLabel
 ): number => {
-  if (submittedNote === '' || actualNote === '') return -1;
   if (
     (submittedNote === 'B' && actualNote === 'C') ||
     (submittedNote === 'C' && actualNote === 'B')
   )
     return 1;
 
-  return Math.abs(
-    musicNotes.indexOf(submittedNote) - musicNotes.indexOf(actualNote)
-  );
+  return Math.abs(NOTE_LABELS.indexOf(submittedNote) - NOTE_LABELS.indexOf(actualNote));
 };
 
-export const checkNotes = (
-  submittedNotes: NoteTile[],
-  actualNotes: NoteNotation[]
-): boolean => {
+export const checkNotes = (submittedNotes: NoteTile[], actualNotes: GameNote[]): boolean => {
   let correctCount = 0;
 
-  for (let i = 0; i < ROW_LENGTH; i++) {
-    const submittedNote = submittedNotes[i];
-    const actualNote: NoteNotation = actualNotes[i];
+  submittedNotes.forEach((submittedNote, index) => {
+    if (submittedNote.note === '') return false;
 
-    submittedNote.answered = true;
-
-    if (submittedNote.noteName === actualNote) {
+    if (submittedNote.note.noteNotation === actualNotes[index].noteNotation) {
       submittedNote.correct = true;
       correctCount++;
     }
 
-    // // Check if guess is a half step off
-    const noteDistance = checkNoteDistance(submittedNote.noteName, actualNote);
+    // Check if guess is a half step off
+    const noteDistance = checkNoteDistance(
+      submittedNote.note.noteNotation,
+      actualNotes[index].noteNotation
+    );
     if (noteDistance === 1) submittedNote.answerIsClose = true;
-  }
+
+    submittedNote.answered = true;
+  });
 
   return correctCount === ROW_LENGTH;
 };
 
-export const generateNotes = (): NoteNotation[] => {
-  let generatedNotes: NoteNotation[] = [];
+export const generateNotes = (): GameNote[] => {
+  const generatedNotes: GameNote[] = [];
 
   for (let i = 0; i < ROW_LENGTH; i++) {
-    let randomIndex = Math.floor(Math.random() * 12);
-    generatedNotes.push(musicNotes[randomIndex]);
+    const randomIndex = Math.floor(Math.random() * 12);
+    generatedNotes.push({
+      noteNotation: NOTE_LABELS[randomIndex],
+      tone: TONE_STRINGS[randomIndex],
+    });
   }
 
   return generatedNotes;
 };
 
-export const playMelody = async (notes: NoteNotation[]): Promise<void> => {
+export const playMelody = async (notes: GameNote[]): Promise<void> => {
   await Tone.start();
   const synth = new Tone.Synth().toDestination();
   const now = Tone.now();
 
-  notes.forEach((note: NoteNotation, index: number) => {
-    if (note.includes('♯')) {
-      note = note.replace('♯', '#') as NoteNotation;
-    } else if (note.includes('♭')) {
-      note = note.replace('♭', 'b') as NoteNotation;
-    }
-
-    const startTime = now + index / 1.75;
-    synth.triggerAttack(`${note}4`, startTime);
+  notes.forEach((note: GameNote, index: number) => {
+    const startTime = now + index / 1.6;
+    synth.triggerAttack(`${note.tone}4`, startTime);
 
     const noteDuration = Tone.Time('8n').toSeconds();
     synth.triggerRelease(startTime + noteDuration);

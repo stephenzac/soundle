@@ -1,20 +1,20 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { generateNotes } from '../lib/GameNotes';
-import { NoteNotation } from '../constants/notes';
+import { GameNote } from '../constants/notes';
 import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
 
-export type NoteTile = {
-  noteName: NoteNotation | '';
+export interface NoteTile {
+  note: GameNote | '';
   answered: boolean;
   correct: boolean;
   answerIsClose: boolean;
-};
+}
 
 interface Board {
   gameBoard: NoteTile[][];
   currentRow: number;
   currentIndex: number;
-  melody: NoteNotation[];
+  melody: GameNote[];
   gameWon: boolean;
   gameLost: boolean;
   melodyPlayed: boolean;
@@ -33,17 +33,17 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [gameBoard, setBoard] = useState<NoteTile[][]>([]);
-  const [melody, setMelody] = useState<NoteNotation[]>([]);
-  const [currentRow, setCurrentRow] = useState<number>(0);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [gameWon, setGameWon] = useState<boolean>(false);
-  const [gameLost, setGameLost] = useState<boolean>(false);
-  const [melodyPlayed, setMelodyPlayed] = useState<boolean>(false);
+  const [melody, setMelody] = useState<GameNote[]>([]);
+  const [currentRow, setCurrentRow] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [gameWon, setGameWon] = useState(false);
+  const [gameLost, setGameLost] = useState(false);
+  const [melodyPlayed, setMelodyPlayed] = useState(false);
 
   useEffect(() => {
     const newGameBoard: NoteTile[][] = Array.from({ length: NUM_ROWS }, () =>
       Array.from({ length: ROW_LENGTH }, () => ({
-        noteName: '',
+        note: '',
         answered: false,
         correct: false,
         answerIsClose: false,
@@ -65,7 +65,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const generateNewMelody = () => {
-    const newNotes: NoteNotation[] = generateNotes();
+    const newNotes = generateNotes();
     setMelody(newNotes);
   };
 
@@ -79,7 +79,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const resetGame = () => {
     const newGameBoard: NoteTile[][] = Array.from({ length: NUM_ROWS }, () =>
       Array.from({ length: ROW_LENGTH }, () => ({
-        noteName: '',
+        note: '',
         answered: false,
         correct: false,
         answerIsClose: false,

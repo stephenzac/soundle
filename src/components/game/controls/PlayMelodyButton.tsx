@@ -1,10 +1,10 @@
 import { use, useState } from 'react';
-import { playMelody } from '../../lib/GameNotes';
-import { GameContext } from '../../contexts/GameContext';
+import { playMelody } from '../../../lib/GameNotes';
+import { GameContext } from '../../../contexts/GameContext';
 
 export const PlayMelodyButton: React.FC = () => {
   const { melody } = use(GameContext);
-  const [playable, setPlayable] = useState<boolean>(true);
+  const [playable, setPlayable] = useState(true);
 
   const melodyButtonClicked = () => {
     if (!playable) return;
@@ -16,11 +16,7 @@ export const PlayMelodyButton: React.FC = () => {
   };
 
   return (
-    <button
-      className='round-button'
-      onClick={melodyButtonClicked}
-      aria-label='Play melody'
-    >
+    <button className="round-button" onClick={melodyButtonClicked} aria-label="Play melody">
       ♫
     </button>
   );

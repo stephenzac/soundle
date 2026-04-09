@@ -1,8 +1,8 @@
 import { use, useEffect, useState } from 'react';
 
-import { checkNotes } from '../../lib/GameNotes';
-import { NUM_ROWS, ROW_LENGTH } from '../../constants/game-board';
-import { GameContext } from '../../contexts/GameContext';
+import { checkNotes } from '../../../lib/GameNotes';
+import { NUM_ROWS, ROW_LENGTH } from '../../../constants/game-board';
+import { GameContext } from '../../../contexts/GameContext';
 
 export const SubmitButton: React.FC = () => {
   const {
@@ -18,20 +18,17 @@ export const SubmitButton: React.FC = () => {
     updateGameLost,
   } = use(GameContext);
 
-  const [buttonClass, setButtonClass] = useState<string>(
-    'round-button-unclickable'
-  );
+  const [buttonClass, setButtonClass] = useState('round-button-unclickable');
 
   useEffect(() => {
     if (currentIndex === ROW_LENGTH) {
       setButtonClass('round-button');
     } else {
-      if (buttonClass != 'round-button-unclickable')
-        setButtonClass('round-button-unclickable');
+      if (buttonClass !== 'round-button-unclickable') setButtonClass('round-button-unclickable');
     }
 
     if (gameWon || gameLost) setButtonClass('round-button-unclickable');
-  }, [currentIndex, gameWon, gameLost]);
+  }, [currentIndex, gameWon, gameLost, buttonClass]);
 
   const submit = () => {
     if (gameWon || gameLost) return;
@@ -59,11 +56,7 @@ export const SubmitButton: React.FC = () => {
   };
 
   return (
-    <button
-      className={buttonClass}
-      onClick={submit}
-      aria-label='Submit melody guess'
-    >
+    <button className={buttonClass} onClick={submit} aria-label="Submit melody guess">
       ✓
     </button>
   );
