@@ -228,15 +228,6 @@ html {
   transition: all 70ms ease;
 }
 
-.round-button:hover {
-  background-color: #5a5a5a;
-  box-shadow:
-    inset 2px 2px 0px #333,
-    inset -2px -2px 0px #999,
-    0 0 0 1px #000;
-  transform: translate(0.5px, 0.5px);
-}
-
 .round-button:active {
   box-shadow:
     inset 2px 2px 0px #333,
@@ -253,15 +244,6 @@ html {
 
 .button-animation {
   transition: all 50ms ease;
-}
-
-.button-animation:hover {
-  background-color: #929292;
-  box-shadow:
-    inset 2px 2px 0px #333,
-    inset -2px -2px 0px #999,
-    0 0 0 1px #000;
-  transform: translate(1px, 1px);
 }
 
 .button-animation:active {
@@ -317,10 +299,30 @@ html {
   transition: all 100ms ease;
 }
 
-.pixel-link:hover {
-  color: #ffeb3b;
-  transform: translate(1px, 1px);
-  text-shadow:
-    1px 1px 0px #000,
-    0 0 0 1px #000;
+@media (hover: hover) {
+  .round-button:hover {
+    background-color: #5a5a5a;
+    box-shadow:
+      inset 2px 2px 0px #333,
+      inset -2px -2px 0px #999,
+      0 0 0 1px #000;
+    transform: translate(0.5px, 0.5px);
+  }
+
+  .button-animation:hover {
+    background-color: #929292;
+    box-shadow:
+      inset 2px 2px 0px #333,
+      inset -2px -2px 0px #999,
+      0 0 0 1px #000;
+    transform: translate(1px, 1px);
+  }
+
+  .pixel-link:hover {
+    color: #ffeb3b;
+    transform: translate(1px, 1px);
+    text-shadow:
+      1px 1px 0px #000,
+      0 0 0 1px #000;
+  }
 }
