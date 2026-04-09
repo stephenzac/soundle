@@ -138,9 +138,8 @@ html {
   color: #fff;
 }
 
-.note-box-base {
+.note-box {
   @apply font-bold flex justify-center items-center place-items-center transition-all;
-  height: 50px;
   aspect-ratio: 1/1;
   font-family: 'Press Start 2P', cursive;
   font-size: 15px;
@@ -154,16 +153,9 @@ html {
   image-rendering: pixelated;
 }
 
-.note-box {
-  @apply note-box-base;
-  border-color: #000;
-  background-color: #b0b0b0;
-}
-
 .note-box-correct {
-  @apply note-box-base;
+  @apply note-box;
   background-color: #4ade80;
-  border-color: #000;
   box-shadow:
     inset -2px -2px 0px #22c55e,
     inset 2px 2px 0px #86efac,
@@ -172,9 +164,8 @@ html {
 }
 
 .note-box-close-answer {
-  @apply note-box-base;
+  @apply note-box;
   background-color: #fbbf24;
-  border-color: #000;
   box-shadow:
     inset -2px -2px 0px #f59e0b,
     inset 2px 2px 0px #fcd34d,
@@ -182,9 +173,8 @@ html {
 }
 
 .note-box-incorrect {
-  @apply note-box-base;
+  @apply note-box;
   background-color: #f87171;
-  border-color: #000;
   box-shadow:
     inset -2px -2px 0px #ef4444,
     inset 2px 2px 0px #fca5a5,
@@ -192,11 +182,10 @@ html {
 }
 
 .note-box-example {
-  @apply font-bold grid place-items-center ml-2;
-  height: 32px;
-  width: 32px;
+  @apply font-bold grid place-items-center;
+  aspect-ratio: 1/1;
   font-family: 'Press Start 2P', cursive;
-  font-size: 10px;
+  font-size: 14px;
   background-color: #b0b0b0;
   color: #000;
   border: 2px solid #000;
@@ -254,19 +243,6 @@ html {
     inset -2px -2px 0px #999,
     0 0 0 1px #000;
   transform: translate(2px, 2px);
-}
-
-.round-button-example {
-  @apply w-9 h-9 ml-2 grid place-items-center;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 12px;
-  background-color: #b3b3b3;
-  color: #000;
-  border: 3px solid #000;
-  box-shadow:
-    inset -2px -2px 0px #666,
-    inset 2px 2px 0px #fff,
-    0 0 0 1px #000;
 }
 
 .round-button-unclickable {

@@ -23,7 +23,7 @@ interface CloseButtonProps {
 
 const CloseButton: React.FC<CloseButtonProps> = ({ children, onClose }) => (
   <button
-    className="flex items-center justify-center hover:cursor-pointer font-bold self-end my-0 w-8 h-8 pixel-border hover:bg-red-600 transition-all"
+    className="flex items-center justify-center hover:cursor-pointer font-bold self-end w-8 h-8 pixel-border hover:bg-red-600 transition-all"
     onClick={onClose}
     aria-label="Close"
     style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '10px' }}
@@ -69,14 +69,14 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
         <div id="modalDescription">
           <header>
-            <p className="modal-text text-slate-100 text-center mb-6 mx-4">
+            <p className="modal-text text-slate-100 text-center mt-4 mb-6">
               Soundle is a Wordle-like ear training game to improve your sense of pitch. Listen to
               the five tones in concert pitch and guess them all correctly within 6 tries.
             </p>
           </header>
 
           <figure className="flex flex-row place-items-center mb-4">
-            <div className="note-box-example" aria-label="Note input button example">
+            <div className="note-box h-[38px]" aria-label="Note input button example">
               C
             </div>
             <figcaption className="modal-text text-slate-100 pl-4">
@@ -86,8 +86,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="note-box-correct font-bold grid place-items-center ml-2"
-              style={{ height: '32px', width: '32px' }}
+              className="note-box-correct h-[38px] font-bold grid place-items-center"
               aria-label="Correct note guess example"
             >
               C
@@ -97,8 +96,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="note-box-close-answer font-bold grid place-items-center ml-2"
-              style={{ height: '32px', width: '32px' }}
+              className="note-box-close-answer h-[38px] font-bold grid place-items-center"
               aria-label="Close note guess example"
             >
               B
@@ -108,8 +106,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="note-box-incorrect font-bold grid place-items-center ml-2"
-              style={{ height: '32px', width: '32px' }}
+              className="note-box-incorrect h-[38px] font-bold grid place-items-center"
               aria-label="Correct note guess example"
             >
               B♭
@@ -118,10 +115,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
           </figure>
 
           <figure className="flex flex-row place-items-center mb-4">
-            <div
-              className="round-button-example font-bold"
-              aria-label="Submit guess button example"
-            >
+            <div className="note-box h-[38px]" aria-label="Submit guess button example">
               ✓
             </div>
             <figcaption className="modal-text text-slate-100 w-full pl-4">
@@ -130,7 +124,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
           </figure>
 
           <figure className="flex flex-row place-items-center mb-4">
-            <div className="round-button-example" aria-label="Play melody button example">
+            <div className="note-box h-[38px]" aria-label="Play melody button example">
               ♫
             </div>
             <figcaption className="modal-text text-slate-100 w-full pl-4">
@@ -139,7 +133,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
           </figure>
 
           <figure className="flex flex-row place-items-center mb-4">
-            <div className="round-button-example" aria-label="Delete button example">
+            <div className="note-box h-[38px]" aria-label="Delete button example">
               ⌫
             </div>
             <figcaption className="modal-text text-slate-100 w-full pl-4">
