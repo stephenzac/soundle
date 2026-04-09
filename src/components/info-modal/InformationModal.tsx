@@ -1,5 +1,37 @@
 import { useState, useEffect } from 'react';
 
+interface OpenInformationButtonProps {
+  setClickedState: (newState: boolean) => void;
+}
+
+export const OpenInformationButton: React.FC<OpenInformationButtonProps> = ({
+  setClickedState,
+}) => (
+  <button
+    className="round-button font-bold"
+    onClick={() => setClickedState(true)}
+    aria-label="Show game information"
+  >
+    i
+  </button>
+);
+
+interface CloseButtonProps {
+  children?: React.ReactNode;
+  onClose: () => void;
+}
+
+const CloseButton: React.FC<CloseButtonProps> = ({ children, onClose }) => (
+  <button
+    className="flex items-center justify-center hover:cursor-pointer font-bold self-end my-0 w-8 h-8 pixel-border hover:bg-red-600 transition-all"
+    onClick={onClose}
+    aria-label="Close"
+    style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '10px' }}
+  >
+    {children}
+  </button>
+);
+
 interface InformationModalProps {
   setClickedState: (newState: boolean) => void;
 }
@@ -33,14 +65,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
         aria-describedby="modalDescription"
         aria-modal="true"
       >
-        <button
-          className="flex items-center justify-center hover:cursor-pointer font-bold self-end my-0 w-8 h-8 pixel-border hover:bg-red-600 transition-all"
-          onClick={handleClose}
-          aria-label="Close"
-          style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '10px' }}
-        >
-          X
-        </button>
+        <CloseButton onClose={handleClose}>X</CloseButton>
 
         <div id="modalDescription">
           <header>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { InformationModal } from '../info-modal/InformationModal';
-import { InformationButton } from '../info-modal/InformationButton';
+import { OpenInformationButton, InformationModal } from '../info-modal/InformationModal';
+
 import { GitHubLink } from './GitHubLink';
 
 export const Header: React.FC = () => {
@@ -16,7 +16,7 @@ export const Header: React.FC = () => {
         </header>
 
         <div className="flex flex-row items-center gap-2">
-          <InformationButton setClickedState={setShowInfo} />
+          <OpenInformationButton setClickedState={setShowInfo} />
           <GitHubLink />
         </div>
       </div>
