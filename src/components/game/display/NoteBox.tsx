@@ -8,19 +8,19 @@ interface NoteBoxProps {
 export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
   const [noteDisplayed, setNoteDisplayed] = useState('');
   const [noteClass, setNoteClass] = useState('');
-  const [noteBoxStyle, setNoteBoxStyle] = useState('note-box h-[50px]');
+  const [noteBoxStyle, setNoteBoxStyle] = useState('note-box h-[50px] relative');
 
   const updateNoteboxStyle = useCallback(() => {
     if (currentNote.answered) {
       if (currentNote.correct) {
-        setNoteBoxStyle('note-box-correct h-[50px]');
+        setNoteBoxStyle('note-box-correct h-[50px] relative');
       } else if (currentNote.answerIsClose) {
-        setNoteBoxStyle('note-box-close-answer h-[50px]');
+        setNoteBoxStyle('note-box-close-answer h-[50px] relative');
       } else {
-        setNoteBoxStyle('note-box-incorrect h-[50px]');
+        setNoteBoxStyle('note-box-incorrect h-[50px] relative');
       }
     } else {
-      setNoteBoxStyle('note-box h-[50px]');
+      setNoteBoxStyle('note-box h-[50px] relative');
     }
   }, [currentNote.answered, currentNote.correct, currentNote.answerIsClose]);
 
@@ -40,7 +40,8 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
       className={`${noteBoxStyle}`}
       aria-label={`Box with ${currentNote.note === '' ? 'nothing' : currentNote.note.noteNotation}`}
     >
-      <p className={noteClass}>{noteDisplayed}</p>
+      <p className={noteClass}>{noteDisplayed[0]}</p>
+      <span className="absolute top-1 right-0.5 text-s">{noteDisplayed[1]}</span>
     </div>
   );
 };

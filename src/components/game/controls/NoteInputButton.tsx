@@ -26,11 +26,12 @@ export const NoteInputButton: React.FC<NoteInputProps> = ({ note }) => {
 
   return (
     <button
-      className="note-input-button button-animation cursor-pointer"
+      className="note-input-button button-animation cursor-pointer relative"
       onClick={inputNote}
       aria-label={`Button to input note ${note.noteNotation}`}
     >
-      {note.noteNotation}
+      {note.noteNotation[0]}
+      <span className="absolute top-1 right-0.5 text-s">{note.noteNotation[1]}</span>
     </button>
   );
 };

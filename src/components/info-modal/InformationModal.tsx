@@ -106,10 +106,10 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="note-box-incorrect h-[38px] font-bold grid place-items-center"
+              className="note-box-incorrect h-[38px] font-bold grid place-items-center relative"
               aria-label="Correct note guess example"
             >
-              B♭
+              B<span className="absolute top-0.5 right-0 text-xs">♭</span>
             </div>
             <figcaption className="modal-text ml-4">Incorrect note guess.</figcaption>
           </figure>
