@@ -10,16 +10,20 @@ import { useEffect, useState } from 'react';
 import { InformationModal } from './components/info-modal/InformationModal';
 
 const NAMESPACE = 'soundle';
-const SHOW_INITIAL_MODAL_KEY = 'showInitialModal';
+const MODAL_HAS_BEEN_SHOWN_KEY = 'modalHasBeenShown';
 
 export const App: React.FC = () => {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
 
   useEffect(() => {
-    const showInitialModalValue = localStorage.getItem(`${NAMESPACE}::${SHOW_INITIAL_MODAL_KEY}`);
-    if (!showInitialModalValue) {
-      setShowInfoModal(true);
-      localStorage.setItem(`${NAMESPACE}::${SHOW_INITIAL_MODAL_KEY}`, 'false');
+    const modalHasBeenShownValue = localStorage.getItem(
+      `${NAMESPACE}::${MODAL_HAS_BEEN_SHOWN_KEY}`
+    );
+    if (!modalHasBeenShownValue) {
+      setTimeout(() => {
+        setShowInfoModal(true);
+      }, 700);
+      localStorage.setItem(`${NAMESPACE}::${MODAL_HAS_BEEN_SHOWN_KEY}`, 'true');
     }
   }, []);
 
