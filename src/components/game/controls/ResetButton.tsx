@@ -6,7 +6,7 @@ export const ResetButton: React.FC = () => {
 
   return (
     <button
-      className="round-button font-bold mr-16 animate-pulse-fast duration-0 relative"
+      className="round-button font-bold animate-pulse-fast duration-0 relative"
       onClick={resetGame}
       aria-label="Reset game"
     >
