@@ -15,13 +15,11 @@ export const Header: React.FC<HeaderProps> = ({ setShowInfoModal }) => {
             Soundle
           </h1>
         </header>
-
         <div className="flex flex-row items-center gap-2">
           <OpenInformationButton setClickedState={setShowInfoModal} />
           <GitHubLink />
         </div>
       </div>
-
       <div className="w-full pixel-divider mb-3 lg:mb-10" />
     </>
   );

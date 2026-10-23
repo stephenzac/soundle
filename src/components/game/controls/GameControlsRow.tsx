@@ -4,15 +4,17 @@ import { PlayMelodyButton } from './PlayMelodyButton';
 import { ResetButton } from './ResetButton';
 import { use } from 'react';
 import { GameContext } from '../../../contexts/GameContext';
+import { cn } from '../../../lib/cn';
 
 export const GameControlsRow: React.FC = () => {
   const { gameWon, gameLost } = use(GameContext);
 
   return (
     <div
-      className={`flex justify-center space-x-8 transition-all duration-300 mt-2 ${
-        !(gameWon || gameLost) ? 'ml-16' : ''
-      }`}
+      className={cn(
+        'flex justify-center space-x-8 transition-all duration-300 mt-2',
+        !(gameWon || gameLost) && 'ml-16'
+      )}
     >
       <DeleteButton />
       <SubmitButton />

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { cn } from '../../lib/cn';
 
 interface OpenInformationButtonProps {
   setClickedState: (newState: boolean) => void;
@@ -37,30 +38,37 @@ interface InformationModalProps {
 }
 
 export const InformationModal: React.FC<InformationModalProps> = ({ setClickedState }) => {
-  const [modalClass, setModalClass] = useState('modal-animate-in');
-  const [backgroundClass, setBackgroundClass] = useState('background-animate-in');
+  const [phase, setPhase] = useState<'enter' | 'active' | 'exit'>('enter');
 
   useEffect(() => {
-    setModalClass('modal-active');
-    setBackgroundClass('background-active');
+    setPhase('active');
   }, []);
 
   const handleClose = () => {
-    setModalClass('modal-animate-out');
-    setBackgroundClass('background-animate-out');
+    setPhase('exit');
     setTimeout(() => setClickedState(false), 100);
   };
 
   return (
     <>
       <div
-        className={`flex justify-center h-screen w-screen fixed top-0 bottom-0 left-0 right-0 pixel-modal-background ${backgroundClass}`}
+        className={cn(
+          'flex justify-center h-screen w-screen fixed top-0 bottom-0 left-0 right-0 pixel-modal-background',
+          phase === 'enter' && 'background-animate-in',
+          phase === 'active' && 'background-active',
+          phase === 'exit' && 'background-animate-out'
+        )}
         onClick={handleClose}
         role="presentation"
       />
 
       <section
-        className={`flex flex-col px-4 absolute top-4 lg:top-12 pixel-modal w-80 lg:w-1/4 pt-4 pb-4 ml-auto mr-auto z-10 ${modalClass} `}
+        className={cn(
+          'flex flex-col px-4 fixed inset-0 m-auto h-fit max-h-[calc(100dvh-2rem)] overflow-y-auto pixel-modal w-[calc(100%-2rem)] max-w-md lg:max-w-xl pt-4 pb-4 z-10',
+          phase === 'enter' && 'modal-animate-in',
+          phase === 'active' && 'modal-active',
+          phase === 'exit' && 'modal-animate-out'
+        )}
         role="dialogue"
         aria-describedby="modalDescription"
         aria-modal="true"
@@ -76,7 +84,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
           </header>
 
           <figure className="flex flex-row place-items-center mb-4">
-            <div className="note-box h-[38px]" aria-label="Note input button example">
+            <div className="note-box h-9.5 lg:h-12" aria-label="Note input button example">
               C
             </div>
             <figcaption className="modal-text text-slate-100 pl-4">
@@ -86,7 +94,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="note-box-correct h-[38px] font-bold grid place-items-center"
+              className="note-box-correct h-9.5 lg:h-12 font-bold grid place-items-center"
               aria-label="Correct note guess example"
             >
               C
@@ -96,7 +104,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="note-box-close-answer h-[38px] font-bold grid place-items-center"
+              className="note-box-close-answer h-9.5 lg:h-12 font-bold grid place-items-center"
               aria-label="Close note guess example"
             >
               B
@@ -106,7 +114,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div
-              className="note-box-incorrect h-[38px] font-bold grid place-items-center relative"
+              className="note-box-incorrect h-9.5 lg:h-12 font-bold grid place-items-center relative"
               aria-label="Correct note guess example"
             >
               B<span className="absolute top-0.5 right-0 text-xs">♭</span>
@@ -115,7 +123,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
           </figure>
 
           <figure className="flex flex-row place-items-center mb-4">
-            <div className="note-box h-[38px]" aria-label="Submit guess button example">
+            <div className="note-box h-9.5 lg:h-12" aria-label="Submit guess button example">
               ✓
             </div>
             <figcaption className="modal-text text-slate-100 w-full pl-4">
@@ -124,7 +132,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
           </figure>
 
           <figure className="flex flex-row place-items-center mb-4">
-            <div className="note-box h-[38px]" aria-label="Play melody button example">
+            <div className="note-box h-9.5 lg:h-12" aria-label="Play melody button example">
               ♫
             </div>
             <figcaption className="modal-text text-slate-100 w-full pl-4">
@@ -133,7 +141,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
           </figure>
 
           <figure className="flex flex-row place-items-center mb-4">
-            <div className="note-box h-[38px]" aria-label="Delete button example">
+            <div className="note-box h-9.5 lg:h-12" aria-label="Delete button example">
               ⌫
             </div>
             <figcaption className="modal-text text-slate-100 w-full pl-4">

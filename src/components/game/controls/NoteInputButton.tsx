@@ -24,6 +24,8 @@ export const NoteInputButton: React.FC<NoteInputProps> = ({ note }) => {
     updateBoard(newNote, currentRow, currentIndex);
   };
 
+  const inputLabel = note.noteNotation[1];
+
   return (
     <button
       className="note-input-button button-animation cursor-pointer relative"
@@ -31,7 +33,7 @@ export const NoteInputButton: React.FC<NoteInputProps> = ({ note }) => {
       aria-label={`Button to input note ${note.noteNotation}`}
     >
       {note.noteNotation[0]}
-      <span className="absolute top-1 right-0.5 text-s">{note.noteNotation[1]}</span>
+      <span className="absolute top-1 right-0.5 text-s">{inputLabel}</span>
     </button>
   );
 };

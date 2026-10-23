@@ -1,9 +1,12 @@
 import { use, useEffect, useState } from 'react';
 import { GameContext } from '../../contexts/GameContext';
+import { cn } from '../../lib/cn';
 
 export const CorrectAnswer: React.FC = () => {
   const { melody, gameLost } = use(GameContext);
-  const [animateClass, setAnimateClass] = useState('modal-animate-in');
+  const [animateClass, setAnimateClass] = useState<
+    'modal-animate-in' | 'modal-active' | 'modal-animate-out'
+  >('modal-animate-in');
 
   useEffect(() => {
     if (gameLost) setAnimateClass('modal-active');
@@ -11,11 +14,15 @@ export const CorrectAnswer: React.FC = () => {
   }, [gameLost]);
 
   const handleClose = () => setAnimateClass('modal-animate-out');
+
   return (
     <>
       {gameLost && (
         <div
-          className={`flex flex-row items-center gap-4 pixel-correct-answer p-4 text-center ${animateClass}`}
+          className={cn(
+            'flex flex-row items-center gap-4 pixel-correct-answer p-4 text-center',
+            animateClass
+          )}
         >
           <img src="./sad-cat.gif" alt="GIF of a sad banana cat crying" width={80} />
 

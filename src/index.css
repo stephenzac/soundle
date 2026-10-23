@@ -1,8 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --animate-pulse-fast: pulse 0.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/*
+ * Custom classes are declared with @utility (not plain selectors or @layer components)
+ * so Tailwind IntelliSense autocompletes them and variants like hover: / lg: work on them.
+ */
 
 body,
 html {
@@ -14,7 +20,7 @@ html {
   image-rendering: crisp-edges;
 }
 
-.pixel-border {
+@utility pixel-border {
   border: 3px solid #000;
   box-shadow:
     inset -2px -2px 0px #666,
@@ -22,100 +28,98 @@ html {
     0 0 0 1px #000;
 }
 
-.pixel-border-pressed {
+@utility pixel-border-pressed {
   border: 3px solid #000;
   box-shadow:
     inset 2px 2px 0px #333,
     inset -2px -2px 0px #999;
 }
 
-.pixel-shadow {
+@utility pixel-shadow {
   box-shadow:
     4px 4px 0px #000,
     0 0 0 1px #000;
 }
 
-.pixel-shadow-sm {
+@utility pixel-shadow-sm {
   box-shadow:
     2px 2px 0px #000,
     0 0 0 1px #000;
 }
 
-@layer components {
-  .modal-animate-in {
-    opacity: 0;
-    transform: scale(0.5);
-  }
+@utility modal-animate-in {
+  opacity: 0;
+  transform: scale(0.5);
+}
 
-  .modal-active {
-    opacity: 1;
-    transition:
-      opacity 200ms,
-      transform 200ms;
-  }
+@utility modal-active {
+  opacity: 1;
+  transition:
+    opacity 200ms,
+    transform 200ms;
+}
 
-  .modal-animate-out {
-    opacity: 0;
-    transform: scale(0.5);
-    transition:
-      opacity 200ms,
-      transform 200ms;
-  }
+@utility modal-animate-out {
+  opacity: 0;
+  transform: scale(0.5);
+  transition:
+    opacity 200ms,
+    transform 200ms;
+}
 
-  .background-animate-in {
-    opacity: 0;
-  }
+@utility background-animate-in {
+  opacity: 0;
+}
 
-  .background-active {
-    opacity: 0.85;
-    transition: opacity 200ms;
-  }
+@utility background-active {
+  opacity: 0.85;
+  transition: opacity 200ms;
+}
 
-  .background-animate-out {
-    opacity: 0;
-    transition: opacity 200ms;
-  }
+@utility background-animate-out {
+  opacity: 0;
+  transition: opacity 200ms;
+}
 
-  .note-active {
-    transform: scaleY(1);
-    transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: pixelPop 150ms ease-out;
-  }
+@utility note-active {
+  transform: scaleY(1);
+  transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: pixelPop 150ms ease-out;
+}
 
-  .note-animate {
-    transform: scaleY(0);
-    transition:
-      opacity 150ms,
-      transform 150ms;
-  }
+@utility note-animate {
+  transform: scaleY(0);
+  transition:
+    opacity 150ms,
+    transform 150ms;
+}
 
-  @keyframes pixelPop {
-    0% {
-      transform: scale(0.8);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
+@keyframes pixelPop {
+  0% {
+    transform: scale(0.8);
   }
-
-  @keyframes pixelShake {
-    0%,
-    100% {
-      transform: translateX(0);
-    }
-    25% {
-      transform: translateX(-2px);
-    }
-    75% {
-      transform: translateX(2px);
-    }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
-.main-header {
+@keyframes pixelShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+@utility main-header {
   font-family: 'Press Start 2P', cursive;
   text-shadow:
     3px 3px 0px #000,
@@ -124,20 +128,24 @@ html {
   color: #ffeb3b;
 }
 
-.header-container {
+@utility header-container {
   background-color: #4f4f4f;
   border-bottom: 3px solid #000;
   box-shadow: 0 4px 0px rgba(0, 0, 0, 0.3);
 }
 
-.modal-text {
+@utility modal-text {
   font-family: 'Press Start 2P', cursive;
   font-size: 10px;
   line-height: 1.6;
   color: #fff;
+
+  @variant lg {
+    font-size: 12px;
+  }
 }
 
-.note-box {
+@utility note-box {
   @apply font-bold flex justify-center items-center place-items-center transition-all;
   aspect-ratio: 1/1;
   font-family: 'Press Start 2P', cursive;
@@ -152,7 +160,7 @@ html {
   image-rendering: pixelated;
 }
 
-.note-box-correct {
+@utility note-box-correct {
   @apply note-box;
   background-color: #4ade80;
   box-shadow:
@@ -162,7 +170,7 @@ html {
     0 0 10px rgba(74, 222, 128, 0.4);
 }
 
-.note-box-close-answer {
+@utility note-box-close-answer {
   @apply note-box;
   background-color: #fbbf24;
   box-shadow:
@@ -171,7 +179,7 @@ html {
     0 0 0 1px #000;
 }
 
-.note-box-incorrect {
+@utility note-box-incorrect {
   @apply note-box;
   background-color: #f87171;
   box-shadow:
@@ -180,7 +188,7 @@ html {
     0 0 0 1px #000;
 }
 
-.note-box-example {
+@utility note-box-example {
   @apply font-bold grid place-items-center;
   aspect-ratio: 1/1;
   font-family: 'Press Start 2P', cursive;
@@ -195,7 +203,7 @@ html {
   image-rendering: pixelated;
 }
 
-.note-input-button {
+@utility note-input-button {
   @apply font-bold grid place-items-center h-11 w-11;
   font-family: 'Press Start 2P', cursive;
   font-size: 14px;
@@ -209,7 +217,7 @@ html {
   image-rendering: pixelated;
 }
 
-.round-button-base {
+@utility round-button-base {
   @apply w-9 h-9 grid place-items-center;
   font-family: 'Press Start 2P', cursive;
   font-size: 14px;
@@ -222,40 +230,62 @@ html {
     0 0 0 1px #000;
 }
 
-.round-button {
+@utility round-button {
   @apply round-button-base;
   cursor: pointer;
   transition: all 70ms ease;
+
+  &:active {
+    box-shadow:
+      inset 2px 2px 0px #333,
+      inset -2px -2px 0px #999,
+      0 0 0 1px #000;
+    transform: translate(1px, 1px);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: #5a5a5a;
+      box-shadow:
+        inset 2px 2px 0px #333,
+        inset -2px -2px 0px #999,
+        0 0 0 1px #000;
+      transform: translate(0.5px, 0.5px);
+    }
+  }
 }
 
-.round-button:active {
-  box-shadow:
-    inset 2px 2px 0px #333,
-    inset -2px -2px 0px #999,
-    0 0 0 1px #000;
-  transform: translate(1px, 1px);
-}
-
-.round-button-unclickable {
-  @apply round-button-base text-white cursor-not-allowed;
+@utility round-button-unclickable {
+  @apply round-button-base cursor-not-allowed;
   opacity: 0.4;
   background-color: #2a2a2a;
 }
 
-.button-animation {
+@utility button-animation {
   transition: all 50ms ease;
+
+  &:active {
+    background-color: #7b7b7b;
+    box-shadow:
+      inset 2px 2px 0px #333,
+      inset -2px -2px 0px #999,
+      0 0 0 1px #000;
+    transform: translate(2px, 2px);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: #929292;
+      box-shadow:
+        inset 2px 2px 0px #333,
+        inset -2px -2px 0px #999,
+        0 0 0 1px #000;
+      transform: translate(1px, 1px);
+    }
+  }
 }
 
-.button-animation:active {
-  background-color: #7b7b7b;
-  box-shadow:
-    inset 2px 2px 0px #333,
-    inset -2px -2px 0px #999,
-    0 0 0 1px #000;
-  transform: translate(2px, 2px);
-}
-
-.pixel-modal {
+@utility pixel-modal {
   background-color: #343434;
   border: 4px solid #000;
   box-shadow:
@@ -265,18 +295,18 @@ html {
     8px 8px 0px rgba(0, 0, 0, 0.5);
 }
 
-.pixel-modal-background {
+@utility pixel-modal-background {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.pixel-divider {
+@utility pixel-divider {
   background: linear-gradient(to right, transparent 0%, #ffd700 20%, #ffd700 80%, transparent 100%);
   height: 3px;
   border: none;
   box-shadow: 0 2px 0px #000;
 }
 
-.pixel-correct-answer {
+@utility pixel-correct-answer {
   background-color: #4f4f4f;
   border: 4px solid #000;
   box-shadow:
@@ -289,7 +319,7 @@ html {
   color: #fff;
 }
 
-.pixel-link {
+@utility pixel-link {
   font-family: 'Press Start 2P', cursive;
   font-size: 8px;
   color: #ffeb3b;
@@ -297,32 +327,14 @@ html {
     2px 2px 0px #000,
     0 0 0 1px #000;
   transition: all 100ms ease;
-}
 
-@media (hover: hover) {
-  .round-button:hover {
-    background-color: #5a5a5a;
-    box-shadow:
-      inset 2px 2px 0px #333,
-      inset -2px -2px 0px #999,
-      0 0 0 1px #000;
-    transform: translate(0.5px, 0.5px);
-  }
-
-  .button-animation:hover {
-    background-color: #929292;
-    box-shadow:
-      inset 2px 2px 0px #333,
-      inset -2px -2px 0px #999,
-      0 0 0 1px #000;
-    transform: translate(1px, 1px);
-  }
-
-  .pixel-link:hover {
-    color: #ffeb3b;
-    transform: translate(1px, 1px);
-    text-shadow:
-      1px 1px 0px #000,
-      0 0 0 1px #000;
+  @media (hover: hover) {
+    &:hover {
+      color: #ffeb3b;
+      transform: translate(1px, 1px);
+      text-shadow:
+        1px 1px 0px #000,
+        0 0 0 1px #000;
+    }
   }
 }
