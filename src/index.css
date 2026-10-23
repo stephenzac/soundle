@@ -1,8 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --animate-pulse-fast: pulse 0.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 
 body,
 html {
@@ -137,7 +138,7 @@ html {
   color: #fff;
 }
 
-.note-box {
+@utility note-box {
   @apply font-bold flex justify-center items-center place-items-center transition-all;
   aspect-ratio: 1/1;
   font-family: 'Press Start 2P', cursive;
@@ -209,7 +210,7 @@ html {
   image-rendering: pixelated;
 }
 
-.round-button-base {
+@utility round-button-base {
   @apply w-9 h-9 grid place-items-center;
   font-family: 'Press Start 2P', cursive;
   font-size: 14px;
@@ -237,7 +238,7 @@ html {
 }
 
 .round-button-unclickable {
-  @apply round-button-base text-white cursor-not-allowed;
+  @apply round-button-base cursor-not-allowed;
   opacity: 0.4;
   background-color: #2a2a2a;
 }
