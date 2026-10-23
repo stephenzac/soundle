@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react';
+import { use } from 'react';
 
 import { checkNotes } from '../../../lib/GameNotes';
 import { NUM_ROWS, ROW_LENGTH } from '../../../constants/game-board';
@@ -18,19 +18,9 @@ export const SubmitButton: React.FC = () => {
     updateGameLost,
   } = use(GameContext);
 
-  const [buttonClass, setButtonClass] = useState('round-button-unclickable');
+  const canSubmit = currentIndex === ROW_LENGTH && !(gameWon || gameLost);
 
-  useEffect(() => {
-    if (currentIndex === ROW_LENGTH) {
-      setButtonClass('round-button');
-    } else {
-      if (buttonClass !== 'round-button-unclickable') setButtonClass('round-button-unclickable');
-    }
-
-    if (gameWon || gameLost) setButtonClass('round-button-unclickable');
-  }, [currentIndex, gameWon, gameLost, buttonClass]);
-
-  const submit = () => {
+  const handleSubmit = () => {
     if (gameWon || gameLost) return;
 
     // Check correctness of submitted notes
@@ -55,8 +45,14 @@ export const SubmitButton: React.FC = () => {
     }
   };
 
+  const buttonClassName = canSubmit ? 'round-button' : 'round-button-unclickable'
+
   return (
-    <button className={buttonClass} onClick={submit} aria-label="Submit melody guess">
+    <button
+      className={buttonClassName}
+      onClick={handleSubmit}
+      aria-label="Submit melody guess"
+    >
       ✓
     </button>
   );

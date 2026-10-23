@@ -10,7 +10,7 @@ export const ResetButton: React.FC = () => {
       onClick={resetGame}
       aria-label="Reset game"
     >
-      <span className="absolute top-[-2px] right-2.5 inline-block text-lg">↺</span>
+      <span className="absolute -top-0.5 right-2.5 inline-block text-lg">↺</span>
     </button>
   );
 };
