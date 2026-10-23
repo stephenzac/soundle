@@ -139,6 +139,10 @@ html {
   font-size: 10px;
   line-height: 1.6;
   color: #fff;
+
+  @variant lg {
+    font-size: 12px;
+  }
 }
 
 @utility note-box {
