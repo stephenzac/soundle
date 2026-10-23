@@ -67,5 +67,5 @@ export const playMelody = async (notes: GameNote[]): Promise<void> => {
     synth.triggerRelease(startTime + noteDuration);
   });
 
-  Tone.Transport.start();
+  Tone.getTransport().start();
 };
