@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { cn } from '../../lib/cn';
+import { PixelModal } from '../modal/PixelModal';
 import { FlatSign } from '../game/display/FlatSign';
 import { MelodyIcon } from '../game/controls/MelodyIcon';
+import { SettingsIcon } from '../settings/SettingsIcon';
 
 interface OpenInformationButtonProps {
   setClickedState: (newState: boolean) => void;
@@ -19,139 +19,94 @@ export const OpenInformationButton: React.FC<OpenInformationButtonProps> = ({
   </button>
 );
 
-interface CloseButtonProps {
-  children?: React.ReactNode;
-  onClose: () => void;
-}
-
-const CloseButton: React.FC<CloseButtonProps> = ({ children, onClose }) => (
-  <button
-    className="flex items-center justify-center hover:cursor-pointer font-bold self-end size-11 shrink-0 pixel-border hover:bg-red-600 transition-all"
-    onClick={onClose}
-    aria-label="Close"
-    style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '10px' }}
-  >
-    {children}
-  </button>
-);
-
 interface InformationModalProps {
   setClickedState: (newState: boolean) => void;
 }
 
-export const InformationModal: React.FC<InformationModalProps> = ({ setClickedState }) => {
-  const [phase, setPhase] = useState<'enter' | 'active' | 'exit'>('enter');
+export const InformationModal: React.FC<InformationModalProps> = ({ setClickedState }) => (
+  <PixelModal onClose={() => setClickedState(false)} descriptionId="modalDescription">
+    <div id="modalDescription">
+      <header>
+        <p className="modal-text text-slate-100 text-center mt-4 mb-6">
+          Soundle is a Wordle-like ear training game to improve your sense of pitch. Listen to the
+          five tones in concert pitch and guess them all correctly within 6 tries.
+        </p>
+      </header>
 
-  useEffect(() => {
-    setPhase('active');
-  }, []);
-
-  const handleClose = () => {
-    setPhase('exit');
-    setTimeout(() => setClickedState(false), 100);
-  };
-
-  return (
-    <>
-      <div
-        className={cn(
-          'flex justify-center h-screen w-screen fixed top-0 bottom-0 left-0 right-0 pixel-modal-background',
-          phase === 'enter' && 'background-animate-in',
-          phase === 'active' && 'background-active',
-          phase === 'exit' && 'background-animate-out'
-        )}
-        onClick={handleClose}
-        role="presentation"
-      />
-
-      <section
-        className={cn(
-          'flex flex-col px-4 fixed inset-0 m-auto h-fit max-h-[calc(100dvh-2rem)] overflow-y-auto pixel-modal w-[calc(100%-2rem)] max-w-md lg:max-w-xl pt-4 pb-4 z-10',
-          phase === 'enter' && 'modal-animate-in',
-          phase === 'active' && 'modal-active',
-          phase === 'exit' && 'modal-animate-out'
-        )}
-        role="dialogue"
-        aria-describedby="modalDescription"
-        aria-modal="true"
-      >
-        <CloseButton onClose={handleClose}>X</CloseButton>
-
-        <div id="modalDescription">
-          <header>
-            <p className="modal-text text-slate-100 text-center mt-4 mb-6">
-              Soundle is a Wordle-like ear training game to improve your sense of pitch. Listen to
-              the five tones in concert pitch and guess them all correctly within 6 tries.
-            </p>
-          </header>
-
-          <figure className="flex flex-row place-items-center mb-4">
-            <div className="note-box h-9.5 lg:h-12" aria-label="Note input button example">
-              C
-            </div>
-            <figcaption className="modal-text text-slate-100 pl-4">
-              Input a note as part of your guess.
-            </figcaption>
-          </figure>
-
-          <figure className="flex flex-row place-items-center mb-4">
-            <div
-              className="note-box-correct h-9.5 lg:h-12 font-bold grid place-items-center"
-              aria-label="Correct note guess example"
-            >
-              C
-            </div>
-            <figcaption className="modal-text ml-4">Correct note guess.</figcaption>
-          </figure>
-
-          <figure className="flex flex-row place-items-center mb-4">
-            <div
-              className="note-box-close-answer h-9.5 lg:h-12 font-bold grid place-items-center"
-              aria-label="Close note guess example"
-            >
-              B
-            </div>
-            <figcaption className="modal-text ml-4">Note guess was off by a half step.</figcaption>
-          </figure>
-
-          <figure className="flex flex-row place-items-center mb-4">
-            <div
-              className="note-box-incorrect h-9.5 lg:h-12 font-bold grid place-items-center relative"
-              aria-label="Correct note guess example"
-            >
-              B<FlatSign variant="superscript" />
-            </div>
-            <figcaption className="modal-text ml-4">Incorrect note guess.</figcaption>
-          </figure>
-
-          <figure className="flex flex-row place-items-center mb-4">
-            <div className="note-box h-9.5 lg:h-12" aria-label="Submit guess button example">
-              ✓
-            </div>
-            <figcaption className="modal-text text-slate-100 w-full pl-4">
-              Submit your guess for the tones played.
-            </figcaption>
-          </figure>
-
-          <figure className="flex flex-row place-items-center mb-4">
-            <div className="note-box h-9.5 lg:h-12" aria-label="Play melody button example">
-              <MelodyIcon />
-            </div>
-            <figcaption className="modal-text text-slate-100 w-full pl-4">
-              Listen to the random tones.
-            </figcaption>
-          </figure>
-
-          <figure className="flex flex-row place-items-center mb-4">
-            <div className="note-box h-9.5 lg:h-12" aria-label="Delete button example">
-              ⌫
-            </div>
-            <figcaption className="modal-text text-slate-100 w-full pl-4">
-              Delete a note from your guess.
-            </figcaption>
-          </figure>
+      <figure className="flex flex-row place-items-center mb-4">
+        <div className="note-box h-9.5 lg:h-12" aria-label="Note input button example">
+          C
         </div>
-      </section>
-    </>
-  );
-};
+        <figcaption className="modal-text text-slate-100 pl-4">
+          Input a note as part of your guess.
+        </figcaption>
+      </figure>
+
+      <figure className="flex flex-row place-items-center mb-4">
+        <div
+          className="note-box-correct h-9.5 lg:h-12 font-bold grid place-items-center"
+          aria-label="Correct note guess example"
+        >
+          C
+        </div>
+        <figcaption className="modal-text ml-4">Correct note guess.</figcaption>
+      </figure>
+
+      <figure className="flex flex-row place-items-center mb-4">
+        <div
+          className="note-box-close-answer h-9.5 lg:h-12 font-bold grid place-items-center"
+          aria-label="Close note guess example"
+        >
+          B
+        </div>
+        <figcaption className="modal-text ml-4">Note guess was off by a half step.</figcaption>
+      </figure>
+
+      <figure className="flex flex-row place-items-center mb-4">
+        <div
+          className="note-box-incorrect h-9.5 lg:h-12 font-bold grid place-items-center relative"
+          aria-label="Correct note guess example"
+        >
+          B<FlatSign variant="superscript" />
+        </div>
+        <figcaption className="modal-text ml-4">Incorrect note guess.</figcaption>
+      </figure>
+
+      <figure className="flex flex-row place-items-center mb-4">
+        <div className="note-box h-9.5 lg:h-12" aria-label="Submit guess button example">
+          ✓
+        </div>
+        <figcaption className="modal-text text-slate-100 w-full pl-4">
+          Submit your guess for the tones played.
+        </figcaption>
+      </figure>
+
+      <figure className="flex flex-row place-items-center mb-4">
+        <div className="note-box h-9.5 lg:h-12" aria-label="Play melody button example">
+          <MelodyIcon />
+        </div>
+        <figcaption className="modal-text text-slate-100 w-full pl-4">
+          Listen to the random tones.
+        </figcaption>
+      </figure>
+
+      <figure className="flex flex-row place-items-center mb-4">
+        <div className="note-box h-9.5 lg:h-12" aria-label="Delete button example">
+          ⌫
+        </div>
+        <figcaption className="modal-text text-slate-100 w-full pl-4">
+          Delete a note from your guess.
+        </figcaption>
+      </figure>
+
+      <figure className="flex flex-row place-items-center mb-4">
+        <div className="note-box h-9.5 lg:h-12" aria-label="Settings button example">
+          <SettingsIcon />
+        </div>
+        <figcaption className="modal-text text-slate-100 w-full pl-4">
+          Choose which octaves the tones play in.
+        </figcaption>
+      </figure>
+    </div>
+  </PixelModal>
+);

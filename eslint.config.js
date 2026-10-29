@@ -62,7 +62,6 @@ export default defineConfig([
       'src/components/game/controls/DeleteButton.tsx',
       'src/components/game/controls/SubmitButton.tsx',
       'src/components/game/display/NoteBox.tsx',
-      'src/components/info-modal/InformationModal.tsx',
       'src/components/info/CorrectAnswer.tsx',
       'src/contexts/GameContext.tsx',
     ],

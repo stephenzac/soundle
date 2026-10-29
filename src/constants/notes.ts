@@ -35,6 +35,11 @@ export interface GameNote {
   tone: ToneString;
 }
 
+// A note in the melody. Guesses are by note name only, so only the melody carries an octave.
+export interface MelodyNote extends GameNote {
+  octave: number;
+}
+
 export const validGameNotes: GameNote[] = [
   { noteNotation: 'C', tone: 'C' },
   { noteNotation: 'D♭', tone: 'Db' },

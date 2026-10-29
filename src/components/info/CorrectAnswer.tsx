@@ -35,6 +35,7 @@ export const CorrectAnswer: React.FC = () => {
                   {index > 0 && ', '}
                   {note.noteNotation[0]}
                   {note.noteNotation.length > 1 && <FlatSign variant="inline" />}
+                  {note.octave}
                 </Fragment>
               ))}
             </p>

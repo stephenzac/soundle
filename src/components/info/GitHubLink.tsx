@@ -11,7 +11,7 @@ export const GitHubLink: React.FC = () => (
         className="w-7 h-7 flex place-items-center"
         alt="GitHub cat sihouette logo"
       />
-      <span className="max-[22.5rem]:sr-only">stephenzac</span>
+      <span className="max-[25rem]:sr-only">stephenzac</span>
     </a>
   </div>
 );

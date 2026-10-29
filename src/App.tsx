@@ -8,12 +8,14 @@ import { NoteInputButton } from './components/game/controls/NoteInputButton';
 import { GameContextProvider } from './contexts/GameContext';
 import { useEffect, useState } from 'react';
 import { InformationModal } from './components/info-modal/InformationModal';
+import { SettingsModal } from './components/settings/SettingsModal';
 
 const NAMESPACE = 'soundle';
 const MODAL_HAS_BEEN_SHOWN_KEY = 'modalHasBeenShown';
 
 export const App: React.FC = () => {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
 
   useEffect(() => {
     const modalHasBeenShownValue = localStorage.getItem(
@@ -28,10 +30,11 @@ export const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-gray-300 min-h-dvh flex flex-col items-center">
-      <Header setShowInfoModal={setShowInfoModal} />
-      <main className="game-size flex flex-1 w-full flex-col items-center px-4 pb-4">
-        <GameContextProvider>
+    // The provider wraps the header and modals too, since the settings modal changes the game
+    <GameContextProvider>
+      <div className="bg-gray-300 min-h-dvh flex flex-col items-center">
+        <Header setShowInfoModal={setShowInfoModal} setShowSettingsModal={setShowSettingsModal} />
+        <main className="game-size flex flex-1 w-full flex-col items-center px-4 pb-4">
           {/* my-auto centers the game vertically but still lets it scroll if it overflows */}
           <div className="my-auto flex flex-col items-center gap-y-(--key-gap) gap-x-10 short-landscape:flex-row">
             <div className="relative">
@@ -48,10 +51,11 @@ export const App: React.FC = () => {
               <CorrectAnswer />
             </div>
           </div>
-        </GameContextProvider>
-      </main>
+        </main>
 
-      {showInfoModal && <InformationModal setClickedState={setShowInfoModal} />}
-    </div>
+        {showInfoModal && <InformationModal setClickedState={setShowInfoModal} />}
+        {showSettingsModal && <SettingsModal setClickedState={setShowSettingsModal} />}
+      </div>
+    </GameContextProvider>
   );
 };
