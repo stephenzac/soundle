@@ -1,4 +1,3 @@
-import * as Tone from 'tone';
 import { NoteTile } from '../contexts/GameContext';
 import { GameNote, NoteNotationLabel, NOTE_LABELS, TONE_STRINGS } from '../constants/notes';
 import { ROW_LENGTH } from '../constants/game-board';
@@ -54,7 +53,11 @@ export const generateNotes = (): GameNote[] => {
   return generatedNotes;
 };
 
+// Tone creates an AudioContext as soon as it's imported, which browsers warn about when that
+// happens before a user gesture. Importing it here, on the first play (always a click), avoids
+// that and keeps it out of the initial bundle.
 export const playMelody = async (notes: GameNote[]): Promise<void> => {
+  const Tone = await import('tone');
   await Tone.start();
   const synth = new Tone.Synth().toDestination();
   const now = Tone.now();
