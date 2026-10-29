@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { cn } from '../../lib/cn';
 import { FlatSign } from '../game/display/FlatSign';
+import { MelodyIcon } from '../game/controls/MelodyIcon';
 
 interface OpenInformationButtonProps {
   setClickedState: (newState: boolean) => void;
@@ -134,7 +135,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
           <figure className="flex flex-row place-items-center mb-4">
             <div className="note-box h-9.5 lg:h-12" aria-label="Play melody button example">
-              ♫
+              <MelodyIcon />
             </div>
             <figcaption className="modal-text text-slate-100 w-full pl-4">
               Listen to the random tones.

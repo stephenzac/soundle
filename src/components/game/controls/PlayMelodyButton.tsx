@@ -1,6 +1,7 @@
 import { use, useState } from 'react';
 import { playMelody } from '../../../lib/GameNotes';
 import { GameContext } from '../../../contexts/GameContext';
+import { MelodyIcon } from './MelodyIcon';
 
 export const PlayMelodyButton: React.FC = () => {
   const { melody } = use(GameContext);
@@ -17,7 +18,7 @@ export const PlayMelodyButton: React.FC = () => {
 
   return (
     <button className="round-button" onClick={melodyButtonClicked} aria-label="Play melody">
-      ♫
+      <MelodyIcon />
     </button>
   );
 };

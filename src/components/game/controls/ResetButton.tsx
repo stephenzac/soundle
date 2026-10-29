@@ -1,5 +1,6 @@
 import { use } from 'react';
 import { GameContext } from '../../../contexts/GameContext';
+import { ResetIcon } from './ResetIcon';
 
 export const ResetButton: React.FC = () => {
   const { resetGame } = use(GameContext);
@@ -10,7 +11,7 @@ export const ResetButton: React.FC = () => {
       onClick={resetGame}
       aria-label="Reset game"
     >
-      <span className="relative -top-0.5 text-[1.25em] leading-none">↺</span>
+      <ResetIcon />
     </button>
   );
 };
