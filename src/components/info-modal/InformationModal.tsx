@@ -104,9 +104,31 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
           <SettingsIcon />
         </div>
         <figcaption className="modal-text text-slate-100 w-full pl-4">
-          Choose which octaves the tones play in.
+          Choose the instrument and octaves the tones play in.
         </figcaption>
       </figure>
+
+      <p className="modal-text text-slate-300 text-center text-[8px]! lg:text-[10px]! mt-2">
+        Instrument samples from{' '}
+        <a
+          className="underline"
+          href="https://github.com/nbrosowsky/tonejs-instruments"
+          target="_blank"
+          rel="noreferrer"
+        >
+          tonejs-instruments
+        </a>{' '}
+        by Nicholaus P. Brosowsky,{' '}
+        <a
+          className="underline"
+          href="https://creativecommons.org/licenses/by/3.0/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          CC BY 3.0
+        </a>
+        .
+      </p>
     </div>
   </PixelModal>
 );

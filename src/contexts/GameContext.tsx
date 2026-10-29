@@ -2,8 +2,8 @@ import { createContext, useEffect, useState } from 'react';
 import { generateNotes } from '../lib/GameNotes';
 import { GameNote, MelodyNote } from '../constants/notes';
 import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
-import { OctaveSettings } from '../constants/octaves';
-import { loadOctaveSettings, saveOctaveSettings } from '../lib/octave-settings';
+import { GameSettings, octavesChanged } from '../constants/settings';
+import { loadSettings, saveSettings } from '../lib/settings';
 
 export interface NoteTile {
   note: GameNote | '';
@@ -17,7 +17,7 @@ interface Board {
   currentRow: number;
   currentIndex: number;
   melody: MelodyNote[];
-  octaveSettings: OctaveSettings;
+  settings: GameSettings;
   gameWon: boolean;
   gameLost: boolean;
   melodyPlayed: boolean;
@@ -26,8 +26,9 @@ interface Board {
   updateGameLost: (newState: boolean) => void;
   updateBoard: (note: NoteTile, rowNumber: number, index: number) => void;
   resetGame: () => void;
-  // Saves the settings and starts a new game, since the current melody used the old ones
-  updateOctaveSettings: (newSettings: OctaveSettings) => void;
+  // Saves the settings. Changing the octaves starts a new game, since the current melody used
+  // the old ones; changing only the instrument keeps the game going.
+  updateSettings: (newSettings: GameSettings) => void;
   updateCurrentRow: (newRow: number) => void;
   setCurrentIndex: (newIndex: number) => void;
 }
@@ -36,8 +37,8 @@ export const GameContext = createContext<Board>({} as Board);
 
 export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [gameBoard, setBoard] = useState<NoteTile[][]>([]);
-  const [octaveSettings, setOctaveSettings] = useState<OctaveSettings>(loadOctaveSettings);
-  const [melody, setMelody] = useState<MelodyNote[]>(() => generateNotes(octaveSettings));
+  const [settings, setSettings] = useState<GameSettings>(loadSettings);
+  const [melody, setMelody] = useState<MelodyNote[]>(() => generateNotes(settings));
   const [currentRow, setCurrentRow] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [gameWon, setGameWon] = useState(false);
@@ -67,8 +68,8 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setMelodyPlayed(false);
   };
 
-  const generateNewMelody = (settings: OctaveSettings) => {
-    const newNotes = generateNotes(settings);
+  const generateNewMelody = (melodySettings: GameSettings) => {
+    const newNotes = generateNotes(melodySettings);
     setMelody(newNotes);
   };
 
@@ -79,7 +80,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setBoard(newBoard);
   };
 
-  const resetGame = (settings: OctaveSettings = octaveSettings) => {
+  const resetGame = (melodySettings: GameSettings = settings) => {
     const newGameBoard: NoteTile[][] = Array.from({ length: NUM_ROWS }, () =>
       Array.from({ length: ROW_LENGTH }, () => ({
         note: '',
@@ -94,13 +95,13 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setGameLost(false);
     updateCurrentRow(0);
     setCurrentIndex(0);
-    generateNewMelody(settings);
+    generateNewMelody(melodySettings);
   };
 
-  const updateOctaveSettings = (newSettings: OctaveSettings) => {
-    setOctaveSettings(newSettings);
-    saveOctaveSettings(newSettings);
-    resetGame(newSettings);
+  const updateSettings = (newSettings: GameSettings) => {
+    setSettings(newSettings);
+    saveSettings(newSettings);
+    if (octavesChanged(newSettings, settings)) resetGame(newSettings);
   };
 
   const updateCurrentRow = (newRow: number): void => {
@@ -113,7 +114,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     currentRow,
     currentIndex,
     melody,
-    octaveSettings,
+    settings,
     gameWon,
     gameLost,
     melodyPlayed,
@@ -122,7 +123,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     updateGameLost,
     updateBoard,
     resetGame,
-    updateOctaveSettings,
+    updateSettings,
     updateCurrentRow,
     setCurrentIndex,
   };

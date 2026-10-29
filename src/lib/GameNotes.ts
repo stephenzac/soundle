@@ -7,7 +7,7 @@ import {
   TONE_STRINGS,
 } from '../constants/notes';
 import { ROW_LENGTH } from '../constants/game-board';
-import { OctaveSettings } from '../constants/octaves';
+import { GameSettings } from '../constants/settings';
 
 const checkNoteDistance = (
   submittedNote: NoteNotationLabel,
@@ -46,7 +46,7 @@ export const checkNotes = (submittedNotes: NoteTile[], actualNotes: GameNote[]):
   return correctCount === ROW_LENGTH;
 };
 
-export const generateNotes = ({ lowestOctave, octaveRange }: OctaveSettings): MelodyNote[] => {
+export const generateNotes = ({ lowestOctave, octaveRange }: GameSettings): MelodyNote[] => {
   const generatedNotes: MelodyNote[] = [];
 
   for (let i = 0; i < ROW_LENGTH; i++) {
@@ -59,24 +59,4 @@ export const generateNotes = ({ lowestOctave, octaveRange }: OctaveSettings): Me
   }
 
   return generatedNotes;
-};
-
-// Tone creates an AudioContext as soon as it's imported, which browsers warn about when that
-// happens before a user gesture. Importing it here, on the first play (always a click), avoids
-// that and keeps it out of the initial bundle.
-export const playMelody = async (notes: MelodyNote[]): Promise<void> => {
-  const Tone = await import('tone');
-  await Tone.start();
-  const synth = new Tone.Synth().toDestination();
-  const now = Tone.now();
-
-  notes.forEach((note: MelodyNote, index: number) => {
-    const startTime = now + index / 1.6;
-    synth.triggerAttack(`${note.tone}${note.octave}`, startTime);
-
-    const noteDuration = Tone.Time('8n').toSeconds();
-    synth.triggerRelease(startTime + noteDuration);
-  });
-
-  Tone.getTransport().start();
 };

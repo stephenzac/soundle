@@ -1,12 +1,14 @@
 import { use, useState } from 'react';
 import { GameContext } from '../../contexts/GameContext';
+import { INSTRUMENTS, INSTRUMENT_IDS, InstrumentId } from '../../constants/instruments';
 import {
-  HIGHEST_OCTAVE,
-  LOWEST_OCTAVE,
-  OctaveSettings,
+  GameSettings,
   QUIET_BELOW_OCTAVE,
+  fitOctavesToInstrument,
   maxOctaveRange,
-} from '../../constants/octaves';
+  octavesChanged,
+} from '../../constants/settings';
+import { loadInstrument } from '../../lib/audio';
 import { cn } from '../../lib/cn';
 import { PixelModal } from '../modal/PixelModal';
 import { SettingsIcon } from './SettingsIcon';
@@ -68,41 +70,106 @@ const Stepper: React.FC<StepperProps> = ({
   </div>
 );
 
+interface InstrumentSelectProps {
+  value: InstrumentId;
+  onChange: (instrument: InstrumentId) => void;
+}
+
+// A native select, styled like the game's buttons when closed. Opening it shows the browser's
+// own list (a wheel or sheet on phones), with keyboard and screen reader support built in.
+const InstrumentSelect: React.FC<InstrumentSelectProps> = ({ value, onChange }) => (
+  <div className="flex flex-col items-center gap-2 mb-5">
+    <label htmlFor="instrumentSelect" className="modal-text">
+      Instrument
+    </label>
+    <div className="relative">
+      <select
+        id="instrumentSelect"
+        value={value}
+        onChange={(event) => onChange(event.target.value as InstrumentId)}
+        className="appearance-none w-44 h-11 pl-4 pr-10 pixel-border bg-[#b3b3b3] text-black text-[10px] lg:text-xs cursor-pointer button-animation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffeb3b]"
+      >
+        {INSTRUMENT_IDS.map((id) => (
+          <option key={id} value={id}>
+            {INSTRUMENTS[id].name}
+          </option>
+        ))}
+      </select>
+      {/* Pixel-art chevron in place of the browser's arrow, which appearance-none removes */}
+      <svg
+        viewBox="0 0 7 4"
+        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-1.5 w-auto text-black"
+        fill="currentColor"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <path d="M0 0h7v1H0zM1 1h5v1H1zM2 2h3v1H2zM3 3h1v1H3z" />
+      </svg>
+    </div>
+  </div>
+);
+
 interface SettingsModalProps {
   setClickedState: (newState: boolean) => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState }) => {
-  const { octaveSettings, updateOctaveSettings } = use(GameContext);
-  // Edits stay local until applied, since applying replaces the melody in progress
-  const [draft, setDraft] = useState<OctaveSettings>(octaveSettings);
-  const { lowestOctave, octaveRange } = draft;
+  const { settings, updateSettings } = use(GameContext);
+  // Edits stay local until applied, since changing octaves replaces the melody in progress
+  const [draft, setDraft] = useState<GameSettings>(settings);
+  const { instrument, lowestOctave, octaveRange } = draft;
+  const {
+    name,
+    lowestOctave: instrumentLowest,
+    highestOctave: instrumentHighest,
+  } = INSTRUMENTS[instrument];
   const highestOctave = lowestOctave + octaveRange - 1;
-  const hasChanges =
-    lowestOctave !== octaveSettings.lowestOctave || octaveRange !== octaveSettings.octaveRange;
+  const startsNewGame = octavesChanged(draft, settings);
+  const hasChanges = startsNewGame || instrument !== settings.instrument;
+
+  // The octaves last chosen with the steppers. Each instrument fits these into its own range, so
+  // trying a narrow instrument while browsing doesn't shrink the choice for the rest.
+  const [chosenOctaves, setChosenOctaves] = useState({
+    lowestOctave: settings.lowestOctave,
+    octaveRange: settings.octaveRange,
+  });
+
+  const selectInstrument = (newInstrument: InstrumentId) =>
+    setDraft(fitOctavesToInstrument({ ...chosenOctaves, instrument: newInstrument }));
+
+  const changeOctaves = (newSettings: GameSettings) => {
+    const fitted = fitOctavesToInstrument(newSettings);
+    setDraft(fitted);
+    setChosenOctaves({ lowestOctave: fitted.lowestOctave, octaveRange: fitted.octaveRange });
+  };
 
   const changeLowestOctave = (newLowestOctave: number) =>
-    setDraft({
-      lowestOctave: newLowestOctave,
-      // Keep the top of the range at or below the highest supported octave
-      octaveRange: Math.min(octaveRange, maxOctaveRange(newLowestOctave)),
-    });
+    changeOctaves({ ...draft, lowestOctave: newLowestOctave });
 
   const changeOctaveRange = (newOctaveRange: number) =>
-    setDraft({ lowestOctave, octaveRange: newOctaveRange });
+    changeOctaves({ ...draft, octaveRange: newOctaveRange });
+
+  const apply = () => {
+    updateSettings(draft);
+    // Start downloading the instrument's samples now (this click is a user gesture), so it's
+    // usually ready by the first play. Playing retries if this fails.
+    loadInstrument(draft).catch(() => {});
+  };
 
   return (
     <PixelModal onClose={() => setClickedState(false)} descriptionId="settingsDescription">
       {(close) => (
         <div className="flex flex-col items-center">
-          <h2 className="main-header text-base lg:text-xl mt-2 mb-6">Octaves</h2>
+          <h2 className="main-header text-base lg:text-xl mt-2 mb-6">Settings</h2>
+
+          <InstrumentSelect value={instrument} onChange={selectInstrument} />
 
           <Stepper
             id="lowestNoteLabel"
             label="Lowest note"
             value={`C${lowestOctave}`}
-            canDecrement={lowestOctave > LOWEST_OCTAVE}
-            canIncrement={lowestOctave < HIGHEST_OCTAVE}
+            canDecrement={lowestOctave > instrumentLowest}
+            canIncrement={lowestOctave < instrumentHighest}
             onDecrement={() => changeLowestOctave(lowestOctave - 1)}
             onIncrement={() => changeLowestOctave(lowestOctave + 1)}
           />
@@ -112,7 +179,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
             label="Octave range"
             value={String(octaveRange)}
             canDecrement={octaveRange > 1}
-            canIncrement={octaveRange < maxOctaveRange(lowestOctave)}
+            canIncrement={octaveRange < maxOctaveRange(draft)}
             onDecrement={() => changeOctaveRange(octaveRange - 1)}
             onIncrement={() => changeOctaveRange(octaveRange + 1)}
           />
@@ -121,6 +188,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
             <p>
               Tones play from C{lowestOctave} to B{highestOctave}. You still guess only the note
               names.
+            </p>
+            <p className="mt-3">
+              {name} covers C{instrumentLowest} to B{instrumentHighest}.
             </p>
             {lowestOctave < QUIET_BELOW_OCTAVE && (
               <p className="text-yellow-300 mt-3">
@@ -136,11 +206,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
             )}
             disabled={!hasChanges}
             onClick={() => {
-              updateOctaveSettings(draft);
+              apply();
               close();
             }}
           >
-            Start new game
+            {startsNewGame ? 'Start new game' : 'Save'}
           </button>
         </div>
       )}

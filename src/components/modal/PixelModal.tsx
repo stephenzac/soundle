@@ -38,6 +38,8 @@ export const PixelModal: React.FC<PixelModalProps> = ({ onClose, descriptionId, 
   }, []);
 
   const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
+    // Escape in a dropdown closes its list; it shouldn't also close the modal
+    if (event.target instanceof HTMLSelectElement) return;
     if (event.key === 'Escape') handleClose();
   });
 
@@ -50,7 +52,7 @@ export const PixelModal: React.FC<PixelModalProps> = ({ onClose, descriptionId, 
     <>
       <div
         className={cn(
-          'flex justify-center h-screen w-screen fixed top-0 bottom-0 left-0 right-0 z-10 pixel-modal-background',
+          'flex justify-center h-screen w-screen fixed top-0 bottom-0 left-0 right-0 z-10 cursor-pointer pixel-modal-background',
           phase === 'enter' && 'background-animate-in',
           phase === 'active' && 'background-active',
           phase === 'exit' && 'background-animate-out'
