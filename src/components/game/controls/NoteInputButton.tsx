@@ -2,6 +2,7 @@ import { use } from 'react';
 import { ROW_LENGTH } from '../../../constants/game-board';
 import { GameNote } from '../../../constants/notes';
 import { GameContext, NoteTile } from '../../../contexts/GameContext';
+import { FlatSign } from '../../game/display/FlatSign';
 
 interface NoteInputProps {
   note: GameNote;
@@ -24,8 +25,6 @@ export const NoteInputButton: React.FC<NoteInputProps> = ({ note }) => {
     updateBoard(newNote, currentRow, currentIndex);
   };
 
-  const inputLabel = note.noteNotation[1];
-
   return (
     <button
       className="note-input-button button-animation cursor-pointer relative"
@@ -33,7 +32,7 @@ export const NoteInputButton: React.FC<NoteInputProps> = ({ note }) => {
       aria-label={`Button to input note ${note.noteNotation}`}
     >
       {note.noteNotation[0]}
-      <span className="absolute top-1 right-0.5 text-s">{inputLabel}</span>
+      {note.noteNotation.length > 1 && <FlatSign variant="superscript" />}
     </button>
   );
 };

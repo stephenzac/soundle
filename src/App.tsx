@@ -28,20 +28,26 @@ export const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-gray-300 min-h-screen flex flex-col items-center">
+    <div className="bg-gray-300 min-h-dvh flex flex-col items-center">
       <Header setShowInfoModal={setShowInfoModal} />
-      <main className="flex flex-col items-center gap-2">
+      <main className="game-size flex flex-1 w-full flex-col items-center px-4 pb-4">
         <GameContextProvider>
-          <HappyCat />
-          <GameTiles />
-          <HappyCat />
-          <div className="w-80 grid grid-cols-6 gap-y-2 mt-2">
-            {validGameNotes.map((note) => (
-              <NoteInputButton note={note} key={note.noteNotation} />
-            ))}
+          {/* my-auto centers the game vertically but still lets it scroll if it overflows */}
+          <div className="my-auto flex flex-col items-center gap-y-(--key-gap) gap-x-10 short-landscape:flex-row">
+            <div className="relative">
+              <HappyCat />
+              <GameTiles />
+            </div>
+            <div className="flex flex-col items-center gap-y-(--key-gap)">
+              <div className="grid grid-cols-6 gap-(--key-gap)">
+                {validGameNotes.map((note) => (
+                  <NoteInputButton note={note} key={note.noteNotation} />
+                ))}
+              </div>
+              <GameControlsRow />
+              <CorrectAnswer />
+            </div>
           </div>
-          <GameControlsRow />
-          <CorrectAnswer />
         </GameContextProvider>
       </main>
 

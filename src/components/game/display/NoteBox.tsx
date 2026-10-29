@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NoteTile } from '../../../contexts/GameContext';
 import { cn } from '../../../lib/cn';
+import { FlatSign } from './FlatSign';
 
 interface NoteBoxProps {
   currentNote: NoteTile;
@@ -28,7 +29,7 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
   return (
     <div
       className={cn(
-        'h-12.5 relative',
+        'size-(--cell) relative',
         !answered && 'note-box',
         answered && correct && 'note-box-correct',
         answered && !correct && answerIsClose && 'note-box-close-answer',
@@ -37,9 +38,7 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote }) => {
       aria-label={`Box with ${currentNote.note === '' ? 'nothing' : currentNote.note.noteNotation}`}
     >
       <p className={isEmpty ? 'note-animate' : 'note-active'}>{noteDisplayed[0]}</p>
-      {noteDisplayed.length > 1 && (
-        <span className="absolute top-1 right-0.5 text-s">{noteDisplayed[1]}</span>
-      )}
+      {noteDisplayed.length > 1 && <FlatSign variant="superscript" />}
     </div>
   );
 };

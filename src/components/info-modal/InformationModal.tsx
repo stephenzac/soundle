@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { cn } from '../../lib/cn';
+import { FlatSign } from '../game/display/FlatSign';
 
 interface OpenInformationButtonProps {
   setClickedState: (newState: boolean) => void;
@@ -24,7 +25,7 @@ interface CloseButtonProps {
 
 const CloseButton: React.FC<CloseButtonProps> = ({ children, onClose }) => (
   <button
-    className="flex items-center justify-center hover:cursor-pointer font-bold self-end w-8 h-8 pixel-border hover:bg-red-600 transition-all"
+    className="flex items-center justify-center hover:cursor-pointer font-bold self-end size-11 shrink-0 pixel-border hover:bg-red-600 transition-all"
     onClick={onClose}
     aria-label="Close"
     style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '10px' }}
@@ -117,7 +118,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
               className="note-box-incorrect h-9.5 lg:h-12 font-bold grid place-items-center relative"
               aria-label="Correct note guess example"
             >
-              B<span className="absolute top-0.5 right-0 text-xs">♭</span>
+              B<FlatSign variant="superscript" />
             </div>
             <figcaption className="modal-text ml-4">Incorrect note guess.</figcaption>
           </figure>

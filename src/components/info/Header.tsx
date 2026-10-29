@@ -9,9 +9,9 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ setShowInfoModal }) => {
   return (
     <>
-      <div className="flex flex-row items-center justify-between w-full px-5 lg:px-7 header-container">
+      <div className="flex flex-row items-center justify-between w-full px-4 sm:px-5 lg:px-7 header-container">
         <header>
-          <h1 className="main-header text-left text-xl italic lg:text-4xl font-bold pt-3 pb-3">
+          <h1 className="main-header text-left text-xl italic lg:text-4xl font-bold py-3 short-landscape:py-1.5">
             Soundle
           </h1>
         </header>
@@ -20,7 +20,7 @@ export const Header: React.FC<HeaderProps> = ({ setShowInfoModal }) => {
           <GitHubLink />
         </div>
       </div>
-      <div className="w-full pixel-divider mb-3 lg:mb-10" />
+      <div className="w-full pixel-divider mb-3 lg:mb-6" />
     </>
   );
 };

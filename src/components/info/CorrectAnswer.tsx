@@ -1,6 +1,7 @@
-import { use, useEffect, useState } from 'react';
+import { Fragment, use, useEffect, useState } from 'react';
 import { GameContext } from '../../contexts/GameContext';
 import { cn } from '../../lib/cn';
+import { FlatSign } from '../game/display/FlatSign';
 
 export const CorrectAnswer: React.FC = () => {
   const { melody, gameLost } = use(GameContext);
@@ -26,9 +27,17 @@ export const CorrectAnswer: React.FC = () => {
         >
           <img src="./sad-cat.gif" alt="GIF of a sad banana cat crying" width={80} />
 
-          <div className="text-md">
+          <div>
             <p>The correct notes were:</p>
-            <p>{Array.from(melody.map((note) => note.noteNotation)).join(', ')}</p>
+            <p>
+              {melody.map((note, index) => (
+                <Fragment key={index}>
+                  {index > 0 && ', '}
+                  {note.noteNotation[0]}
+                  {note.noteNotation.length > 1 && <FlatSign variant="inline" />}
+                </Fragment>
+              ))}
+            </p>
           </div>
         </div>
       )}

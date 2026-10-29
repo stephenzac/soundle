@@ -7,8 +7,12 @@ export const HappyCat: React.FC = () => {
   return (
     <>
       {gameWon && (
-        <div className="absolute left-1/2">
-          <img className="w-28" src="./happy-cat.gif" alt="GIF of happy cat dancing" />
+        <div className="absolute top-0 left-1/2 z-10">
+          <img
+            className="w-[calc(var(--cell)*2.25)]"
+            src="./happy-cat.gif"
+            alt="GIF of happy cat dancing"
+          />
         </div>
       )}
     </>
