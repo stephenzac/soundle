@@ -5,10 +5,35 @@
   --animate-blink: blink 1s steps(1) infinite;
   /* Hops forward and back in pixel-like steps; a rotated element hops its own way */
   --animate-nudge: nudge 0.8s steps(1) infinite;
+  /* A row with too few notes to submit */
+  --animate-row-shake: row-shake 0.4s linear;
+  /* A guessed tile turning over to show its result */
+  --animate-flip: flip 0.4s ease-in-out;
 
   @keyframes blink {
     50% {
       opacity: 0;
+    }
+  }
+
+  @keyframes row-shake {
+    20% {
+      transform: translateX(-6px);
+    }
+    40% {
+      transform: translateX(6px);
+    }
+    60% {
+      transform: translateX(-4px);
+    }
+    80% {
+      transform: translateX(4px);
+    }
+  }
+
+  @keyframes flip {
+    50% {
+      transform: rotateX(90deg);
     }
   }
 

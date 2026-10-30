@@ -3,9 +3,9 @@ import { GameContext } from '../../../contexts/GameContext';
 import { DeleteIcon } from './DeleteIcon';
 
 export const DeleteButton: React.FC = () => {
-  const { currentIndex, deleteNote, gameWon, gameLost } = use(GameContext);
+  const { currentIndex, deleteNote, gameWon, gameLost, reveal } = use(GameContext);
 
-  const canDeleteNote = currentIndex > 0 && !(gameWon || gameLost);
+  const canDeleteNote = currentIndex > 0 && !(gameWon || gameLost) && !reveal;
 
   return (
     <button

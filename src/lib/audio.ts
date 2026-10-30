@@ -4,9 +4,27 @@ import { MelodyNote } from '../constants/notes';
 import { GameSettings, melodyPool, referenceNote } from '../constants/settings';
 import { midiFromName, toneNameOf } from './pitch';
 
-// Both Tone.PolySynth and Tone.Sampler fit this shape
+// Both Tone.Synth and Tone.Sampler fit this shape
 interface Voice {
   triggerAttackRelease: (note: string, duration: number, time: number) => unknown;
+  connect: (destination: ToneModule.InputNode) => unknown;
+  dispose: () => unknown;
+}
+
+interface LoadedInstrument {
+  // A new voice for each playback, so one can be stopped without cutting off the others (and a
+  // one-note-at-a-time synth can play the reference over the melody)
+  createVoice: () => Voice;
+  // Sampled notes are raised to the synth's level, with a compressor catching their peaks
+  sampled: boolean;
+}
+
+// A melody, guess, or reference note that's been scheduled
+export interface Playback {
+  // Seconds until the first note sounds, so visuals can be timed to it
+  startsIn: number;
+  // Fades out what's sounding and cancels the notes not yet played
+  stop: () => void;
 }
 
 // Tone creates an AudioContext as soon as it's imported, which browsers warn about when that
@@ -83,20 +101,19 @@ export const levelSample = (channels: Float32Array[], sampleRate: number): Float
   return trimmed;
 };
 
-const voices = new Map<string, Promise<Voice>>();
+const instruments = new Map<string, Promise<LoadedInstrument>>();
 
-// Builds the instrument for these settings, downloading only the samples their octaves need.
+// Loads the instrument for these settings, downloading only the samples their octaves need.
 // Cached, so calling it again (to preload, then to play) costs nothing.
-export const loadInstrument = (settings: GameSettings): Promise<Voice> => {
+export const loadInstrument = (settings: GameSettings): Promise<LoadedInstrument> => {
   const { instrument, lowestOctave, octaveRange } = settings;
   const key = `${instrument}:${lowestOctave}:${octaveRange}`;
-  const cached = voices.get(key);
+  const cached = instruments.get(key);
   if (cached) return cached;
 
-  const voice = loadTone().then(async (Tone): Promise<Voice> => {
+  const loaded = loadTone().then(async (Tone): Promise<LoadedInstrument> => {
     const { samples } = INSTRUMENTS[instrument];
-    // Polyphonic, so the reference note can sound while the melody is still playing
-    if (!samples) return new Tone.PolySynth(Tone.Synth).toDestination();
+    if (!samples) return { createVoice: () => new Tone.Synth(), sampled: false };
 
     const buffers = await Promise.all(
       samplesForNotes(samples, melodyPool(settings)).map(async (s) => {
@@ -105,50 +122,90 @@ export const loadInstrument = (settings: GameSettings): Promise<Voice> => {
           audio.getChannelData(c)
         );
         const leveled = levelSample(channels, audio.sampleRate);
-        return [s.replace('s', '#'), Tone.ToneAudioBuffer.fromArray(leveled)] as const;
+        // Kept as plain AudioBuffers, which a voice's disposal can't release
+        return [s.replace('s', '#'), Tone.ToneAudioBuffer.fromArray(leveled).get()] as const;
       })
     );
+    const urls: Record<string, AudioBuffer> = {};
+    for (const [note, buffer] of buffers) if (buffer) urls[note] = buffer;
+
     // The short attack smooths the cut where levelSample trimmed into the note
-    return new Tone.Sampler({
-      urls: Object.fromEntries(buffers),
-      attack: 0.005,
-      release: 0.3,
-      volume: SAMPLER_VOLUME_DB,
-    }).connect(
-      new Tone.Compressor({
-        threshold: -2,
-        ratio: 20,
-        attack: 0,
-        release: 0.1,
-        knee: 0,
-      }).toDestination()
-    );
+    return {
+      createVoice: () =>
+        new Tone.Sampler({ urls, attack: 0.005, release: 0.3, volume: SAMPLER_VOLUME_DB }),
+      sampled: true,
+    };
   });
 
   // Forget a failed load (e.g. offline) so the next attempt retries
-  voice.catch(() => voices.delete(key));
-  voices.set(key, voice);
-  return voice;
+  loaded.catch(() => instruments.delete(key));
+  instruments.set(key, loaded);
+  return loaded;
 };
 
-// Plays the notes one after another, starting now
-const playNotes = async (notes: string[], settings: GameSettings): Promise<void> => {
+// Time from the start of one melody note to the next
+export const NOTE_SPACING_SECONDS = 0.8;
+// Covers the longest release (the synth's, 1 s) before a finished playback is cleaned up
+const RELEASE_SECONDS = 1.5;
+// Quick enough to feel instant, slow enough not to click
+const STOP_FADE_SECONDS = 0.03;
+
+// Plays the notes one after another, starting now, on a voice of their own. Resolves once
+// they're scheduled (after any download).
+const playNotes = async (notes: string[], settings: GameSettings): Promise<Playback> => {
   const Tone = await loadTone();
   await Tone.start();
-  const voice = await loadInstrument(settings);
+  const { createVoice, sampled } = await loadInstrument(settings);
   const { noteSeconds } = INSTRUMENTS[settings.instrument];
-  const now = Tone.now();
 
+  const voice = createVoice();
+  const output = new Tone.Gain(1);
+  voice.connect(output);
+  const compressor = sampled
+    ? new Tone.Compressor({ threshold: -2, ratio: 20, attack: 0, release: 0.1, knee: 0 })
+    : undefined;
+  if (compressor) output.chain(compressor, Tone.getDestination());
+  else output.toDestination();
+
+  // Tone.now() is a little ahead of the audio clock, so scheduling never falls behind it
+  const now = Tone.now();
   notes.forEach((note, index) => {
-    voice.triggerAttackRelease(note, noteSeconds, now + index / 1.5);
+    voice.triggerAttackRelease(note, noteSeconds, now + index * NOTE_SPACING_SECONDS);
   });
+  const startsIn = now - Tone.getContext().currentTime;
+
+  let disposed = false;
+  const dispose = () => {
+    if (disposed) return;
+    disposed = true;
+    voice.dispose();
+    output.dispose();
+    compressor?.dispose();
+  };
+  const lastsSeconds =
+    startsIn + (notes.length - 1) * NOTE_SPACING_SECONDS + noteSeconds + RELEASE_SECONDS;
+  const cleanup = window.setTimeout(dispose, lastsSeconds * 1000);
+
+  return {
+    startsIn,
+    stop: () => {
+      if (disposed) return;
+      clearTimeout(cleanup);
+      output.gain.rampTo(0, STOP_FADE_SECONDS);
+      window.setTimeout(dispose, STOP_FADE_SECONDS * 1000 + 50);
+    },
+  };
 };
 
-export const playMelody = (notes: MelodyNote[], settings: GameSettings): Promise<void> =>
+export const playMelody = (notes: MelodyNote[], settings: GameSettings): Promise<Playback> =>
   playNotes(
     notes.map((note) => `${note.tone}${note.octave}`),
     settings
   );
 
-export const playReference = (settings: GameSettings): Promise<void> =>
+export const playReference = (settings: GameSettings): Promise<Playback> =>
   playNotes([toneNameOf(referenceNote(settings))], settings);
+
+// Plays any notes, given as MIDI numbers, at the melody's pace
+export const playTones = (midis: number[], settings: GameSettings): Promise<Playback> =>
+  playNotes(midis.map(toneNameOf), settings);

@@ -2,14 +2,16 @@ import { Fragment, use, useEffect, useState } from 'react';
 import { GameContext } from '../../contexts/GameContext';
 import { cn } from '../../lib/cn';
 import { NoteName } from '../game/display/NoteName';
+import { FlatSign } from '../game/display/FlatSign';
 import { NOTE_LABELS } from '../../constants/notes';
 import { NUM_ROWS } from '../../constants/game-board';
 import { midiFromParts } from '../../lib/pitch';
 
-// Shown in the keypad's place once a game ends: how it went and what the melody was. It's
-// sized to the keypad so the layout doesn't shift, and grows only if the text needs more room.
+// Shown in the keypad's place once a game ends: how it went and what the melody was (as tiles
+// after a loss). It's sized to the keypad so the layout doesn't shift, and grows only if its
+// content needs more room.
 export const GameResult: React.FC = () => {
-  const { melody, gameWon, currentRow } = use(GameContext);
+  const { melody, gameWon, gameLost, currentRow } = use(GameContext);
   const [entered, setEntered] = useState(false);
 
   // Wait a frame so the starting styles paint before transitioning in
@@ -31,7 +33,8 @@ export const GameResult: React.FC = () => {
       <p className="main-header">
         {gameWon ? `Solved in ${currentRow + 1}/${NUM_ROWS}!` : 'Out of tries'}
       </p>
-      <p>
+      {/* A loss shows the answer as tiles, like a row of the board; a win already has it there */}
+      <p className={cn(gameLost && 'sr-only')}>
         The notes were{' '}
         {melody.map((note, index) => (
           <Fragment key={index}>
@@ -44,6 +47,20 @@ export const GameResult: React.FC = () => {
         ))}
         .
       </p>
+      {gameLost && (
+        <div className="flex gap-[calc(var(--key)*0.12)]" aria-hidden="true">
+          {melody.map((note, index) => (
+            <div
+              className="note-box-correct relative size-[calc(var(--key)*0.75)] [--tile-font:calc(var(--key)*0.75*0.3)]"
+              key={index}
+            >
+              {note.noteNotation[0]}
+              {note.noteNotation.length > 1 && <FlatSign variant="superscript" />}
+              <span className="absolute right-[10%] bottom-[8%] text-[0.55em]">{note.octave}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

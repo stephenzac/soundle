@@ -4,9 +4,9 @@ import { GameContext } from '../../../contexts/GameContext';
 import { SubmitIcon } from './SubmitIcon';
 
 export const SubmitButton: React.FC = () => {
-  const { currentIndex, submitGuess, gameWon, gameLost } = use(GameContext);
+  const { currentIndex, submitGuess, gameWon, gameLost, reveal } = use(GameContext);
 
-  const canSubmit = currentIndex === ROW_LENGTH && !(gameWon || gameLost);
+  const canSubmit = currentIndex === ROW_LENGTH && !(gameWon || gameLost) && !reveal;
 
   return (
     <button

@@ -1,10 +1,16 @@
 import { createContext, useRef, useState } from 'react';
-import { generateNotes, scoreGuess } from '../lib/GameNotes';
+import { generateNotes, guessTones, scoreGuess } from '../lib/GameNotes';
 import { GameNote, MelodyNote } from '../constants/notes';
 import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
 import { GameSettings, octavesChanged } from '../constants/settings';
 import { loadSettings, saveSettings } from '../lib/settings';
-import { playMelody as playMelodyNotes, playReference as playReferenceNote } from '../lib/audio';
+import {
+  NOTE_SPACING_SECONDS,
+  playMelody as playMelodyNotes,
+  playReference as playReferenceNote,
+  playTones,
+  Playback,
+} from '../lib/audio';
 
 export interface NoteTile {
   note: GameNote | '';
@@ -28,6 +34,13 @@ interface Board {
   loadingSound: 'melody' | 'reference' | null;
   // Shown briefly each time the reference plays, naming the note
   referenceHintVisible: boolean;
+  // The row just submitted, turning over tile by tile as each tone plays: `flipped` tiles have
+  // started turning, and `revealed` ones show their result. Input waits until it's done.
+  reveal: { row: number; flipped: number; revealed: number } | null;
+  // The tile whose tone is playing while a row is replayed
+  playingTile: { row: number; index: number } | null;
+  // Set for a moment when a row with too few notes is submitted, to shake it
+  rowShaking: boolean;
   // The game's actions, shared by the on-screen buttons and the keyboard. Each does nothing
   // when it doesn't apply (a full row, an empty row, a game that's over).
   inputNote: (note: GameNote) => void;
@@ -35,6 +48,8 @@ interface Board {
   submitGuess: () => void;
   playMelody: () => Promise<void>;
   playReference: () => Promise<void>;
+  // Plays a guessed row's notes again, highlighting each tile as it sounds
+  replayRow: (row: number) => void;
   resetGame: () => void;
   // Saves the settings. Changing the octaves starts a new game, since the current melody used
   // the old ones; changing only the instrument keeps the game going.
@@ -48,9 +63,13 @@ const EMPTY_TILE: NoteTile = { note: '', answered: false, correct: false, closeD
 const emptyBoard = (): NoteTile[][] =>
   Array.from({ length: NUM_ROWS }, () => Array.from({ length: ROW_LENGTH }, () => EMPTY_TILE));
 
-// How long after the melody starts before it can be played again, so presses can't pile up
-const MELODY_REPLAY_LOCK_MS = 2900;
+// How long after the melody starts before it can be played again, so presses can't pile up:
+// about when its last note ends
+const MELODY_REPLAY_LOCK_MS = ((ROW_LENGTH - 1) * NOTE_SPACING_SECONDS + 0.25) * 1000;
 const REFERENCE_HINT_MS = 1500;
+// These match the animations in index.css. A flipping tile shows its result halfway through.
+const FLIP_MS = 400;
+const ROW_SHAKE_MS = 400;
 
 export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [gameBoard, setBoard] = useState<NoteTile[][]>(emptyBoard);
@@ -63,8 +82,24 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [melodyPlayed, setMelodyPlayed] = useState(false);
   const [loadingSound, setLoadingSound] = useState<'melody' | 'reference' | null>(null);
   const [referenceHintVisible, setReferenceHintVisible] = useState(false);
+  const [reveal, setReveal] = useState<Board['reveal']>(null);
+  const [playingTile, setPlayingTile] = useState<Board['playingTile']>(null);
+  const [rowShaking, setRowShaking] = useState(false);
   const melodyLocked = useRef(false);
+  const melodyLockTimer = useRef<number | undefined>(undefined);
+  // The melody as it plays, so a submitted guess can cut it off, and a count that tells a melody
+  // still loading its sounds that it was cut off before it began
+  const melodyPlayback = useRef<Playback | undefined>(undefined);
+  const melodyId = useRef(0);
+  const rowPlayback = useRef<Playback | undefined>(undefined);
   const referenceHintTimer = useRef<number | undefined>(undefined);
+  const rowShakeTimer = useRef<number | undefined>(undefined);
+  // True while a row's tones play (on submit or replay), so sounds don't pile up
+  const rowPlaying = useRef(false);
+  // Timers for the visuals of a row's tones, cleared when a new game starts mid-way
+  const rowTimers = useRef<number[]>([]);
+  // Bumped by a new game, so a row still loading its sounds from the last one doesn't play
+  const gameId = useRef(0);
 
   const gameOver = gameWon || gameLost;
 
@@ -76,59 +111,155 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   const inputNote = (note: GameNote) => {
-    if (currentIndex >= ROW_LENGTH || gameOver) return;
+    if (currentIndex >= ROW_LENGTH || gameOver || reveal) return;
     setTile({ ...EMPTY_TILE, note }, currentIndex);
     setCurrentIndex(currentIndex + 1);
   };
 
   const deleteNote = () => {
-    if (currentIndex === 0 || gameOver) return;
+    if (currentIndex === 0 || gameOver || reveal) return;
     setTile(EMPTY_TILE, currentIndex - 1);
     setCurrentIndex(currentIndex - 1);
   };
 
-  const submitGuess = () => {
-    if (currentIndex < ROW_LENGTH || gameOver) return;
+  // Plays a row's guessed notes, calling onTone as each sounds and onEnd after the last. The
+  // visuals run on timers even if the sound fails, so a reveal always finishes.
+  const playRow = async (
+    row: NoteTile[],
+    onTone: (index: number) => void,
+    onEnd: () => void,
+    endDelayMs: number
+  ) => {
+    const id = gameId.current;
+    let startsIn = 0;
+    try {
+      const playback = await playTones(guessTones(row, melody, settings), settings);
+      if (id !== gameId.current) {
+        playback.stop();
+        return;
+      }
+      rowPlayback.current = playback;
+      startsIn = playback.startsIn;
+    } catch (error) {
+      console.error('Could not play the guess', error);
+    }
+    if (id !== gameId.current) return;
 
-    const scoredRow = scoreGuess(gameBoard[currentRow], melody);
+    const at = (ms: number, callback: () => void) =>
+      rowTimers.current.push(window.setTimeout(callback, startsIn * 1000 + ms));
+    row.forEach((_, index) => at(index * NOTE_SPACING_SECONDS * 1000, () => onTone(index)));
+    at((row.length - 1) * NOTE_SPACING_SECONDS * 1000 + endDelayMs, onEnd);
+  };
+
+  const submitGuess = () => {
+    if (gameOver || reveal) return;
+    if (currentIndex < ROW_LENGTH) {
+      // Ended by a timer rather than the animation's end, which never comes with reduced motion
+      setRowShaking(true);
+      clearTimeout(rowShakeTimer.current);
+      rowShakeTimer.current = window.setTimeout(() => setRowShaking(false), ROW_SHAKE_MS);
+      return;
+    }
+
+    // The guess's tones play next, so a melody still playing gives way to them
+    stopMelody();
+
+    const row = currentRow;
+    const scoredRow = scoreGuess(gameBoard[row], melody);
     const newBoard = [...gameBoard];
-    newBoard[currentRow] = scoredRow;
+    newBoard[row] = scoredRow;
     setBoard(newBoard);
 
-    if (scoredRow.every((tile) => tile.correct)) {
-      setGameWon(true);
-      return;
-    }
+    // The result (a win, a loss, or the next row) waits until every tile has turned over
+    const finish = () => {
+      rowPlaying.current = false;
+      rowPlayback.current = undefined;
+      rowTimers.current = [];
+      setReveal(null);
+      if (scoredRow.every((tile) => tile.correct)) {
+        setGameWon(true);
+        return;
+      }
+      setCurrentRow(row + 1);
+      if (row === NUM_ROWS - 1) {
+        setGameLost(true);
+        return;
+      }
+      setCurrentIndex(0);
+    };
 
-    setCurrentRow(currentRow + 1);
-    if (currentRow === NUM_ROWS - 1) {
-      setGameLost(true);
-      return;
-    }
-    // Back to the beginning of the next row
-    setCurrentIndex(0);
+    rowPlaying.current = true;
+    setPlayingTile(null);
+    setReveal({ row, flipped: 0, revealed: 0 });
+    void playRow(
+      scoredRow,
+      (index) => {
+        setReveal((r) => r && { ...r, flipped: index + 1 });
+        rowTimers.current.push(
+          window.setTimeout(() => setReveal((r) => r && { ...r, revealed: index + 1 }), FLIP_MS / 2)
+        );
+      },
+      finish,
+      FLIP_MS
+    );
+  };
+
+  const replayRow = (row: number) => {
+    if (rowPlaying.current || melodyLocked.current) return;
+    rowPlaying.current = true;
+    void playRow(
+      gameBoard[row],
+      (index) => setPlayingTile({ row, index }),
+      () => {
+        rowPlaying.current = false;
+        rowPlayback.current = undefined;
+        rowTimers.current = [];
+        setPlayingTile(null);
+      },
+      NOTE_SPACING_SECONDS * 1000
+    );
   };
 
   const playMelody = async () => {
-    if (melodyLocked.current) return;
+    if (melodyLocked.current || rowPlaying.current) return;
     melodyLocked.current = true;
     setMelodyPlayed(true);
     setLoadingSound('melody');
+    const id = melodyId.current;
 
     try {
-      await playMelodyNotes(melody, settings);
+      const playback = await playMelodyNotes(melody, settings);
+      if (id !== melodyId.current) {
+        playback.stop();
+        return;
+      }
+      melodyPlayback.current = playback;
     } catch (error) {
       console.error('Could not play the melody', error);
       melodyLocked.current = false;
       return;
     } finally {
-      setLoadingSound(null);
+      setLoadingSound((sound) => (sound === 'melody' ? null : sound));
     }
 
-    setTimeout(() => (melodyLocked.current = false), MELODY_REPLAY_LOCK_MS);
+    melodyLockTimer.current = window.setTimeout(() => {
+      melodyLocked.current = false;
+      melodyPlayback.current = undefined;
+    }, MELODY_REPLAY_LOCK_MS);
+  };
+
+  // Cuts the melody off, or keeps one still loading from starting, and lets it be played again
+  const stopMelody = () => {
+    melodyId.current++;
+    melodyPlayback.current?.stop();
+    melodyPlayback.current = undefined;
+    clearTimeout(melodyLockTimer.current);
+    melodyLocked.current = false;
+    setLoadingSound((sound) => (sound === 'melody' ? null : sound));
   };
 
   const playReference = async () => {
+    if (rowPlaying.current) return;
     // Pressing again keeps the popup up for a full REFERENCE_HINT_MS from this press
     setReferenceHintVisible(true);
     clearTimeout(referenceHintTimer.current);
@@ -148,6 +279,17 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   const resetGame = (melodySettings: GameSettings = settings) => {
+    // Nothing from the last game keeps playing
+    stopMelody();
+    gameId.current++;
+    rowPlayback.current?.stop();
+    rowPlayback.current = undefined;
+    rowTimers.current.forEach(clearTimeout);
+    rowTimers.current = [];
+    rowPlaying.current = false;
+    setReveal(null);
+    setPlayingTile(null);
+    setRowShaking(false);
     setBoard(emptyBoard());
     setGameWon(false);
     setGameLost(false);
@@ -174,11 +316,15 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     melodyPlayed,
     loadingSound,
     referenceHintVisible,
+    reveal,
+    playingTile,
+    rowShaking,
     inputNote,
     deleteNote,
     submitGuess,
     playMelody,
     playReference,
+    replayRow,
     resetGame,
     updateSettings,
   };
