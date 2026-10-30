@@ -4,6 +4,8 @@ import { MelodyIcon } from '../game/controls/MelodyIcon';
 import { SettingsIcon } from '../settings/SettingsIcon';
 import { SubmitIcon } from '../game/controls/SubmitIcon';
 import { DeleteIcon } from '../game/controls/DeleteIcon';
+import { ResetIcon } from '../game/controls/ResetIcon';
+import { cn } from '../../lib/cn';
 
 interface OpenInformationButtonProps {
   setClickedState: (newState: boolean) => void;
@@ -25,90 +27,72 @@ interface InformationModalProps {
   setClickedState: (newState: boolean) => void;
 }
 
+// One control and what it does. The example is decorative; the caption carries the meaning.
+const ControlExample: React.FC<{ example: React.ReactNode; children: React.ReactNode }> = ({
+  example,
+  children,
+}) => (
+  <figure className="flex flex-row items-center gap-4">
+    <div className="note-box h-9.5 lg:h-12 shrink-0" aria-hidden="true">
+      {example}
+    </div>
+    <figcaption className="modal-text">{children}</figcaption>
+  </figure>
+);
+
+// A guessed note's tile color after a guess, with its meaning underneath
+const FeedbackExample: React.FC<{ className: string; example: React.ReactNode; label: string }> = ({
+  className,
+  example,
+  label,
+}) => (
+  <figure className="flex flex-col items-center gap-2 text-center">
+    <div className={cn(className, 'h-9.5 lg:h-12 relative')} aria-hidden="true">
+      {example}
+    </div>
+    <figcaption className="modal-text">{label}</figcaption>
+  </figure>
+);
+
 export const InformationModal: React.FC<InformationModalProps> = ({ setClickedState }) => (
-  <PixelModal onClose={() => setClickedState(false)} descriptionId="modalDescription">
-    <div id="modalDescription">
-      <header>
-        <p className="modal-text text-slate-100 text-center mt-4 mb-6">
-          Soundle is a Wordle-like ear training game to improve your sense of pitch. Listen to the
-          five tones in concert pitch and guess them all correctly within 6 tries.
-        </p>
-      </header>
+  <PixelModal
+    title="How to play"
+    onClose={() => setClickedState(false)}
+    descriptionId="modalDescription"
+  >
+    <div id="modalDescription" className="flex flex-col gap-3">
+      <p className="modal-text">Name the five tones you hear, in order, within 6 tries.</p>
+      <p className="modal-text mb-2">
+        Notes can repeat. Only the note name counts, not the octave. Tones are in concert pitch: as
+        they sound, not transposed.
+      </p>
 
-      <figure className="flex flex-row place-items-center mb-4">
-        <div className="note-box h-9.5 lg:h-12" aria-label="Note input button example">
-          C
-        </div>
-        <figcaption className="modal-text text-slate-100 pl-4">
-          Input a note as part of your guess.
-        </figcaption>
-      </figure>
+      <ControlExample example={<MelodyIcon />}>
+        Play the tones. Replay them as often as you like.
+      </ControlExample>
+      <ControlExample example="C">
+        Enter a note. Sharps are written as flats, so C sharp is D
+        <FlatSign variant="inline" />.
+      </ControlExample>
+      <ControlExample example={<DeleteIcon />}>Delete the last note.</ControlExample>
+      <ControlExample example={<SubmitIcon />}>Submit a full guess.</ControlExample>
 
-      <figure className="flex flex-row place-items-center mb-4">
-        <div
-          className="note-box-correct h-9.5 lg:h-12 font-bold grid place-items-center"
-          aria-label="Correct note guess example"
-        >
-          C
-        </div>
-        <figcaption className="modal-text ml-4">Correct note guess.</figcaption>
-      </figure>
+      <div className="grid grid-cols-3 gap-2 my-2">
+        <FeedbackExample className="note-box-correct" example="C" label="Right note" />
+        <FeedbackExample className="note-box-close-answer" example="B" label="Half step off" />
+        <FeedbackExample
+          className="note-box-incorrect"
+          example={
+            <>
+              B<FlatSign variant="superscript" />
+            </>
+          }
+          label="Further off"
+        />
+      </div>
 
-      <figure className="flex flex-row place-items-center mb-4">
-        <div
-          className="note-box-close-answer h-9.5 lg:h-12 font-bold grid place-items-center"
-          aria-label="Close note guess example"
-        >
-          B
-        </div>
-        <figcaption className="modal-text ml-4">Note guess was off by a half step.</figcaption>
-      </figure>
-
-      <figure className="flex flex-row place-items-center mb-4">
-        <div
-          className="note-box-incorrect h-9.5 lg:h-12 font-bold grid place-items-center relative"
-          aria-label="Correct note guess example"
-        >
-          B<FlatSign variant="superscript" />
-        </div>
-        <figcaption className="modal-text ml-4">Incorrect note guess.</figcaption>
-      </figure>
-
-      <figure className="flex flex-row place-items-center mb-4">
-        <div className="note-box h-9.5 lg:h-12" aria-label="Submit guess button example">
-          <SubmitIcon />
-        </div>
-        <figcaption className="modal-text text-slate-100 w-full pl-4">
-          Submit your guess for the tones played.
-        </figcaption>
-      </figure>
-
-      <figure className="flex flex-row place-items-center mb-4">
-        <div className="note-box h-9.5 lg:h-12" aria-label="Play melody button example">
-          <MelodyIcon />
-        </div>
-        <figcaption className="modal-text text-slate-100 w-full pl-4">
-          Listen to the random tones.
-        </figcaption>
-      </figure>
-
-      <figure className="flex flex-row place-items-center mb-4">
-        <div className="note-box h-9.5 lg:h-12" aria-label="Delete button example">
-          <DeleteIcon />
-        </div>
-        <figcaption className="modal-text text-slate-100 w-full pl-4">
-          Delete a note from your guess.
-        </figcaption>
-      </figure>
-
-      <figure className="flex flex-row place-items-center mb-4">
-        <div className="note-box h-9.5 lg:h-12" aria-label="Settings button example">
-          <SettingsIcon />
-        </div>
-        <figcaption className="modal-text text-slate-100 w-full pl-4">
-          Choose the instrument and octaves the tones play in.
-        </figcaption>
-      </figure>
+      <ControlExample example={<SettingsIcon />}>Choose the instrument and octaves.</ControlExample>
+      <ControlExample example={<ResetIcon />}>Start a new melody once a game ends.</ControlExample>
 
       <p className="modal-text text-slate-300 text-center text-[8px]! lg:text-[10px]! mt-2">
         Instrument samples from{' '}

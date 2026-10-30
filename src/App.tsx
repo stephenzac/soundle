@@ -1,10 +1,8 @@
 import { GameTiles } from './components/game/display/GameTiles';
-import { HappyCat } from './components/info/HappyCat';
+import { GameOverCat } from './components/info/GameOverCat';
 import { GameControlsRow } from './components/game/controls/GameControlsRow';
-import { CorrectAnswer } from './components/info/CorrectAnswer';
 import { Header } from './components/info/Header';
-import { validGameNotes } from './constants/notes';
-import { NoteInputButton } from './components/game/controls/NoteInputButton';
+import { NoteKeypad } from './components/game/controls/NoteKeypad';
 import { GameContextProvider } from './contexts/GameContext';
 import { useEffect, useState } from 'react';
 import { InformationModal } from './components/info-modal/InformationModal';
@@ -38,17 +36,12 @@ export const App: React.FC = () => {
           {/* my-auto centers the game vertically but still lets it scroll if it overflows */}
           <div className="my-auto flex flex-col items-center gap-y-(--key-gap) gap-x-10 short-landscape:flex-row">
             <div className="relative">
-              <HappyCat />
+              <GameOverCat />
               <GameTiles />
             </div>
             <div className="flex flex-col items-center gap-y-(--key-gap)">
-              <div className="grid grid-cols-6 gap-(--key-gap)">
-                {validGameNotes.map((note) => (
-                  <NoteInputButton note={note} key={note.noteNotation} />
-                ))}
-              </div>
+              <NoteKeypad />
               <GameControlsRow />
-              <CorrectAnswer />
             </div>
           </div>
         </main>

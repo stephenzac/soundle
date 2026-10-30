@@ -20,6 +20,7 @@ interface Board {
   settings: GameSettings;
   gameWon: boolean;
   gameLost: boolean;
+  // Whether this game's melody has been played yet, to point new players at the play button
   melodyPlayed: boolean;
   setMelodyPlayed: (newState: boolean) => void;
   updateGameWon: (newState: boolean) => void;
@@ -58,15 +59,9 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setBoard(newGameBoard);
   }, []);
 
-  const updateGameWon = (newState: boolean) => {
-    setGameWon(newState);
-    setMelodyPlayed(false);
-  };
+  const updateGameWon = (newState: boolean) => setGameWon(newState);
 
-  const updateGameLost = (newState: boolean) => {
-    setGameLost(newState);
-    setMelodyPlayed(false);
-  };
+  const updateGameLost = (newState: boolean) => setGameLost(newState);
 
   const generateNewMelody = (melodySettings: GameSettings) => {
     const newNotes = generateNotes(melodySettings);
@@ -95,6 +90,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setGameLost(false);
     updateCurrentRow(0);
     setCurrentIndex(0);
+    setMelodyPlayed(false);
     generateNewMelody(melodySettings);
   };
 
@@ -104,10 +100,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (octavesChanged(newSettings, settings)) resetGame(newSettings);
   };
 
-  const updateCurrentRow = (newRow: number): void => {
-    setCurrentRow(newRow);
-    setMelodyPlayed(false);
-  };
+  const updateCurrentRow = (newRow: number): void => setCurrentRow(newRow);
 
   const contextValue: Board = {
     gameBoard,

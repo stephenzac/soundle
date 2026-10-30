@@ -1,11 +1,11 @@
-import { useEffect, useEffectEvent, useState } from 'react';
+import { useEffect, useEffectEvent, useId, useState } from 'react';
 import { cn } from '../../lib/cn';
 
 const EXIT_ANIMATION_MS = 100;
 
 const CloseButton: React.FC<{ onClose: () => void }> = ({ onClose }) => (
   <button
-    className="flex items-center justify-center hover:cursor-pointer font-bold self-end size-11 shrink-0 pixel-border hover:bg-red-600 transition-all"
+    className="flex items-center justify-center hover:cursor-pointer font-bold size-11 shrink-0 pixel-border hover:bg-red-600 transition-all"
     onClick={onClose}
     aria-label="Close"
     style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '10px' }}
@@ -19,11 +19,19 @@ interface PixelModalProps {
   onClose: () => void;
   // id of the element inside children that describes the dialog
   descriptionId: string;
+  // Shown on the same row as the close button, and names the dialog for screen readers
+  title?: string;
   // A function child gets a close() that plays the exit animation before calling onClose
   children: React.ReactNode | ((close: () => void) => React.ReactNode);
 }
 
-export const PixelModal: React.FC<PixelModalProps> = ({ onClose, descriptionId, children }) => {
+export const PixelModal: React.FC<PixelModalProps> = ({
+  onClose,
+  descriptionId,
+  title,
+  children,
+}) => {
+  const titleId = useId();
   const [phase, setPhase] = useState<'enter' | 'active' | 'exit'>('enter');
 
   const handleClose = () => {
@@ -69,10 +77,20 @@ export const PixelModal: React.FC<PixelModalProps> = ({ onClose, descriptionId, 
           phase === 'exit' && 'modal-animate-out'
         )}
         role="dialog"
+        aria-labelledby={title ? titleId : undefined}
         aria-describedby={descriptionId}
         aria-modal="true"
       >
-        <CloseButton onClose={handleClose} />
+        <div
+          className={cn('flex items-center gap-4', title ? 'justify-between mb-6' : 'justify-end')}
+        >
+          {title && (
+            <h2 id={titleId} className="main-header text-base lg:text-xl">
+              {title}
+            </h2>
+          )}
+          <CloseButton onClose={handleClose} />
+        </div>
         {typeof children === 'function' ? children(handleClose) : children}
       </section>
     </>

@@ -2,6 +2,13 @@
 
 @theme {
   --animate-pulse-fast: pulse 0.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-blink: blink 1s steps(1) infinite;
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
 }
 
 /* Phones held sideways: too short to stack the board above the keypad */
@@ -182,6 +189,12 @@ html {
   image-rendering: pixelated;
 }
 
+/* The empty tile the next note goes in */
+@utility note-box-current {
+  @apply note-box;
+  background-color: #d4d4d4;
+}
+
 @utility note-box-correct {
   @apply note-box;
   background-color: #4ade80;
@@ -279,6 +292,16 @@ html {
       transform: translate(0.5px, 0.5px);
     }
   }
+}
+
+/* A round button to press next, in the title's yellow */
+@utility round-button-attention {
+  @apply round-button animate-pulse-fast;
+  background-color: #ffeb3b;
+  box-shadow:
+    inset -2px -2px 0px #c9b300,
+    inset 2px 2px 0px #fff59d,
+    0 0 0 1px #000;
 }
 
 @utility round-button-unclickable {

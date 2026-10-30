@@ -50,7 +50,7 @@ const Stepper: React.FC<StepperProps> = ({
   onDecrement,
   onIncrement,
 }) => (
-  <div className="flex flex-col items-center gap-2 mb-5">
+  <div className="flex flex-col items-start gap-2 mb-5">
     <span id={id} className="modal-text">
       {label}
     </span>
@@ -86,7 +86,7 @@ interface InstrumentSelectProps {
 // A native select, styled like the game's buttons when closed. Opening it shows the browser's
 // own list (a wheel or sheet on phones), with keyboard and screen reader support built in.
 const InstrumentSelect: React.FC<InstrumentSelectProps> = ({ value, onChange }) => (
-  <div className="flex flex-col items-center gap-2 mb-5">
+  <div className="flex flex-col items-start gap-2 mb-5">
     <label htmlFor="instrumentSelect" className="modal-text">
       Instrument
     </label>
@@ -163,11 +163,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
   };
 
   return (
-    <PixelModal onClose={() => setClickedState(false)} descriptionId="settingsDescription">
+    <PixelModal
+      title="Settings"
+      onClose={() => setClickedState(false)}
+      descriptionId="settingsDescription"
+    >
       {(close) => (
-        <div className="flex flex-col items-center">
-          <h2 className="main-header text-base lg:text-xl mt-2 mb-6">Settings</h2>
-
+        <div className="flex flex-col items-start">
           <InstrumentSelect value={instrument} onChange={selectInstrument} />
 
           <Stepper
@@ -191,7 +193,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
             onIncrement={() => changeOctaveRange(octaveRange + 1)}
           />
 
-          <div id="settingsDescription" className="modal-text text-center mb-6">
+          <div id="settingsDescription" className="modal-text text-left mb-6">
             <p>
               Tones play from <NoteName midi={pool[0]} /> to{' '}
               <NoteName midi={pool[pool.length - 1]} />. You still guess only the note names.
