@@ -1,4 +1,4 @@
-import { INSTRUMENTS, INSTRUMENT_IDS } from '../constants/instruments';
+import { INSTRUMENT_IDS, octaveLimits } from '../constants/instruments';
 import { DEFAULT_SETTINGS, GameSettings } from '../constants/settings';
 
 const STORAGE_KEY = 'soundle::settings';
@@ -11,8 +11,9 @@ const isValid = (value: unknown): value is GameSettings => {
   if (!INSTRUMENT_IDS.includes(instrument as GameSettings['instrument'])) return false;
   if (!Number.isInteger(lowestOctave) || !Number.isInteger(octaveRange)) return false;
 
-  const { lowestOctave: min, highestOctave: max } =
-    INSTRUMENTS[instrument as GameSettings['instrument']];
+  const { lowestOctave: min, highestOctave: max } = octaveLimits(
+    instrument as GameSettings['instrument']
+  );
   const low = lowestOctave as number;
   const range = octaveRange as number;
   return low >= min && low <= max && range >= 1 && low + range - 1 <= max;

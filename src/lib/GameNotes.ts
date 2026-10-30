@@ -7,7 +7,8 @@ import {
   TONE_STRINGS,
 } from '../constants/notes';
 import { ROW_LENGTH } from '../constants/game-board';
-import { GameSettings } from '../constants/settings';
+import { GameSettings, melodyPool } from '../constants/settings';
+import { octaveOf, pitchClassOf } from './pitch';
 
 const checkNoteDistance = (
   submittedNote: NoteNotationLabel,
@@ -46,17 +47,20 @@ export const checkNotes = (submittedNotes: NoteTile[], actualNotes: GameNote[]):
   return correctCount === ROW_LENGTH;
 };
 
-export const generateNotes = ({ lowestOctave, octaveRange }: GameSettings): MelodyNote[] => {
-  const generatedNotes: MelodyNote[] = [];
+const randomItem = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
 
-  for (let i = 0; i < ROW_LENGTH; i++) {
-    const randomIndex = Math.floor(Math.random() * 12);
-    generatedNotes.push({
-      noteNotation: NOTE_LABELS[randomIndex],
-      tone: TONE_STRINGS[randomIndex],
-      octave: lowestOctave + Math.floor(Math.random() * octaveRange),
-    });
-  }
+// Each note name is equally likely, then one of its octaves in the pool is picked at random.
+// (Picking from the pool directly would favor names that appear in more octaves.)
+export const generateNotes = (settings: GameSettings): MelodyNote[] => {
+  const pool = melodyPool(settings);
 
-  return generatedNotes;
+  return Array.from({ length: ROW_LENGTH }, () => {
+    const pitchClass = Math.floor(Math.random() * 12);
+    const midi = randomItem(pool.filter((note) => pitchClassOf(note) === pitchClass));
+    return {
+      noteNotation: NOTE_LABELS[pitchClass],
+      tone: TONE_STRINGS[pitchClass],
+      octave: octaveOf(midi),
+    };
+  });
 };

@@ -1,7 +1,9 @@
 import { Fragment, use, useEffect, useState } from 'react';
 import { GameContext } from '../../contexts/GameContext';
 import { cn } from '../../lib/cn';
-import { FlatSign } from '../game/display/FlatSign';
+import { NoteName } from '../game/display/NoteName';
+import { NOTE_LABELS } from '../../constants/notes';
+import { midiFromParts } from '../../lib/pitch';
 
 export const CorrectAnswer: React.FC = () => {
   const { melody, gameLost } = use(GameContext);
@@ -33,9 +35,9 @@ export const CorrectAnswer: React.FC = () => {
               {melody.map((note, index) => (
                 <Fragment key={index}>
                   {index > 0 && ', '}
-                  {note.noteNotation[0]}
-                  {note.noteNotation.length > 1 && <FlatSign variant="inline" />}
-                  {note.octave}
+                  <NoteName
+                    midi={midiFromParts(NOTE_LABELS.indexOf(note.noteNotation), note.octave)}
+                  />
                 </Fragment>
               ))}
             </p>

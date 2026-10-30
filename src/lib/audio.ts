@@ -1,7 +1,8 @@
 import type * as ToneModule from 'tone';
 import { INSTRUMENTS } from '../constants/instruments';
 import { MelodyNote } from '../constants/notes';
-import { GameSettings } from '../constants/settings';
+import { GameSettings, melodyPool } from '../constants/settings';
+import { midiFromName } from './pitch';
 
 // Both Tone.Synth and Tone.Sampler fit this shape
 interface Voice {
@@ -14,24 +15,14 @@ interface Voice {
 let tonePromise: Promise<typeof ToneModule> | undefined;
 const loadTone = () => (tonePromise ??= import('tone'));
 
-const midiNumber = (sampleName: string): number => {
-  const pitchClass = sampleName.slice(0, -1).replace('s', '#');
-  const sharpIndex = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-  return (Number(sampleName.slice(-1)) + 1) * 12 + sharpIndex.indexOf(pitchClass);
-};
-
-// The recordings needed for the chosen octaves: those inside them, plus the nearest one on
+// The recordings needed for these notes: those inside their range, plus the nearest one on
 // each side so the notes at the edges are shifted from a close recording
-const samplesForOctaves = (
-  samples: readonly string[],
-  lowestOctave: number,
-  octaveRange: number
-) => {
-  const lowest = (lowestOctave + 1) * 12;
-  const highest = (lowestOctave + octaveRange + 1) * 12 - 1;
-  const inside = samples.filter((s) => midiNumber(s) >= lowest && midiNumber(s) <= highest);
-  const below = samples.filter((s) => midiNumber(s) < lowest).at(-1);
-  const above = samples.find((s) => midiNumber(s) > highest);
+const samplesForNotes = (samples: readonly string[], notes: number[]) => {
+  const lowest = notes[0];
+  const highest = notes[notes.length - 1];
+  const inside = samples.filter((s) => midiFromName(s) >= lowest && midiFromName(s) <= highest);
+  const below = samples.filter((s) => midiFromName(s) < lowest).at(-1);
+  const above = samples.find((s) => midiFromName(s) > highest);
   return [below, ...inside, above].filter((s) => s !== undefined);
 };
 
@@ -107,7 +98,7 @@ export const loadInstrument = (settings: GameSettings): Promise<Voice> => {
     if (!samples) return new Tone.Synth().toDestination();
 
     const buffers = await Promise.all(
-      samplesForOctaves(samples, lowestOctave, octaveRange).map(async (s) => {
+      samplesForNotes(samples, melodyPool(settings)).map(async (s) => {
         const audio = await Tone.ToneAudioBuffer.load(`./samples/${instrument}/${s}.mp3`);
         const channels = Array.from({ length: audio.numberOfChannels }, (_, c) =>
           audio.getChannelData(c)

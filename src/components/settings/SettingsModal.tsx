@@ -1,13 +1,21 @@
 import { use, useState } from 'react';
 import { GameContext } from '../../contexts/GameContext';
-import { INSTRUMENTS, INSTRUMENT_IDS, InstrumentId } from '../../constants/instruments';
+import {
+  INSTRUMENTS,
+  INSTRUMENT_IDS,
+  InstrumentId,
+  octaveLimits,
+} from '../../constants/instruments';
 import {
   GameSettings,
-  QUIET_BELOW_OCTAVE,
+  QUIET_BELOW,
   fitOctavesToInstrument,
   maxOctaveRange,
+  melodyPool,
   octavesChanged,
 } from '../../constants/settings';
+import { midiFromName, midiFromParts } from '../../lib/pitch';
+import { NoteName } from '../game/display/NoteName';
 import { loadInstrument } from '../../lib/audio';
 import { cn } from '../../lib/cn';
 import { PixelModal } from '../modal/PixelModal';
@@ -26,7 +34,7 @@ export const OpenSettingsButton: React.FC<OpenSettingsButtonProps> = ({ setClick
 interface StepperProps {
   id: string;
   label: string;
-  value: string;
+  value: React.ReactNode;
   canDecrement: boolean;
   canIncrement: boolean;
   onDecrement: () => void;
@@ -118,12 +126,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
   // Edits stay local until applied, since changing octaves replaces the melody in progress
   const [draft, setDraft] = useState<GameSettings>(settings);
   const { instrument, lowestOctave, octaveRange } = draft;
-  const {
-    name,
-    lowestOctave: instrumentLowest,
-    highestOctave: instrumentHighest,
-  } = INSTRUMENTS[instrument];
-  const highestOctave = lowestOctave + octaveRange - 1;
+  const { name, lowestNote, highestNote } = INSTRUMENTS[instrument];
+  const { lowestOctave: lowestAllowed, highestOctave: highestAllowed } = octaveLimits(instrument);
+  const pool = melodyPool(draft);
+  const instrumentLow = midiFromName(lowestNote);
   const startsNewGame = octavesChanged(draft, settings);
   const hasChanges = startsNewGame || instrument !== settings.instrument;
 
@@ -167,9 +173,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
           <Stepper
             id="lowestNoteLabel"
             label="Lowest note"
-            value={`C${lowestOctave}`}
-            canDecrement={lowestOctave > instrumentLowest}
-            canIncrement={lowestOctave < instrumentHighest}
+            // The instrument's lowest note when it starts partway through the chosen octave
+            value={<NoteName midi={Math.max(midiFromParts(0, lowestOctave), instrumentLow)} />}
+            canDecrement={lowestOctave > lowestAllowed}
+            canIncrement={lowestOctave < highestAllowed}
             onDecrement={() => changeLowestOctave(lowestOctave - 1)}
             onIncrement={() => changeLowestOctave(lowestOctave + 1)}
           />
@@ -186,13 +193,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
 
           <div id="settingsDescription" className="modal-text text-center mb-6">
             <p>
-              Tones play from C{lowestOctave} to B{highestOctave}. You still guess only the note
-              names.
+              Tones play from <NoteName midi={pool[0]} /> to{' '}
+              <NoteName midi={pool[pool.length - 1]} />. You still guess only the note names.
             </p>
             <p className="mt-3">
-              {name} covers C{instrumentLowest} to B{instrumentHighest}.
+              {name} plays <NoteName midi={instrumentLow} /> to{' '}
+              <NoteName midi={midiFromName(highestNote)} />.
             </p>
-            {lowestOctave < QUIET_BELOW_OCTAVE && (
+            {pool[0] < QUIET_BELOW && (
               <p className="text-yellow-300 mt-3">
                 Notes this low can be hard to hear on phone and laptop speakers.
               </p>
