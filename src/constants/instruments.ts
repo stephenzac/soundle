@@ -26,6 +26,10 @@ export interface Instrument {
   // Recorded notes in public/samples/<id>/<note>.mp3 ("s" means sharp, as in As4.mp3).
   // Absent for the synth, which needs no samples.
   samples?: readonly string[];
+  // For instruments whose music is written in another key: how many semitones above the
+  // sounding pitch their notes are written, and the key they're in (a B-flat trumpet's written C
+  // sounds as a concert B-flat)
+  transposition?: { semitones: number; key: string };
 }
 
 export const INSTRUMENTS: Record<InstrumentId, Instrument> = {
@@ -68,6 +72,7 @@ export const INSTRUMENTS: Record<InstrumentId, Instrument> = {
     highestNote: 'As5',
     noteSeconds: 0.55,
     samples: ['F3', 'A3', 'C4', 'Ds4', 'G4', 'As4', 'D5', 'F5', 'A5', 'C6'],
+    transposition: { semitones: 2, key: 'B♭' },
   },
   trombone: {
     name: 'Trombone',
@@ -103,6 +108,7 @@ export const INSTRUMENTS: Record<InstrumentId, Instrument> = {
     highestNote: 'A6',
     noteSeconds: 0.55,
     samples: ['D3', 'F3', 'As3', 'D4', 'F4', 'As4', 'D5', 'F5', 'As5', 'D6', 'Fs6'],
+    transposition: { semitones: 2, key: 'B♭' },
   },
   'alto-sax': {
     name: 'Alto sax',
@@ -111,6 +117,7 @@ export const INSTRUMENTS: Record<InstrumentId, Instrument> = {
     highestNote: 'Gs5',
     noteSeconds: 0.55,
     samples: ['Cs3', 'E3', 'G3', 'As3', 'Cs4', 'E4', 'G4', 'As4', 'Cs5', 'E5', 'G5', 'A5'],
+    transposition: { semitones: 9, key: 'E♭' },
   },
 };
 

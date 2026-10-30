@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { NoteTile } from '../../../contexts/GameContext';
+import { use, useEffect, useState } from 'react';
+import { GameContext, NoteTile } from '../../../contexts/GameContext';
+import { transposeNote } from '../../../constants/notes';
 import { cn } from '../../../lib/cn';
 import { FlatSign } from './FlatSign';
 import { HintArrow } from './HintArrow';
@@ -25,22 +26,26 @@ export const NoteBox: React.FC<NoteBoxProps> = ({
   flipping,
   highlighted,
 }) => {
+  const { transposition } = use(GameContext);
   const [noteDisplayed, setNoteDisplayed] = useState('');
+  // Tiles hold concert notes; the name shown follows the chosen pitch
+  const noteName =
+    currentNote.note === '' ? '' : transposeNote(currentNote.note, transposition).noteNotation;
 
   const isEmpty = currentNote.note === '';
   const { correct, closeDirection } = currentNote;
   const answered = currentNote.answered && !concealed;
 
   useEffect(() => {
-    if (currentNote.note === '') {
+    if (noteName === '') {
       const clearAfterExit = window.setTimeout(() => {
         setNoteDisplayed('');
       }, NOTE_EXIT_MS);
       return () => clearTimeout(clearAfterExit);
     }
 
-    setNoteDisplayed(currentNote.note.noteNotation);
-  }, [currentNote.note]);
+    setNoteDisplayed(noteName);
+  }, [noteName]);
 
   return (
     <div
@@ -53,7 +58,7 @@ export const NoteBox: React.FC<NoteBoxProps> = ({
         flipping && 'motion-safe:animate-flip',
         highlighted && 'z-10 scale-110 outline-3 outline-[#ffeb3b]'
       )}
-      aria-label={`Box with ${currentNote.note === '' ? 'nothing' : currentNote.note.noteNotation}${
+      aria-label={`Box with ${noteName === '' ? 'nothing' : noteName}${
         !answered
           ? ''
           : correct

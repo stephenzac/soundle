@@ -1,8 +1,8 @@
 import { createContext, useRef, useState } from 'react';
 import { generateNotes, guessTones, scoreGuess } from '../lib/GameNotes';
-import { GameNote, MelodyNote } from '../constants/notes';
+import { GameNote, MelodyNote, transposeNote } from '../constants/notes';
 import { NUM_ROWS, ROW_LENGTH } from '../constants/game-board';
-import { GameSettings, octavesChanged } from '../constants/settings';
+import { GameSettings, octavesChanged, transpositionOf } from '../constants/settings';
 import { loadSettings, saveSettings } from '../lib/settings';
 import {
   NOTE_SPACING_SECONDS,
@@ -26,6 +26,10 @@ interface Board {
   currentIndex: number;
   melody: MelodyNote[];
   settings: GameSettings;
+  // Semitones from the sounding notes to the names shown, for written pitch on a transposing
+  // instrument; 0 at concert pitch. The game keeps every note at concert pitch and only
+  // translates names on the way in and out, so the setting can change mid-game.
+  transposition: number;
   gameWon: boolean;
   gameLost: boolean;
   // Whether this game's melody has been played yet, to point new players at the play button
@@ -43,6 +47,7 @@ interface Board {
   rowShaking: boolean;
   // The game's actions, shared by the on-screen buttons and the keyboard. Each does nothing
   // when it doesn't apply (a full row, an empty row, a game that's over).
+  // Takes the note as named on screen, which the keypad and keyboard show in the chosen pitch
   inputNote: (note: GameNote) => void;
   deleteNote: () => void;
   submitGuess: () => void;
@@ -102,6 +107,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const gameId = useRef(0);
 
   const gameOver = gameWon || gameLost;
+  const transposition = transpositionOf(settings);
 
   const setTile = (tile: NoteTile, index: number) => {
     const newBoard = [...gameBoard];
@@ -112,7 +118,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const inputNote = (note: GameNote) => {
     if (currentIndex >= ROW_LENGTH || gameOver || reveal) return;
-    setTile({ ...EMPTY_TILE, note }, currentIndex);
+    setTile({ ...EMPTY_TILE, note: transposeNote(note, -transposition) }, currentIndex);
     setCurrentIndex(currentIndex + 1);
   };
 
@@ -311,6 +317,7 @@ export const GameContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     currentIndex,
     melody,
     settings,
+    transposition,
     gameWon,
     gameLost,
     melodyPlayed,

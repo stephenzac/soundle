@@ -7,8 +7,9 @@ const LEGACY_OCTAVE_KEY = 'soundle::octaveSettings';
 
 const isValid = (value: unknown): value is GameSettings => {
   if (typeof value !== 'object' || value === null) return false;
-  const { instrument, lowestOctave, octaveRange } = value as Record<string, unknown>;
+  const { instrument, lowestOctave, octaveRange, writtenPitch } = value as Record<string, unknown>;
   if (!INSTRUMENT_IDS.includes(instrument as GameSettings['instrument'])) return false;
+  if (typeof writtenPitch !== 'boolean') return false;
   if (!Number.isInteger(lowestOctave) || !Number.isInteger(octaveRange)) return false;
 
   const { lowestOctave: min, highestOctave: max } = octaveLimits(
@@ -24,10 +25,15 @@ const read = (key: string): unknown => JSON.parse(localStorage.getItem(key) ?? '
 // Storage can be unavailable (private browsing, blocked site data), so fall back to defaults
 export const loadSettings = (): GameSettings => {
   try {
-    const saved = read(STORAGE_KEY);
+    // Settings saved before the written-pitch option lack it, so they get its default
+    const saved = { writtenPitch: DEFAULT_SETTINGS.writtenPitch, ...(read(STORAGE_KEY) ?? {}) };
     if (isValid(saved)) return saved;
 
-    const legacy = { instrument: DEFAULT_SETTINGS.instrument, ...(read(LEGACY_OCTAVE_KEY) ?? {}) };
+    const legacy = {
+      instrument: DEFAULT_SETTINGS.instrument,
+      writtenPitch: DEFAULT_SETTINGS.writtenPitch,
+      ...(read(LEGACY_OCTAVE_KEY) ?? {}),
+    };
     return isValid(legacy) ? legacy : DEFAULT_SETTINGS;
   } catch {
     return DEFAULT_SETTINGS;

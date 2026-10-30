@@ -54,3 +54,8 @@ export const validGameNotes: GameNote[] = [
   { noteNotation: 'B♭', tone: 'Bb' },
   { noteNotation: 'B', tone: 'B' },
 ];
+
+// The same note moved by some semitones, wrapping around the octave. Used to turn concert note
+// names into those written for a transposing instrument (and back, with negative semitones).
+export const transposeNote = (note: GameNote, semitones: number): GameNote =>
+  validGameNotes[(((NOTE_LABELS.indexOf(note.noteNotation) + semitones) % 12) + 12) % 12];

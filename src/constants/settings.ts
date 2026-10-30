@@ -10,6 +10,10 @@ export interface GameSettings {
   // lowestOctave up through octaveRange octaves
   lowestOctave: number;
   octaveRange: number;
+  // Show note names as written for a transposing instrument (trumpet, clarinet, alto sax)
+  // rather than at concert pitch. Kept when switching to an instrument without one, where it
+  // has no effect, so switching back remembers it.
+  writtenPitch: boolean;
 }
 
 // Synth, one octave from middle C: the original Soundle behavior
@@ -17,7 +21,12 @@ export const DEFAULT_SETTINGS: GameSettings = {
   instrument: 'synth',
   lowestOctave: 4,
   octaveRange: 1,
+  writtenPitch: false,
 };
+
+// Semitones to add to a sounding note to get the name the player reads: 0 at concert pitch
+export const transpositionOf = ({ instrument, writtenPitch }: GameSettings): number =>
+  writtenPitch ? (INSTRUMENTS[instrument].transposition?.semitones ?? 0) : 0;
 
 export const maxOctaveRange = ({ instrument, lowestOctave }: GameSettings): number =>
   octaveLimits(instrument).highestOctave - lowestOctave + 1;
@@ -72,10 +81,12 @@ export const melodyPool = ({ instrument, lowestOctave, octaveRange }: GameSettin
 };
 
 // The C to play as a reference: the one in the melody's notes closest to their middle, so it
-// sits in the same register as the melody
+// sits in the same register as the melody. With written note names it's the player's written C
+// (a concert B-flat on trumpet), so "C" means the same thing everywhere in the game.
 export const referenceNote = (settings: GameSettings): number => {
   const pool = melodyPool(settings);
   const middle = (pool[0] + pool[pool.length - 1]) / 2;
-  const cs = pool.filter((midi) => pitchClassOf(midi) === 0);
+  const concertC = (12 - transpositionOf(settings)) % 12;
+  const cs = pool.filter((midi) => pitchClassOf(midi) === concertC);
   return cs.reduce((best, c) => (Math.abs(c - middle) < Math.abs(best - middle) ? c : best));
 };

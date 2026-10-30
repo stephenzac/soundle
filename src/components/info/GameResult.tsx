@@ -5,13 +5,17 @@ import { NoteName } from '../game/display/NoteName';
 import { FlatSign } from '../game/display/FlatSign';
 import { NOTE_LABELS } from '../../constants/notes';
 import { NUM_ROWS } from '../../constants/game-board';
-import { midiFromParts } from '../../lib/pitch';
+import { midiFromParts, octaveOf, pitchClassOf } from '../../lib/pitch';
 
 // Shown in the keypad's place once a game ends: how it went and what the melody was (as tiles
 // after a loss). It's sized to the keypad so the layout doesn't shift, and grows only if its
 // content needs more room.
 export const GameResult: React.FC = () => {
-  const { melody, gameWon, gameLost, currentRow } = use(GameContext);
+  const { melody, gameWon, gameLost, currentRow, transposition } = use(GameContext);
+  // The melody as the player reads it: concert pitch, or written for their instrument
+  const shownNotes = melody.map(
+    (note) => midiFromParts(NOTE_LABELS.indexOf(note.noteNotation), note.octave) + transposition
+  );
   const [entered, setEntered] = useState(false);
 
   // Wait a frame so the starting styles paint before transitioning in
@@ -36,12 +40,12 @@ export const GameResult: React.FC = () => {
       {/* A loss shows the answer as tiles, like a row of the board; a win already has it there */}
       <p className={cn(gameLost && 'sr-only')}>
         The notes were{' '}
-        {melody.map((note, index) => (
+        {shownNotes.map((midi, index) => (
           <Fragment key={index}>
             {index > 0 && ', '}
             {/* Keeps a note like "G♭4" from breaking across lines */}
             <span className="whitespace-nowrap">
-              <NoteName midi={midiFromParts(NOTE_LABELS.indexOf(note.noteNotation), note.octave)} />
+              <NoteName midi={midi} />
             </span>
           </Fragment>
         ))}
@@ -49,16 +53,21 @@ export const GameResult: React.FC = () => {
       </p>
       {gameLost && (
         <div className="flex gap-[calc(var(--key)*0.12)]" aria-hidden="true">
-          {melody.map((note, index) => (
-            <div
-              className="note-box-correct relative size-[calc(var(--key)*0.75)] [--tile-font:calc(var(--key)*0.75*0.3)]"
-              key={index}
-            >
-              {note.noteNotation[0]}
-              {note.noteNotation.length > 1 && <FlatSign variant="superscript" />}
-              <span className="absolute right-[10%] bottom-[8%] text-[0.55em]">{note.octave}</span>
-            </div>
-          ))}
+          {shownNotes.map((midi, index) => {
+            const label = NOTE_LABELS[pitchClassOf(midi)];
+            return (
+              <div
+                className="note-box-correct relative size-[calc(var(--key)*0.75)] [--tile-font:calc(var(--key)*0.75*0.3)]"
+                key={index}
+              >
+                {label[0]}
+                {label.length > 1 && <FlatSign variant="superscript" />}
+                <span className="absolute right-[10%] bottom-[8%] text-[0.55em]">
+                  {octaveOf(midi)}
+                </span>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
