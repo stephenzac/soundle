@@ -2,6 +2,8 @@ import { PixelModal } from '../modal/PixelModal';
 import { FlatSign } from '../game/display/FlatSign';
 import { MelodyIcon } from '../game/controls/MelodyIcon';
 import { SettingsIcon } from '../settings/SettingsIcon';
+import { SubmitIcon } from '../game/controls/SubmitIcon';
+import { DeleteIcon } from '../game/controls/DeleteIcon';
 
 interface OpenInformationButtonProps {
   setClickedState: (newState: boolean) => void;
@@ -74,7 +76,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
       <figure className="flex flex-row place-items-center mb-4">
         <div className="note-box h-9.5 lg:h-12" aria-label="Submit guess button example">
-          ✓
+          <SubmitIcon />
         </div>
         <figcaption className="modal-text text-slate-100 w-full pl-4">
           Submit your guess for the tones played.
@@ -92,7 +94,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
 
       <figure className="flex flex-row place-items-center mb-4">
         <div className="note-box h-9.5 lg:h-12" aria-label="Delete button example">
-          ⌫
+          <DeleteIcon />
         </div>
         <figcaption className="modal-text text-slate-100 w-full pl-4">
           Delete a note from your guess.

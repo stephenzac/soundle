@@ -1,5 +1,6 @@
 import { use } from 'react';
 import { GameContext, NoteTile } from '../../../contexts/GameContext';
+import { DeleteIcon } from './DeleteIcon';
 
 export const DeleteButton: React.FC = () => {
   const { currentIndex, setCurrentIndex, currentRow, updateBoard, gameWon, gameLost } =
@@ -26,7 +27,7 @@ export const DeleteButton: React.FC = () => {
       onClick={deleteNote}
       aria-label="Delete note"
     >
-      ⌫
+      <DeleteIcon />
     </button>
   );
 };
