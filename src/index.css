@@ -3,10 +3,18 @@
 @theme {
   --animate-pulse-fast: pulse 0.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-blink: blink 1s steps(1) infinite;
+  /* Hops forward and back in pixel-like steps; a rotated element hops its own way */
+  --animate-nudge: nudge 0.8s steps(1) infinite;
 
   @keyframes blink {
     50% {
       opacity: 0;
+    }
+  }
+
+  @keyframes nudge {
+    50% {
+      transform: translateY(-30%);
     }
   }
 }

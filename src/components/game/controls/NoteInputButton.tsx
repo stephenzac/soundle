@@ -1,7 +1,6 @@
 import { use } from 'react';
-import { ROW_LENGTH } from '../../../constants/game-board';
 import { GameNote } from '../../../constants/notes';
-import { GameContext, NoteTile } from '../../../contexts/GameContext';
+import { GameContext } from '../../../contexts/GameContext';
 import { FlatSign } from '../../game/display/FlatSign';
 
 interface NoteInputProps {
@@ -9,26 +8,12 @@ interface NoteInputProps {
 }
 
 export const NoteInputButton: React.FC<NoteInputProps> = ({ note }) => {
-  const { currentRow, currentIndex, setCurrentIndex, updateBoard, gameWon, gameLost } =
-    use(GameContext);
-
-  const inputNote = () => {
-    if (currentIndex >= ROW_LENGTH || gameWon || gameLost) return;
-    setCurrentIndex(currentIndex + 1);
-
-    const newNote: NoteTile = {
-      note,
-      answered: false,
-      correct: false,
-      answerIsClose: false,
-    };
-    updateBoard(newNote, currentRow, currentIndex);
-  };
+  const { inputNote } = use(GameContext);
 
   return (
     <button
       className="note-input-button button-animation cursor-pointer relative"
-      onClick={inputNote}
+      onClick={() => inputNote(note)}
       aria-label={`Button to input note ${note.noteNotation}`}
     >
       {note.noteNotation[0]}

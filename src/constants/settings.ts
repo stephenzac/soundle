@@ -70,3 +70,12 @@ export const melodyPool = ({ instrument, lowestOctave, octaveRange }: GameSettin
 
   return pool.sort((a, b) => a - b);
 };
+
+// The C to play as a reference: the one in the melody's notes closest to their middle, so it
+// sits in the same register as the melody
+export const referenceNote = (settings: GameSettings): number => {
+  const pool = melodyPool(settings);
+  const middle = (pool[0] + pool[pool.length - 1]) / 2;
+  const cs = pool.filter((midi) => pitchClassOf(midi) === 0);
+  return cs.reduce((best, c) => (Math.abs(c - middle) < Math.abs(best - middle) ? c : best));
+};

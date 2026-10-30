@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NoteTile } from '../../../contexts/GameContext';
 import { cn } from '../../../lib/cn';
 import { FlatSign } from './FlatSign';
+import { HintArrow } from './HintArrow';
 
 interface NoteBoxProps {
   currentNote: NoteTile;
@@ -15,7 +16,7 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote, isNext }) => {
   const [noteDisplayed, setNoteDisplayed] = useState('');
 
   const isEmpty = currentNote.note === '';
-  const { answered, correct, answerIsClose } = currentNote;
+  const { answered, correct, closeDirection } = currentNote;
 
   useEffect(() => {
     if (currentNote.note === '') {
@@ -34,10 +35,18 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote, isNext }) => {
         'size-(--cell) relative',
         !answered && (isNext ? 'note-box-current' : 'note-box'),
         answered && correct && 'note-box-correct',
-        answered && !correct && answerIsClose && 'note-box-close-answer',
-        answered && !correct && !answerIsClose && 'note-box-incorrect'
+        answered && !correct && closeDirection && 'note-box-close-answer',
+        answered && !correct && !closeDirection && 'note-box-incorrect'
       )}
-      aria-label={`Box with ${currentNote.note === '' ? 'nothing' : currentNote.note.noteNotation}`}
+      aria-label={`Box with ${currentNote.note === '' ? 'nothing' : currentNote.note.noteNotation}${
+        !answered
+          ? ''
+          : correct
+            ? ', correct'
+            : closeDirection
+              ? `, a half step ${closeDirection === 'up' ? 'low' : 'high'}`
+              : ', wrong'
+      }`}
       aria-current={isNext || undefined}
     >
       {isNext && (
@@ -48,6 +57,7 @@ export const NoteBox: React.FC<NoteBoxProps> = ({ currentNote, isNext }) => {
       )}
       <p className={isEmpty ? 'note-animate' : 'note-active'}>{noteDisplayed[0]}</p>
       {noteDisplayed.length > 1 && <FlatSign variant="superscript" />}
+      {answered && closeDirection && <HintArrow direction={closeDirection} />}
     </div>
   );
 };

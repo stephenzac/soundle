@@ -1,10 +1,10 @@
 import type * as ToneModule from 'tone';
 import { INSTRUMENTS } from '../constants/instruments';
 import { MelodyNote } from '../constants/notes';
-import { GameSettings, melodyPool } from '../constants/settings';
-import { midiFromName } from './pitch';
+import { GameSettings, melodyPool, referenceNote } from '../constants/settings';
+import { midiFromName, toneNameOf } from './pitch';
 
-// Both Tone.Synth and Tone.Sampler fit this shape
+// Both Tone.PolySynth and Tone.Sampler fit this shape
 interface Voice {
   triggerAttackRelease: (note: string, duration: number, time: number) => unknown;
 }
@@ -95,7 +95,8 @@ export const loadInstrument = (settings: GameSettings): Promise<Voice> => {
 
   const voice = loadTone().then(async (Tone): Promise<Voice> => {
     const { samples } = INSTRUMENTS[instrument];
-    if (!samples) return new Tone.Synth().toDestination();
+    // Polyphonic, so the reference note can sound while the melody is still playing
+    if (!samples) return new Tone.PolySynth(Tone.Synth).toDestination();
 
     const buffers = await Promise.all(
       samplesForNotes(samples, melodyPool(settings)).map(async (s) => {
@@ -130,7 +131,8 @@ export const loadInstrument = (settings: GameSettings): Promise<Voice> => {
   return voice;
 };
 
-export const playMelody = async (notes: MelodyNote[], settings: GameSettings): Promise<void> => {
+// Plays the notes one after another, starting now
+const playNotes = async (notes: string[], settings: GameSettings): Promise<void> => {
   const Tone = await loadTone();
   await Tone.start();
   const voice = await loadInstrument(settings);
@@ -138,6 +140,15 @@ export const playMelody = async (notes: MelodyNote[], settings: GameSettings): P
   const now = Tone.now();
 
   notes.forEach((note, index) => {
-    voice.triggerAttackRelease(`${note.tone}${note.octave}`, noteSeconds, now + index / 1.5);
+    voice.triggerAttackRelease(note, noteSeconds, now + index / 1.5);
   });
 };
+
+export const playMelody = (notes: MelodyNote[], settings: GameSettings): Promise<void> =>
+  playNotes(
+    notes.map((note) => `${note.tone}${note.octave}`),
+    settings
+  );
+
+export const playReference = (settings: GameSettings): Promise<void> =>
+  playNotes([toneNameOf(referenceNote(settings))], settings);

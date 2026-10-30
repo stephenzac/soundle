@@ -1,51 +1,25 @@
 import { NoteTile } from '../contexts/GameContext';
-import {
-  GameNote,
-  MelodyNote,
-  NoteNotationLabel,
-  NOTE_LABELS,
-  TONE_STRINGS,
-} from '../constants/notes';
+import { GameNote, MelodyNote, NOTE_LABELS, TONE_STRINGS } from '../constants/notes';
 import { ROW_LENGTH } from '../constants/game-board';
 import { GameSettings, melodyPool } from '../constants/settings';
 import { octaveOf, pitchClassOf } from './pitch';
 
-const checkNoteDistance = (
-  submittedNote: NoteNotationLabel,
-  actualNote: NoteNotationLabel
-): number => {
-  if (
-    (submittedNote === 'B' && actualNote === 'C') ||
-    (submittedNote === 'C' && actualNote === 'B')
-  )
-    return 1;
+// Scores a full row against the melody, returning new tiles. A wrong note a half step from the
+// right one gets the direction of the right note, wrapping around the octave (B to C is up).
+export const scoreGuess = (row: NoteTile[], melody: GameNote[]): NoteTile[] =>
+  row.map((tile, index) => {
+    if (tile.note === '') return tile;
 
-  return Math.abs(NOTE_LABELS.indexOf(submittedNote) - NOTE_LABELS.indexOf(actualNote));
-};
-
-export const checkNotes = (submittedNotes: NoteTile[], actualNotes: GameNote[]): boolean => {
-  let correctCount = 0;
-
-  submittedNotes.forEach((submittedNote, index) => {
-    if (submittedNote.note === '') return false;
-
-    if (submittedNote.note.noteNotation === actualNotes[index].noteNotation) {
-      submittedNote.correct = true;
-      correctCount++;
-    }
-
-    // Check if guess is a half step off
-    const noteDistance = checkNoteDistance(
-      submittedNote.note.noteNotation,
-      actualNotes[index].noteNotation
-    );
-    if (noteDistance === 1) submittedNote.answerIsClose = true;
-
-    submittedNote.answered = true;
+    const guessed = NOTE_LABELS.indexOf(tile.note.noteNotation);
+    const actual = NOTE_LABELS.indexOf(melody[index].noteNotation);
+    const semitonesUp = (actual - guessed + 12) % 12;
+    return {
+      ...tile,
+      answered: true,
+      correct: semitonesUp === 0,
+      closeDirection: semitonesUp === 1 ? 'up' : semitonesUp === 11 ? 'down' : null,
+    };
   });
-
-  return correctCount === ROW_LENGTH;
-};
 
 const randomItem = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
 

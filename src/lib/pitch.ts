@@ -1,3 +1,5 @@
+import { TONE_STRINGS } from '../constants/notes';
+
 // Notes as MIDI numbers, where C4 (middle C) is 60 and A4 (440 Hz) is 69. Octaves follow
 // scientific pitch notation, so each octave runs from C to B.
 
@@ -14,3 +16,7 @@ export const midiFromParts = (pitchClass: number, octave: number): number =>
 export const pitchClassOf = (midi: number): number => midi % 12;
 
 export const octaveOf = (midi: number): number => Math.floor(midi / 12) - 1;
+
+// The name Tone.js plays, like "Db4"
+export const toneNameOf = (midi: number): string =>
+  `${TONE_STRINGS[pitchClassOf(midi)]}${octaveOf(midi)}`;

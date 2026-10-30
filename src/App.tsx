@@ -3,6 +3,7 @@ import { GameOverCat } from './components/info/GameOverCat';
 import { GameControlsRow } from './components/game/controls/GameControlsRow';
 import { Header } from './components/info/Header';
 import { NoteKeypad } from './components/game/controls/NoteKeypad';
+import { KeyboardControls } from './components/game/controls/KeyboardControls';
 import { GameContextProvider } from './contexts/GameContext';
 import { useEffect, useState } from 'react';
 import { InformationModal } from './components/info-modal/InformationModal';
@@ -46,6 +47,7 @@ export const App: React.FC = () => {
           </div>
         </main>
 
+        <KeyboardControls disabled={showInfoModal || showSettingsModal} />
         {showInfoModal && <InformationModal setClickedState={setShowInfoModal} />}
         {showSettingsModal && <SettingsModal setClickedState={setShowSettingsModal} />}
       </div>

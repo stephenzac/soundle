@@ -10,6 +10,8 @@ export const ResetButton: React.FC = () => {
       className="round-button font-bold animate-pulse-fast duration-0"
       onClick={() => resetGame()}
       aria-label="Reset game"
+      aria-keyshortcuts="Enter"
+      title="New melody (Enter)"
     >
       <ResetIcon />
     </button>
