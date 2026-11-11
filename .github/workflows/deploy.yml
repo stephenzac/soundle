@@ -1,0 +1,67 @@
+# Builds the site and deploys it to GitHub Pages on every push to main. Needs the repo's Pages
+# source set to "GitHub Actions" (Settings → Pages → Build and deployment).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ['main']
+  # Allows a deploy from the Actions tab without a new commit
+  workflow_dispatch:
+
+# The Pages deploy needs these; everything else stays read-only
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time. A newer push replaces a deploy still waiting, but never cancels one
+# mid-way, which could leave the site half-published.
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      # Installs exactly what package-lock.json pins
+      - name: Install dependencies
+        run: npm ci
+
+      # A lint or formatting problem stops the deploy before anything goes live
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Build
+        run: npm run build
+
+      - name: Set up Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
