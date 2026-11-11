@@ -10,7 +10,8 @@ interface KeyboardControlsProps {
   disabled: boolean;
 }
 
-// Plays the game from a keyboard: A to G enter notes (with Shift for the flat), Backspace
+// Plays the game from a keyboard: A to G enter notes (with Shift for the flat, or the sharp when
+// notes are shown with sharps), Backspace
 // deletes, Enter submits (or starts a new game once it's over), Space plays the melody and R the
 // reference note
 export const KeyboardControls: React.FC<KeyboardControlsProps> = ({ disabled }) => {
@@ -23,6 +24,7 @@ export const KeyboardControls: React.FC<KeyboardControlsProps> = ({ disabled }) 
     resetGame,
     gameWon,
     gameLost,
+    settings,
   } = use(GameContext);
 
   const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
@@ -36,10 +38,12 @@ export const KeyboardControls: React.FC<KeyboardControlsProps> = ({ disabled }) 
 
     const key = event.key.toLowerCase();
     if (key in NATURAL_NOTES) {
-      // There's no C♭ or F♭ key, so Shift+C and Shift+F do nothing
-      if (event.shiftKey && (key === 'c' || key === 'f')) return;
+      const sharps = settings.accidentals === 'sharps';
+      // There are no C♭, F♭, E♯ or B♯ keys, so Shift does nothing on those letters
+      if (event.shiftKey && (sharps ? 'eb' : 'cf').includes(key)) return;
       if (event.repeat) return;
-      inputNote(validGameNotes[NATURAL_NOTES[key] - (event.shiftKey ? 1 : 0)]);
+      const shift = event.shiftKey ? (sharps ? 1 : -1) : 0;
+      inputNote(validGameNotes[NATURAL_NOTES[key] + shift]);
       return;
     }
 

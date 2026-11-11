@@ -59,3 +59,13 @@ export const validGameNotes: GameNote[] = [
 // names into those written for a transposing instrument (and back, with negative semitones).
 export const transposeNote = (note: GameNote, semitones: number): GameNote =>
   validGameNotes[(((NOTE_LABELS.indexOf(note.noteNotation) + semitones) % 12) + 12) % 12];
+
+// How the five black-key notes are spelled on screen. Notes are always stored by their flat
+// names (NOTE_LABELS); this only changes what's shown.
+export type Accidentals = 'flats' | 'sharps';
+
+const SHARP_LABELS = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'] as const;
+
+// A pitch class's name as shown, like "D♭" or "C♯" for the same note
+export const noteLabel = (pitchClass: number, accidentals: Accidentals): string =>
+  (accidentals === 'sharps' ? SHARP_LABELS : NOTE_LABELS)[pitchClass];

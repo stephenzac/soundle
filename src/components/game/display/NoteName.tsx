@@ -1,14 +1,22 @@
-import { NOTE_LABELS } from '../../../constants/notes';
+import { use } from 'react';
+import { Accidentals, noteLabel } from '../../../constants/notes';
+import { GameContext } from '../../../contexts/GameContext';
 import { octaveOf, pitchClassOf } from '../../../lib/pitch';
-import { FlatSign } from './FlatSign';
+import { NoteLabel } from './NoteLabel';
 
-// A note in running text, like "E♭3", with the flat drawn since the font has no ♭
-export const NoteName: React.FC<{ midi: number }> = ({ midi }) => {
-  const label = NOTE_LABELS[pitchClassOf(midi)];
+// A note in running text, like "E♭3", spelled with the chosen accidentals. Settings passes its
+// unsaved choice so the preview matches.
+export const NoteName: React.FC<{ midi: number; accidentals?: Accidentals }> = ({
+  midi,
+  accidentals,
+}) => {
+  const { settings } = use(GameContext);
   return (
     <>
-      {label[0]}
-      {label.length > 1 && <FlatSign variant="inline" />}
+      <NoteLabel
+        label={noteLabel(pitchClassOf(midi), accidentals ?? settings.accidentals)}
+        variant="inline"
+      />
       {octaveOf(midi)}
     </>
   );

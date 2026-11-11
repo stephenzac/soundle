@@ -2,8 +2,8 @@ import { Fragment, use, useEffect, useState } from 'react';
 import { GameContext } from '../../contexts/GameContext';
 import { cn } from '../../lib/cn';
 import { NoteName } from '../game/display/NoteName';
-import { FlatSign } from '../game/display/FlatSign';
-import { NOTE_LABELS } from '../../constants/notes';
+import { NoteLabel } from '../game/display/NoteLabel';
+import { NOTE_LABELS, noteLabel } from '../../constants/notes';
 import { NUM_ROWS } from '../../constants/game-board';
 import { midiFromParts, octaveOf, pitchClassOf } from '../../lib/pitch';
 
@@ -11,7 +11,7 @@ import { midiFromParts, octaveOf, pitchClassOf } from '../../lib/pitch';
 // after a loss). It's sized to the keypad so the layout doesn't shift, and grows only if its
 // content needs more room.
 export const GameResult: React.FC = () => {
-  const { melody, gameWon, gameLost, currentRow, transposition } = use(GameContext);
+  const { melody, gameWon, gameLost, currentRow, transposition, settings } = use(GameContext);
   // The melody as the player reads it: concert pitch, or written for their instrument
   const shownNotes = melody.map(
     (note) => midiFromParts(NOTE_LABELS.indexOf(note.noteNotation), note.octave) + transposition
@@ -54,14 +54,13 @@ export const GameResult: React.FC = () => {
       {gameLost && (
         <div className="flex gap-[calc(var(--key)*0.12)]" aria-hidden="true">
           {shownNotes.map((midi, index) => {
-            const label = NOTE_LABELS[pitchClassOf(midi)];
+            const label = noteLabel(pitchClassOf(midi), settings.accidentals);
             return (
               <div
                 className="note-box-correct relative size-[calc(var(--key)*0.75)] [--tile-font:calc(var(--key)*0.75*0.3)]"
                 key={index}
               >
-                {label[0]}
-                {label.length > 1 && <FlatSign variant="superscript" />}
+                <NoteLabel label={label} variant="superscript" />
                 <span className="absolute right-[10%] bottom-[8%] text-[0.55em]">
                   {octaveOf(midi)}
                 </span>

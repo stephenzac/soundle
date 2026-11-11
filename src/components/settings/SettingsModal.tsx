@@ -17,7 +17,8 @@ import {
 } from '../../constants/settings';
 import { midiFromName, midiFromParts } from '../../lib/pitch';
 import { NoteName } from '../game/display/NoteName';
-import { FlatSign } from '../game/display/FlatSign';
+import { NoteLabel } from '../game/display/NoteLabel';
+import { Accidentals } from '../../constants/notes';
 import { loadInstrument } from '../../lib/audio';
 import { cn } from '../../lib/cn';
 import { PixelModal } from '../modal/PixelModal';
@@ -119,6 +120,59 @@ const InstrumentSelect: React.FC<InstrumentSelectProps> = ({ value, onChange }) 
   </div>
 );
 
+interface RadioChipProps {
+  selected: boolean;
+  label: React.ReactNode;
+  // Read by screen readers and shown on hover, since a chip's label is often a single symbol
+  description: string;
+  onSelect?: () => void;
+}
+
+// One choice in a row of chips, chosen in the title's yellow. Its parent has role="radiogroup".
+const RadioChip: React.FC<RadioChipProps> = ({ selected, label, description, onSelect }) => (
+  <button
+    role="radio"
+    aria-checked={selected}
+    aria-label={description}
+    title={description}
+    onClick={onSelect}
+    className={cn(
+      'h-11 px-3 whitespace-nowrap pixel-border text-black text-[10px] lg:text-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffeb3b]',
+      selected ? 'bg-[#ffeb3b] cursor-default' : 'bg-[#b3b3b3] cursor-pointer button-animation'
+    )}
+  >
+    {label}
+  </button>
+);
+
+interface AccidentalsToggleProps {
+  accidentals: Accidentals;
+  onChange: (accidentals: Accidentals) => void;
+}
+
+// Whether black-key notes are spelled as flats or sharps, shown by example
+const AccidentalsToggle: React.FC<AccidentalsToggleProps> = ({ accidentals, onChange }) => (
+  <div className="flex flex-col items-start gap-2 mb-5">
+    <span id="accidentalsLabel" className="modal-text">
+      Accidentals
+    </span>
+    <div className="flex gap-1" role="radiogroup" aria-labelledby="accidentalsLabel">
+      <RadioChip
+        selected={accidentals === 'flats'}
+        label={<NoteLabel label="D♭" variant="inline" />}
+        description="Flats, like D♭"
+        onSelect={() => onChange('flats')}
+      />
+      <RadioChip
+        selected={accidentals === 'sharps'}
+        label={<NoteLabel label="C♯" variant="inline" />}
+        description="Sharps, like C♯"
+        onSelect={() => onChange('sharps')}
+      />
+    </div>
+  </div>
+);
+
 interface PitchToggleProps {
   writtenPitch: boolean;
   // The instrument's key, like "B♭"; undefined for an instrument that sounds as written
@@ -142,26 +196,6 @@ const PitchToggle: React.FC<PitchToggleProps> = ({
   if (instrumentKey && instrumentKey !== shownKey) setShownKey(instrumentKey);
 
   const written = writtenPitch && instrumentKey !== undefined;
-  const option = (
-    selected: boolean,
-    label: React.ReactNode,
-    description: string,
-    onSelect?: () => void
-  ) => (
-    <button
-      role="radio"
-      aria-checked={selected}
-      aria-label={description}
-      title={description}
-      onClick={onSelect}
-      className={cn(
-        'h-11 px-3 whitespace-nowrap pixel-border text-black text-[10px] lg:text-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffeb3b]',
-        selected ? 'bg-[#ffeb3b] cursor-default' : 'bg-[#b3b3b3] cursor-pointer button-animation'
-      )}
-    >
-      {label}
-    </button>
-  );
 
   return (
     <div className="flex flex-col items-start gap-2">
@@ -169,14 +203,14 @@ const PitchToggle: React.FC<PitchToggleProps> = ({
         Notes in
       </span>
       <div className="flex" role="radiogroup" aria-labelledby="pitchToggleLabel">
-        {option(
-          !written,
-          'C',
-          'Concert pitch',
+        <RadioChip
+          selected={!written}
+          label="C"
+          description="Concert pitch"
           // Nothing to switch from on an instrument that sounds as written; leaving the saved
           // choice alone keeps it for the next transposing instrument
-          instrumentKey ? () => onChange(false) : undefined
-        )}
+          onSelect={instrumentKey ? () => onChange(false) : undefined}
+        />
         {/* Grows from no width to its own, and back: a grid column animates where width: auto
             can't. Inert while hidden, so it can't be tabbed to. */}
         <div
@@ -191,15 +225,13 @@ const PitchToggle: React.FC<PitchToggleProps> = ({
               its label onto two lines mid-slide. */}
           <div className="min-w-0 overflow-hidden -my-px py-px pr-px">
             <div className="pl-1 w-max">
-              {option(
-                written,
-                <>
-                  {shownKey[0]}
-                  {shownKey.length > 1 && <FlatSign variant="inline" />}
-                </>,
-                `Written for ${shownKey} ${instrumentName.toLowerCase()}`,
-                () => onChange(true)
-              )}
+              {/* Instrument keys are always named with flats ("B♭ trumpet"), whatever the setting */}
+              <RadioChip
+                selected={written}
+                label={<NoteLabel label={shownKey} variant="inline" />}
+                description={`Written for ${shownKey} ${instrumentName.toLowerCase()}`}
+                onSelect={() => onChange(true)}
+              />
             </div>
           </div>
         </div>
@@ -216,7 +248,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
   const { settings, updateSettings } = use(GameContext);
   // Edits stay local until applied, since changing octaves replaces the melody in progress
   const [draft, setDraft] = useState<GameSettings>(settings);
-  const { instrument, lowestOctave, octaveRange, writtenPitch } = draft;
+  const { instrument, lowestOctave, octaveRange, writtenPitch, accidentals } = draft;
   const { name, lowestNote, highestNote, transposition } = INSTRUMENTS[instrument];
   // Notes below are named the way the player chose: concert pitch, or written for the instrument
   const shown = transpositionOf(draft);
@@ -225,7 +257,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
   const instrumentLow = midiFromName(lowestNote);
   const startsNewGame = octavesChanged(draft, settings);
   const hasChanges =
-    startsNewGame || instrument !== settings.instrument || writtenPitch !== settings.writtenPitch;
+    startsNewGame ||
+    instrument !== settings.instrument ||
+    writtenPitch !== settings.writtenPitch ||
+    accidentals !== settings.accidentals;
 
   // The octaves last chosen with the steppers. Each instrument fits these into its own range, so
   // trying a narrow instrument while browsing doesn't shrink the choice for the rest.
@@ -235,7 +270,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
   });
 
   const selectInstrument = (newInstrument: InstrumentId) =>
-    setDraft(fitOctavesToInstrument({ ...chosenOctaves, instrument: newInstrument, writtenPitch }));
+    setDraft(fitOctavesToInstrument({ ...draft, ...chosenOctaves, instrument: newInstrument }));
 
   const changeOctaves = (newSettings: GameSettings) => {
     const fitted = fitOctavesToInstrument(newSettings);
@@ -274,12 +309,20 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
             />
           </div>
 
+          <AccidentalsToggle
+            accidentals={accidentals}
+            onChange={(newAccidentals) => setDraft({ ...draft, accidentals: newAccidentals })}
+          />
+
           <Stepper
             id="lowestNoteLabel"
             label="Lowest note"
             // The instrument's lowest note when it starts partway through the chosen octave
             value={
-              <NoteName midi={Math.max(midiFromParts(0, lowestOctave), instrumentLow) + shown} />
+              <NoteName
+                midi={Math.max(midiFromParts(0, lowestOctave), instrumentLow) + shown}
+                accidentals={accidentals}
+              />
             }
             canDecrement={lowestOctave > lowestAllowed}
             canIncrement={lowestOctave < highestAllowed}
@@ -299,13 +342,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ setClickedState })
 
           <div id="settingsDescription" className="modal-text text-left mb-6">
             <p>
-              Tones play from <NoteName midi={pool[0] + shown} /> to{' '}
-              <NoteName midi={pool[pool.length - 1] + shown} />
+              Tones play from <NoteName midi={pool[0] + shown} accidentals={accidentals} /> to{' '}
+              <NoteName midi={pool[pool.length - 1] + shown} accidentals={accidentals} />
               {shown !== 0 && ' as written'}. You still guess only the note names.
             </p>
             <p className="mt-3">
-              {name} plays <NoteName midi={instrumentLow + shown} /> to{' '}
-              <NoteName midi={midiFromName(highestNote) + shown} />
+              {name} plays <NoteName midi={instrumentLow + shown} accidentals={accidentals} /> to{' '}
+              <NoteName midi={midiFromName(highestNote) + shown} accidentals={accidentals} />
               {shown !== 0 && ' as written'}.
             </p>
             {pool[0] < QUIET_BELOW && (

@@ -1,8 +1,8 @@
 import { use, useEffect, useState } from 'react';
 import { GameContext, NoteTile } from '../../../contexts/GameContext';
-import { transposeNote } from '../../../constants/notes';
+import { NOTE_LABELS, noteLabel, transposeNote } from '../../../constants/notes';
 import { cn } from '../../../lib/cn';
-import { FlatSign } from './FlatSign';
+import { AccidentalSign } from './NoteLabel';
 import { HintArrow } from './HintArrow';
 
 interface NoteBoxProps {
@@ -26,11 +26,16 @@ export const NoteBox: React.FC<NoteBoxProps> = ({
   flipping,
   highlighted,
 }) => {
-  const { transposition } = use(GameContext);
+  const { transposition, settings } = use(GameContext);
   const [noteDisplayed, setNoteDisplayed] = useState('');
-  // Tiles hold concert notes; the name shown follows the chosen pitch
+  // Tiles hold concert notes; the name shown follows the chosen pitch and accidentals
   const noteName =
-    currentNote.note === '' ? '' : transposeNote(currentNote.note, transposition).noteNotation;
+    currentNote.note === ''
+      ? ''
+      : noteLabel(
+          NOTE_LABELS.indexOf(transposeNote(currentNote.note, transposition).noteNotation),
+          settings.accidentals
+        );
 
   const isEmpty = currentNote.note === '';
   const { correct, closeDirection } = currentNote;
@@ -76,7 +81,7 @@ export const NoteBox: React.FC<NoteBoxProps> = ({
         />
       )}
       <p className={isEmpty ? 'note-animate' : 'note-active'}>{noteDisplayed[0]}</p>
-      {noteDisplayed.length > 1 && <FlatSign variant="superscript" />}
+      <AccidentalSign symbol={noteDisplayed[1]} variant="superscript" />
       {answered && closeDirection && <HintArrow direction={closeDirection} />}
     </div>
   );

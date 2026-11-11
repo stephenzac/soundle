@@ -1,4 +1,5 @@
 import { INSTRUMENTS, InstrumentId, octaveLimits } from './instruments';
+import { Accidentals } from './notes';
 import { midiFromName, midiFromParts, pitchClassOf } from '../lib/pitch';
 
 // Below about C3, small phone and laptop speakers barely reproduce these sounds
@@ -14,6 +15,8 @@ export interface GameSettings {
   // rather than at concert pitch. Kept when switching to an instrument without one, where it
   // has no effect, so switching back remembers it.
   writtenPitch: boolean;
+  // Black-key notes shown as flats (D♭) or sharps (C♯)
+  accidentals: Accidentals;
 }
 
 // Synth, one octave from middle C: the original Soundle behavior
@@ -22,6 +25,7 @@ export const DEFAULT_SETTINGS: GameSettings = {
   lowestOctave: 4,
   octaveRange: 1,
   writtenPitch: false,
+  accidentals: 'flats',
 };
 
 // Semitones to add to a sounding note to get the name the player reads: 0 at concert pitch

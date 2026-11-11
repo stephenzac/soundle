@@ -7,6 +7,9 @@ import { DeleteIcon } from '../game/controls/DeleteIcon';
 import { ResetIcon } from '../game/controls/ResetIcon';
 import { TuningForkIcon } from '../game/controls/TuningForkIcon';
 import { HintArrow } from '../game/display/HintArrow';
+import { NoteLabel } from '../game/display/NoteLabel';
+import { SharpSign } from '../game/display/SharpSign';
+import { noteLabel } from '../../constants/notes';
 import { SpeakerIcon } from '../game/display/SpeakerIcon';
 import { cn } from '../../lib/cn';
 import { use } from 'react';
@@ -83,6 +86,7 @@ const Tip: React.FC<{ children: React.ReactNode; className?: string }> = ({
 // name, then the finer rules, which matter less on a first read
 export const InformationModal: React.FC<InformationModalProps> = ({ setClickedState }) => {
   const { settings, transposition } = use(GameContext);
+  const sharps = settings.accidentals === 'sharps';
   const { name, transposition: instrumentTransposition } = INSTRUMENTS[settings.instrument];
   const key = instrumentTransposition?.key ?? '';
 
@@ -111,9 +115,7 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
             <FeedbackExample
               className="note-box-incorrect"
               example={
-                <>
-                  B<FlatSign variant="superscript" />
-                </>
+                <NoteLabel label={noteLabel(10, settings.accidentals)} variant="superscript" />
               }
               label="Further off"
             />
@@ -148,7 +150,17 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
           <ul className="modal-text text-slate-300 flex flex-col gap-2">
             <Tip>Notes can repeat. Only the name counts, not the octave.</Tip>
             <Tip>
-              Sharps are written as flats: C sharp is D<FlatSign variant="inline" />.
+              {sharps ? (
+                <>
+                  Black-key notes show as sharps, like C<SharpSign variant="inline" />. Settings can
+                  switch them to flats.
+                </>
+              ) : (
+                <>
+                  Black-key notes show as flats, like D<FlatSign variant="inline" />. Settings can
+                  switch them to sharps.
+                </>
+              )}
             </Tip>
             <Tip>
               {transposition === 0 ? (
@@ -162,7 +174,8 @@ export const InformationModal: React.FC<InformationModalProps> = ({ setClickedSt
             </Tip>
             {/* Only for devices with a mouse, which usually have a keyboard too */}
             <Tip className="hidden pointer-fine:flex">
-              Keyboard: A to G, Shift for flats, Enter, Backspace, Space to play, R for the C.
+              Keyboard: A to G, Shift for {sharps ? 'sharps' : 'flats'}, Enter, Backspace, Space to
+              play, R for the C.
             </Tip>
           </ul>
         </section>
