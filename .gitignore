@@ -26,3 +26,6 @@ dist-ssr
 
 NotesContext.tsx
 ActiveTest.tsx
+# Claude Code: dev server config and personal settings, kept local
+.claude/launch.json
+.claude/settings.local.json
