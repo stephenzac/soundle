@@ -1,23 +1,29 @@
-import { use, useState } from 'react';
-import { playMelody } from '../../../lib/GameNotes';
+import { use } from 'react';
 import { GameContext } from '../../../contexts/GameContext';
+import { cn } from '../../../lib/cn';
+import { MelodyIcon } from './MelodyIcon';
 
 export const PlayMelodyButton: React.FC = () => {
-  const { melody } = use(GameContext);
-  const [playable, setPlayable] = useState(true);
+  const { playMelody, loadingSound, melodyPlayed, gameWon, gameLost } = use(GameContext);
+  // True while an instrument's samples download before its first play
+  const loading = loadingSound === 'melody';
 
-  const melodyButtonClicked = () => {
-    if (!playable) return;
-    setPlayable(false);
-    playMelody(melody);
-
-    // prevent melody button spamming
-    setTimeout(() => setPlayable(true), 2900);
-  };
+  // Until a game's melody is first played, the button stands out so new players know to start here
+  const needsAttention = !melodyPlayed && !(gameWon || gameLost);
 
   return (
-    <button className="round-button" onClick={melodyButtonClicked} aria-label="Play melody">
-      ♫
+    <button
+      className={cn(
+        needsAttention ? 'round-button-attention' : 'round-button',
+        loading && 'animate-pulse'
+      )}
+      onClick={playMelody}
+      aria-label="Play melody"
+      aria-busy={loading}
+      aria-keyshortcuts="Space"
+      title="Play melody (Space)"
+    >
+      <MelodyIcon />
     </button>
   );
 };

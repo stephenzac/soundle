@@ -1,71 +1,63 @@
-import * as Tone from 'tone';
 import { NoteTile } from '../contexts/GameContext';
-import { GameNote, NoteNotationLabel, NOTE_LABELS, TONE_STRINGS } from '../constants/notes';
+import { GameNote, MelodyNote, NOTE_LABELS, TONE_STRINGS } from '../constants/notes';
 import { ROW_LENGTH } from '../constants/game-board';
+import { GameSettings, melodyPool } from '../constants/settings';
+import { midiFromParts, octaveOf, pitchClassOf } from './pitch';
 
-const checkNoteDistance = (
-  submittedNote: NoteNotationLabel,
-  actualNote: NoteNotationLabel
-): number => {
-  if (
-    (submittedNote === 'B' && actualNote === 'C') ||
-    (submittedNote === 'C' && actualNote === 'B')
-  )
-    return 1;
+// Scores a full row against the melody, returning new tiles. A wrong note a half step from the
+// right one gets the direction of the right note, wrapping around the octave (B to C is up).
+export const scoreGuess = (row: NoteTile[], melody: GameNote[]): NoteTile[] =>
+  row.map((tile, index) => {
+    if (tile.note === '') return tile;
 
-  return Math.abs(NOTE_LABELS.indexOf(submittedNote) - NOTE_LABELS.indexOf(actualNote));
+    const guessed = NOTE_LABELS.indexOf(tile.note.noteNotation);
+    const actual = NOTE_LABELS.indexOf(melody[index].noteNotation);
+    const semitonesUp = (actual - guessed + 12) % 12;
+    return {
+      ...tile,
+      answered: true,
+      correct: semitonesUp === 0,
+      closeDirection: semitonesUp === 1 ? 'up' : semitonesUp === 11 ? 'down' : null,
+    };
+  });
+
+const randomItem = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
+
+// Each note name is equally likely, then one of its octaves in the pool is picked at random.
+// (Picking from the pool directly would favor names that appear in more octaves.)
+export const generateNotes = (settings: GameSettings): MelodyNote[] => {
+  const pool = melodyPool(settings);
+
+  return Array.from({ length: ROW_LENGTH }, () => {
+    const pitchClass = Math.floor(Math.random() * 12);
+    const midi = randomItem(pool.filter((note) => pitchClassOf(note) === pitchClass));
+    return {
+      noteNotation: NOTE_LABELS[pitchClass],
+      tone: TONE_STRINGS[pitchClass],
+      octave: octaveOf(midi),
+    };
+  });
 };
 
-export const checkNotes = (submittedNotes: NoteTile[], actualNotes: GameNote[]): boolean => {
-  let correctCount = 0;
-
-  submittedNotes.forEach((submittedNote, index) => {
-    if (submittedNote.note === '') return false;
-
-    if (submittedNote.note.noteNotation === actualNotes[index].noteNotation) {
-      submittedNote.correct = true;
-      correctCount++;
-    }
-
-    // Check if guess is a half step off
-    const noteDistance = checkNoteDistance(
-      submittedNote.note.noteNotation,
-      actualNotes[index].noteNotation
+// The notes to play for a guessed row. A guess is only a note name, so each is played in the
+// octave closest to the melody's note at that spot (among those the instrument plays): a B
+// guessed for a C4 sounds as B3, a half step below, as the arrow says.
+export const guessTones = (
+  row: NoteTile[],
+  melody: MelodyNote[],
+  settings: GameSettings
+): number[] => {
+  const pool = melodyPool(settings);
+  return row.map((tile, index) => {
+    const target = midiFromParts(
+      NOTE_LABELS.indexOf(melody[index].noteNotation),
+      melody[index].octave
     );
-    if (noteDistance === 1) submittedNote.answerIsClose = true;
-
-    submittedNote.answered = true;
+    const guessed =
+      tile.note === '' ? pitchClassOf(target) : NOTE_LABELS.indexOf(tile.note.noteNotation);
+    const options = pool.filter((midi) => pitchClassOf(midi) === guessed);
+    return options.reduce((best, midi) =>
+      Math.abs(midi - target) < Math.abs(best - target) ? midi : best
+    );
   });
-
-  return correctCount === ROW_LENGTH;
-};
-
-export const generateNotes = (): GameNote[] => {
-  const generatedNotes: GameNote[] = [];
-
-  for (let i = 0; i < ROW_LENGTH; i++) {
-    const randomIndex = Math.floor(Math.random() * 12);
-    generatedNotes.push({
-      noteNotation: NOTE_LABELS[randomIndex],
-      tone: TONE_STRINGS[randomIndex],
-    });
-  }
-
-  return generatedNotes;
-};
-
-export const playMelody = async (notes: GameNote[]): Promise<void> => {
-  await Tone.start();
-  const synth = new Tone.Synth().toDestination();
-  const now = Tone.now();
-
-  notes.forEach((note: GameNote, index: number) => {
-    const startTime = now + index / 1.6;
-    synth.triggerAttack(`${note.tone}4`, startTime);
-
-    const noteDuration = Tone.Time('8n').toSeconds();
-    synth.triggerRelease(startTime + noteDuration);
-  });
-
-  Tone.getTransport().start();
 };

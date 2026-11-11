@@ -1,16 +1,19 @@
 import { use } from 'react';
 import { GameContext } from '../../../contexts/GameContext';
+import { ResetIcon } from './ResetIcon';
 
 export const ResetButton: React.FC = () => {
   const { resetGame } = use(GameContext);
 
   return (
     <button
-      className="round-button font-bold animate-pulse-fast duration-0 relative"
-      onClick={resetGame}
+      className="round-button font-bold animate-pulse-fast duration-0"
+      onClick={() => resetGame()}
       aria-label="Reset game"
+      aria-keyshortcuts="Enter"
+      title="New melody (Enter)"
     >
-      <span className="absolute -top-0.5 right-2.5 inline-block text-lg">↺</span>
+      <ResetIcon />
     </button>
   );
 };

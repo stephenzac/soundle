@@ -1,0 +1,8 @@
+Instrument samples are from tonejs-instruments by Nicholaus P. Brosowsky
+https://github.com/nbrosowsky/tonejs-instruments
+Licensed under Creative Commons Attribution 3.0 (CC BY 3.0):
+https://creativecommons.org/licenses/by/3.0/
+
+Soundle includes a subset of the original files (about every third semitone), unmodified.
+Folder names here differ from the original: alto-sax is "saxophone", guitar is
+"guitar-acoustic", and bass is "bass-electric".

@@ -1,25 +1,21 @@
 import { DeleteButton } from './DeleteButton';
 import { SubmitButton } from './SubmitButton';
 import { PlayMelodyButton } from './PlayMelodyButton';
+import { ReferenceButton } from './ReferenceButton';
 import { ResetButton } from './ResetButton';
 import { use } from 'react';
 import { GameContext } from '../../../contexts/GameContext';
-import { cn } from '../../../lib/cn';
 
 export const GameControlsRow: React.FC = () => {
   const { gameWon, gameLost } = use(GameContext);
 
   return (
-    <div
-      className={cn(
-        'flex justify-center space-x-8 transition-all duration-300 mt-2',
-        !(gameWon || gameLost) && 'ml-16'
-      )}
-    >
+    <div className="flex justify-center gap-(--controls-gap)">
       <DeleteButton />
       <SubmitButton />
       <PlayMelodyButton />
-      {gameWon || gameLost ? <ResetButton /> : <div className="w-8 h-8 opacity-0" />}
+      {/* The reference note only helps while guessing, so its slot becomes reset once it's over */}
+      {gameWon || gameLost ? <ResetButton /> : <ReferenceButton />}
     </div>
   );
 };

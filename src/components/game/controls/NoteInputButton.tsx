@@ -1,39 +1,23 @@
 import { use } from 'react';
-import { ROW_LENGTH } from '../../../constants/game-board';
-import { GameNote } from '../../../constants/notes';
-import { GameContext, NoteTile } from '../../../contexts/GameContext';
+import { GameNote, NOTE_LABELS, noteLabel } from '../../../constants/notes';
+import { GameContext } from '../../../contexts/GameContext';
+import { NoteLabel } from '../../game/display/NoteLabel';
 
 interface NoteInputProps {
   note: GameNote;
 }
 
 export const NoteInputButton: React.FC<NoteInputProps> = ({ note }) => {
-  const { currentRow, currentIndex, setCurrentIndex, updateBoard, gameWon, gameLost } =
-    use(GameContext);
-
-  const inputNote = () => {
-    if (currentIndex >= ROW_LENGTH || gameWon || gameLost) return;
-    setCurrentIndex(currentIndex + 1);
-
-    const newNote: NoteTile = {
-      note,
-      answered: false,
-      correct: false,
-      answerIsClose: false,
-    };
-    updateBoard(newNote, currentRow, currentIndex);
-  };
-
-  const inputLabel = note.noteNotation[1];
+  const { inputNote, settings } = use(GameContext);
+  const label = noteLabel(NOTE_LABELS.indexOf(note.noteNotation), settings.accidentals);
 
   return (
     <button
       className="note-input-button button-animation cursor-pointer relative"
-      onClick={inputNote}
-      aria-label={`Button to input note ${note.noteNotation}`}
+      onClick={() => inputNote(note)}
+      aria-label={`Button to input note ${label}`}
     >
-      {note.noteNotation[0]}
-      <span className="absolute top-1 right-0.5 text-s">{inputLabel}</span>
+      <NoteLabel label={label} variant="superscript" />
     </button>
   );
 };
